@@ -14,25 +14,48 @@
   <main class="container">
     <div class="progress-wrap"><div class="progress-text" id="progressText"></div><div class="progress-bar"><div class="progress" id="progressBar"></div></div></div>
     <section class="card">
-      <h2>Chapitre 1 - La problématique métier</h2>
+      <h2>Chapitre 1 - Cadrer la problématique (sans jargon)</h2>
       <p class="quote">
-        Imagine que tu es Lead Data Engineer chez UrbaTech. La ville de Casablanca te confie une mission:
-        auditer le marche immobilier et detecter les zones de gentrification. Les chiffres seuls ne suffisent pas.
+        Paris veut comprendre ce qui se passe dans ses quartiers. Le Maire ne te demande pas “des chiffres” :
+        il te demande un diagnostic clair, pour expliquer la situation et proposer des actions utiles.
       </p>
+
       <div class="grid-2">
         <div>
-          <p>
-            Le coeur du probleme est multidimensionnel: les prix racontent une partie de l'histoire, mais le ressenti des
-            habitants et la qualite visuelle des logements racontent une autre realite.
+          <p><strong>Maire de Paris :</strong> “Dans certains endroits, les gens se plaignent. Des familles disent que le logement devient trop cher, que le quartier change vite, et que leur quotidien devient plus difficile.”</p>
+          <p><strong>Analyste :</strong> “D’accord. Avant toute analyse, on doit cadrer la question : qu’est-ce qui change exactement, pour qui, et avec quels signaux observables ?”</p>
+          <p class="lead" style="margin-top:10px; color:var(--muted);">
+            Pour t’aider à comprendre, imagine trois situations fréquentes :
           </p>
           <ul>
-            <li>Comment croiser des donnees tabulaires, textuelles et visuelles ?</li>
-            <li>Quels signaux permettent d'anticiper une transformation de quartier ?</li>
-            <li>Comment presenter un diagnostic clair pour un decideur non technique ?</li>
+            <li>Des habitants rapportent une hausse des loyers et un sentiment de “départ forcé”.</li>
+            <li>On observe une transformation du standing (rénovations, changement d’usages, nouveau type de commerce).</li>
+            <li>Les immeubles évoluent visuellement : certains bâtiments paraissent mieux entretenus, d’autres subissent au contraire des contrastes.</li>
           </ul>
-          <button class="btn btn-soft" data-mark-read>Marquer ce chapitre comme lu</button>
+          <p>
+            <strong>Gentrification (définition simple)</strong> : c’est quand un quartier change rapidement, souvent avec une hausse des prix,
+            et que cela peut pousser les habitants historiques à quitter les lieux.
+          </p>
+
+          <p><strong>Maire de Paris :</strong> “Alors je veux savoir : dans quels quartiers ces signaux sont les plus visibles, et comment le dire clairement ?”</p>
+          <p>
+            <strong>Ce que ce chapitre te fait produire</strong> : une problématique bien formulée, des exemples concrets,
+            et une liste de “ce qu’on cherche” (signaux à observer) avant de passer aux données.
+          </p>
+          <ul>
+            <li>Quels changements concrets les habitants décrivent-ils ?</li>
+            <li>Quels indices indiquent une évolution du standing ?</li>
+            <li>Comment résumer ces observations en une conclusion compréhensible ?</li>
+          </ul>
+          <!-- Bouton de suivi supprimé pour rester minimal -->
         </div>
-        <img class="chapter-image" src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80" alt="Reunion d'equipe et decision" />
+
+        <img
+          class="chapter-image"
+          src="../Fig2.webp"
+          alt="Illustration narrative des perceptions et changements de quartier"
+          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80';"
+        />
       </div>
     </section>
     <nav class="book-nav">

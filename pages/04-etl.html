@@ -14,26 +14,19 @@
   <main class="container">
     <div class="progress-wrap"><div class="progress-text" id="progressText"></div><div class="progress-bar"><div class="progress" id="progressBar"></div></div></div>
     <section class="card">
-      <h2>Chapitre 4 - Phase 2 (3h): ETL multimodal</h2>
-      <div class="grid-2">
-        <div>
-          <p>Transformer la donnee brute en variables utiles pour l'analyse decisionnelle.</p>
-          <details><summary>Texte -> sentiment</summary><p>Pretraiter les avis, appliquer modele pre-entraine, produire score normalise [-1, 1].</p></details>
-          <details><summary>Image -> standing</summary><p>Classer les logements en Luxe/Standard via modele visuel et echantillon de validation.</p></details>
-          <details><summary>Conception SQL en amont</summary><p>Anticiper le schema final avant implementation complete de l'ETL.</p></details>
-          <pre><code>CREATE TABLE mart_property_signals (
-  property_id TEXT PRIMARY KEY,
-  neighborhood TEXT NOT NULL,
-  price_mad NUMERIC(12,2),
-  sentiment_score NUMERIC(5,3),
-  visual_class TEXT CHECK (visual_class IN ('Luxe','Standard')),
-  gentrification_index NUMERIC(6,3),
-  loaded_at TIMESTAMP DEFAULT NOW()
-);
-</code></pre>
-          <button class="btn btn-soft" data-mark-read>Marquer ce chapitre comme lu</button>
-        </div>
-        <img class="chapter-image" src="../schema-etl.png" alt="Schema ETL pedagogique" onerror="this.src='https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1200&q=80'" />
+      <h2>Chapitre 4 - Coming soon !</h2>
+      <p class="lead" style="margin-top:10px;">
+        Cette section est en cours de preparation. Revenez plus tard pour le contenu complet :
+        transformation ETL multimodale, schematisation, et mise en forme pour l'analyse et la visualisation.
+      </p>
+      <div style="margin-top:14px; text-align:center;">
+        <img
+          class="chapter-image"
+          src="../FigCS.jpg"
+          alt="Coming soon"
+          style="width:200px; max-width:100%; height:auto; border-radius:12px;"
+          onerror="this.onerror=null;this.style.display='none';"
+        />
       </div>
     </section>
     <nav class="book-nav">
