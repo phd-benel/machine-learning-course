@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ImmoVision 360 - Support Interactif</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Prism.js (Syntax Highlighting) -->
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-sql.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #171a21;
+      --card: #1d2230;
+      --text: #e9eefb;
+      --muted: #aab4d0;
+      --accent: #74b9ff;
+      --accent-2: #55efc4;
+      --danger: #ff7675;
+      --border: #2b3346;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --radius: 16px;
+      --maxw: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    html { scroll-behavior: smooth; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      background: rgba(15, 17, 21, 0.85);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: var(--maxw);
+      margin: auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      font-family: Merriweather, serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: .2px;
+    }
+    .pill {
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .85rem;
+    }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      align-items: center;
+      margin: 20px 0 40px;
+      background: linear-gradient(160deg, rgba(116,185,255,.12), rgba(85,239,196,.08));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .hero-content { padding: 28px; }
+    .hero h1 {
+      margin: 0 0 12px;
+      font-family: Merriweather, serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+      line-height: 1.25;
+    }
+    .hero p { color: var(--muted); margin: 0 0 18px; line-height: 1.7; }
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 280px;
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    .cta-row {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    button, .btn {
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: .95rem;
+      transition: .25s ease;
+      color: #081018;
+      background: var(--accent-2);
+    }
+    button:hover, .btn:hover { transform: translateY(-1px); filter: brightness(1.03); text-decoration: none; }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .progress-wrap {
+      margin: 14px 0 24px;
+      display: grid;
+      gap: 8px;
+    }
+    .progress-text {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+    .progress-bar {
+      height: 8px;
+      background: #202838;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width .4s ease;
+    }
+
+    section.chapter {
+      margin: 24px 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 90px;
+    }
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .chapter h2 {
+      margin: 0;
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      font-family: Merriweather, serif;
+    }
+    .chapter-tag {
+      color: #09121f;
+      background: var(--accent);
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .78rem;
+      white-space: nowrap;
+    }
+
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .chapter img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .chapter p, .chapter li {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: .97rem;
+    }
+
+    .narrative {
+      border-left: 3px solid var(--accent);
+      padding: 8px 0 8px 14px;
+      margin: 8px 0 16px;
+      background: rgba(116,185,255,.06);
+      border-radius: 8px;
+    }
+
+    .links {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+    .links ul { margin: 8px 0 0; padding-left: 20px; }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #151a27;
+      margin: 10px 0;
+    }
+    details[open] { border-color: #3d4b6a; }
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      outline: none;
+    }
+    summary::marker { color: var(--accent); }
+
+    pre {
+      border-radius: 12px !important;
+      border: 1px solid #2d3550;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+
+    .chapter-nav {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .9rem;
+      padding: 20px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .highlight {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    @media (max-width: 920px) {
+      .hero, .chapter-grid { grid-template-columns: 1fr; }
+      .hero img { min-height: 220px; }
+      .chapter img { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">ImmoVision 360 • Support Interactif</div>
+      <div class="pill">Projet fil rouge • 9h • Data multimodale</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <h1>ImmoVision 360 — L'Intelligence Territoriale</h1>
+        <p>
+          Un parcours immersif pour former des ingénieurs à la <span class="highlight">collecte</span>, la
+          <span class="highlight">transformation</span> et l'<span class="highlight">exploration</span> de données multimodales
+          (tabulaire, texte, image) dans un cas réel d'audit immobilier urbain.
+        </p>
+        <div class="cta-row">
+          <button id="startBtn">Démarrer le parcours</button>
+          <a class="btn btn-outline" href="#chap-intro">Aller à l'introduction</a>
+        </div>
+      </div>
+      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=80"
+           alt="Vue urbaine moderne de Casablanca symbolisant l'intelligence territoriale" />
+    </section>
+
+    <div class="progress-wrap" aria-label="Progression du cours">
+      <div class="progress-text" id="progressText">Progression: 0 / 6 sections</div>
+      <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+    </div>
+
+    <!-- 1. Introduction -->
+    <section class="chapter" id="chap-intro" data-step>
+      <div class="chapter-header">
+        <h2>Introduction & Problématique</h2>
+        <span class="chapter-tag">Contexte mission</span>
+      </div>
+      <div class="chapter-grid">
+        <div>
+          <p class="narrative">
+            <strong>Imagine que tu es Lead Data Engineer chez UrbaTech.</strong> La ville de Casablanca te missionne pour auditer
+            le marché immobilier. Le problème: les chiffres seuls ne disent pas tout. Il faut croiser les prix,
+            le ressenti des clients (texte) et l'état visuel des bâtiments (images) pour identifier les zones de gentrification.
+          </p>
+          <p>
+            Cette mission simule une situation professionnelle complète: interpréter un phénomène urbain complexe avec des données
+            de nature différente, puis produire une recommandation intelligible pour un décideur public.
+          </p>
+          <ul>
+            <li><strong>Question centrale:</strong> où les signaux de gentrification sont-ils les plus visibles ?</li>
+            <li><strong>Objectif pédagogique:</strong> relier ingénierie data, IA appliquée et aide à la décision.</li>
+            <li><strong>Livrable final:</strong> un rapport de synthèse orienté action publique.</li>
+          </ul>
+        </div>
+        <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1400&q=80"
+             alt="Collecte et lecture de données dans un contexte urbain" />
+      </div>
+      <div class="chapter-nav">
+        <button class="next-btn">Suivant</button>
+      </div>
+    </section>
+
+    <!-- 2. Sources -->
+    <section class="chapter" id="chap-sources" data-step>
+      <div class="chapter-header">
+        <h2>Sources de Données — Le Data Lake</h2>
+        <span class="chapter-tag">Collecte</span>
+      </div>
+      <div class="chapter-grid">
+        <div>
+          <p>
+            Vous allez constituer un Data Lake à partir de sources réelles. L'idée est de conserver les données <em>brutes</em>
+            avant transformation afin de garantir traçabilité et reproductibilité.
+          </p>
+          <div class="links">
+            <strong>Sources recommandées:</strong>
+            <ul>
+              <li><a href="https://insideairbnb.com/get-the-data/" target="_blank" rel="noopener noreferrer">Inside Airbnb — Portail des jeux de données</a></li>
+              <li><a href="https://insideairbnb.com/get-the-data/" target="_blank" rel="noopener noreferrer">`listings.csv` (annonces et prix)</a></li>
+              <li><a href="https://insideairbnb.com/get-the-data/" target="_blank" rel="noopener noreferrer">`reviews.csv` (avis clients textuels)</a></li>
+              <li>Dossier d'images d'appartements (collecte locale/scraping encadré ou dataset pédagogique fourni)</li>
+            </ul>
+          </div>
+
+          <details>
+            <summary>Détail technique — Structure initiale du Data Lake</summary>
+            <p>
+              Exemple de dossier:
+              <code>/data_lake/raw/listings/</code>,
+              <code>/data_lake/raw/reviews/</code>,
+              <code>/data_lake/raw/images/</code>.
+              Conserver les fichiers horodatés pour versionner les extractions.
+            </p>
+          </details>
+        </div>
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80"
+             alt="Collecte de données, documents et écrans d'analyse" />
+      </div>
+      <div class="chapter-nav">
+        <button class="next-btn">Suivant</button>
+      </div>
+    </section>
+
+    <!-- 3. Phase 1 -->
+    <section class="chapter" id="chap-phase1" data-step>
+      <div class="chapter-header">
+        <h2>Phase 1 (3h) — Le Chaos Organisé</h2>
+        <span class="chapter-tag">Architecture</span>
+      </div>
+      <div class="chapter-grid">
+        <div>
+          <p>
+            Vous posez le socle d'architecture du projet: environnement conteneurisé, séparation des couches de stockage,
+            et stratégie d'ingestion robuste.
+          </p>
+
+          <details>
+            <summary>Consigne 1 — Environnement Docker</summary>
+            <p>Créer des services Docker pour PostgreSQL, notebook ETL, et éventuel service d'inférence.</p>
+            <pre><code class="language-bash"># Exemple minimal
+docker compose up -d
+docker ps
+</code></pre>
+          </details>
+
+          <details>
+            <summary>Consigne 2 — Data Lake vs Data Warehouse</summary>
+            <p>
+              <strong>Data Lake:</strong> stockage brut, flexible, orienté fichiers.<br />
+              <strong>Data Warehouse (PostgreSQL):</strong> stockage structuré, requêtable, orienté décision.
+            </p>
+          </details>
+
+          <details>
+            <summary>Consigne 3 — Stratégie d'ingestion</summary>
+            <p>
+              Définir un pipeline d'ingestion incrémental: extraction, validation de schéma, contrôle qualité,
+              journalisation des erreurs.
+            </p>
+          </details>
+        </div>
+        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=80"
+             alt="Architecture serveur et pipeline de données" />
+      </div>
+      <div class="chapter-nav">
+        <button class="next-btn">Suivant</button>
+      </div>
+    </section>
+
+    <!-- 4. Phase 2 -->
+    <section class="chapter" id="chap-phase2" data-step>
+      <div class="chapter-header">
+        <h2>Phase 2 (3h) — La Transformation Intelligente</h2>
+        <span class="chapter-tag">ETL multimodal</span>
+      </div>
+      <div class="chapter-grid">
+        <div>
+          <p>
+            Vous enrichissez les données pour rendre visibles des signaux faibles:
+            sentiment des avis textuels et standing visuel des logements.
+          </p>
+
+          <details>
+            <summary>Consigne 1 — Texte vers score de sentiment</summary>
+            <p>
+              Utiliser un modèle pré-entraîné (Transformers, TextBlob, VADER selon langue/disponibilité),
+              puis normaliser un score dans l'intervalle [-1, 1].
+            </p>
+          </details>
+
+          <details>
+            <summary>Consigne 2 — Image vers classe de standing</summary>
+            <p>
+              Appliquer un classifieur pré-entraîné ou une heuristique visuelle guidée pour catégoriser
+              <strong>Luxe</strong> vs <strong>Standard</strong>.
+            </p>
+          </details>
+
+          <details>
+            <summary>Consigne 3 — Anticipation du schéma SQL final</summary>
+            <p>
+              Concevoir le schéma cible avant implémentation complète ETL afin de stabiliser les contrats de données.
+            </p>
+            <pre><code class="language-sql">CREATE TABLE mart_property_signals (
+  property_id            TEXT PRIMARY KEY,
+  neighborhood           TEXT NOT NULL,
+  price_mad              NUMERIC(12,2),
+  review_sentiment_score NUMERIC(5,3),
+  visual_standing_class  TEXT CHECK (visual_standing_class IN ('Luxe','Standard')),
+  gentrification_index   NUMERIC(6,3),
+  loaded_at              TIMESTAMP DEFAULT NOW()
+);
+</code></pre>
+          </details>
+        </div>
+        <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1400&q=80"
+             alt="Pipeline ETL et intelligence artificielle appliquée" />
+      </div>
+      <div class="chapter-nav">
+        <button class="next-btn">Suivant</button>
+      </div>
+    </section>
+
+    <!-- 5. Phase 3 -->
+    <section class="chapter" id="chap-phase3" data-step>
+      <div class="chapter-header">
+        <h2>Phase 3 (3h) — Le Verdict de l'Ingénieur</h2>
+        <span class="chapter-tag">Exploration & Impact</span>
+      </div>
+      <div class="chapter-grid">
+        <div>
+          <p>
+            Place à l'analyse exploratoire (EDA): comparer quartiers, détecter corrélations, interpréter des zones de tension
+            immobilière et produire des recommandations concrètes.
+          </p>
+
+          <details>
+            <summary>Consigne 1 — EDA orientée décision</summary>
+            <p>
+              Produire des visualisations: distribution des prix, sentiment moyen par quartier, standing visuel dominant,
+              et indice de gentrification composite.
+            </p>
+          </details>
+
+          <details>
+            <summary>Consigne 2 — Rapport de 2 pages pour le Maire</summary>
+            <p>
+              Structurer le rapport: contexte, méthodologie, 3 résultats majeurs, limites, recommandations actionnables
+              (régulation, urbanisme, logement social, suivi temporel).
+            </p>
+          </details>
+
+          <details>
+            <summary>Consigne 3 — Argumentaire d'ingénierie</summary>
+            <p>
+              Justifier les choix techniques (modèles, métriques, architecture) et leurs impacts sur la fiabilité des conclusions.
+            </p>
+          </details>
+        </div>
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=80"
+             alt="Graphiques analytiques et tableaux de bord de décision" />
+      </div>
+      <div class="chapter-nav">
+        <button class="next-btn">Suivant</button>
+      </div>
+    </section>
+
+    <!-- 6. Synthèse -->
+    <section class="chapter" id="chap-synthese" data-step>
+      <div class="chapter-header">
+        <h2>Synthèse Pédagogique & Livrables</h2>
+        <span class="chapter-tag">Clôture</span>
+      </div>
+      <div class="chapter-grid">
+        <div>
+          <p>
+            En 9h, l'étudiant traverse un cycle complet de projet data industriel: <strong>ingestion</strong>,
+            <strong>modélisation</strong>, <strong>enrichissement IA</strong>, et <strong>communication d'impact</strong>.
+          </p>
+          <ul>
+            <li>Livrable 1: architecture Docker + documentation Data Lake/Warehouse.</li>
+            <li>Livrable 2: pipeline ETL multimodal reproductible.</li>
+            <li>Livrable 3: EDA + rapport exécutif de 2 pages au Maire.</li>
+          </ul>
+
+          <pre><code class="language-python"># Pseudo-indice de gentrification (exemple pédagogique)
+gentrification_index = (
+    0.5 * normalize(price_mad)
+    + 0.3 * normalize(review_sentiment_score)
+    + 0.2 * standing_score  # Luxe=1, Standard=0
+)
+</code></pre>
+        </div>
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=80"
+             alt="Vision stratégique et synthèse de projet data" />
+      </div>
+      <div class="chapter-nav">
+        <a class="btn btn-outline" href="#hero">Revenir en haut</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Support interactif — Projet Fil Rouge <strong>ImmoVision 360</strong> • Collecte & Exploration de Données Multimodales
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const sections = Array.from(document.querySelectorAll("[data-step]"));
+      const nextButtons = document.querySelectorAll(".next-btn");
+      const startBtn = document.getElementById("startBtn");
+      const progressBar = document.getElementById("progressBar");
+      const progressText = document.getElementById("progressText");
+
+      function updateProgress() {
+        const trigger = window.innerHeight * 0.45;
+        let done = 0;
+        sections.forEach((sec) => {
+          const rect = sec.getBoundingClientRect();
+          if (rect.top < trigger) done++;
+        });
+        const pct = Math.min(100, Math.round((done / sections.length) * 100));
+        progressBar.style.width = pct + "%";
+        progressText.textContent = `Progression: ${done} / ${sections.length} sections`;
+      }
+
+      function goToNext(currentSection) {
+        const idx = sections.indexOf(currentSection);
+        if (idx >= 0 && idx < sections.length - 1) {
+          sections[idx + 1].scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      nextButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const current = e.target.closest("[data-step]");
+          goToNext(current);
+        });
+      });
+
+      startBtn.addEventListener("click", () => {
+        const intro = document.getElementById("chap-intro");
+        intro.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      window.addEventListener("scroll", updateProgress, { passive: true });
+      window.addEventListener("load", updateProgress);
+      updateProgress();
+    })();
+  </script>
+</body>
+</html>
