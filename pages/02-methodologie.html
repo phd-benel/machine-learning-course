@@ -14,27 +14,63 @@
   <main class="container">
     <div class="progress-wrap"><div class="progress-text" id="progressText"></div><div class="progress-bar"><div class="progress" id="progressBar"></div></div></div>
     <section class="card">
-      <h2>Chapitre 2 - Méthodologie générale : La "Data Supply Chain" – De la Vision à l'Impact</h2>
-      <p class="lead">Ce chapitre pose la logique complete du projet: de la problematique metier jusqu'au rapport d'impact.</p>
-      <div class="grid-3">
-        <article class="card">
-          <h3>1. Problematique</h3>
-          <p>Formuler les questions utiles au Maire, identifier indicateurs et hypotheses de travail.</p>
-          <img class="chapter-image" src="../schema-collecte.png" alt="Schema problematique et collecte" onerror="this.src='https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80'" />
-        </article>
-        <article class="card">
-          <h3>2. Collecte + ETL</h3>
-          <p>Ingestion des sources, nettoyage, enrichissement texte/image, modelisation SQL.</p>
-          <img class="chapter-image" src="../schema-etl.png" alt="Schema ETL" onerror="this.src='https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1200&q=80'" />
-        </article>
-        <article class="card">
-          <h3>3. Analyse</h3>
-          <p>EDA, creation d'indicateurs composites, interpretation et recommandations publiques.</p>
-          <img class="chapter-image" src="../schema-analyse.png" alt="Schema analyse" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80'" />
-        </article>
-      </div>
-      <details><summary>Message pedagogique important</summary><p>La valeur analytique finale depend d'abord de la rigueur des etapes amont: collecte, qualite, tracabilite et design de schema.</p></details>
-      <!-- Bouton de suivi supprimé pour rester minimal -->
+      <h2>Chapitre 2 - Méthodologie :La "Data Supply Chain" – De la Vision à l'Impact</h2>
+
+      <p class="lead">
+        Après avoir cadré la problématique avec la Mairie de Paris, vous devez concevoir l'architecture technique qui transformera des téraoctets de données brutes en une décision politique. Un projet de Data Science n'est pas une simple suite de scripts isolés ; c'est une chaîne de valeur logique et automatisée.
+      </p>
+
+      <h3>1. La Vue d'Ensemble : La Pipeline du Projet</h3>
+      <p class="lead">L'ingénieur ne se contente pas d'analyser ; il construit une "usine" à données. Voici le cheminement critique :</p>
+      <pre><code>$$\text{Problématique (Ch. 1)} \xrightarrow{\text{Phase 1}} \text{Collecte \& Ingestion} \xrightarrow{\text{Phase 2}} \text{ETL \& Enrichissement} \xrightarrow{\text{Phase 3}} \text{EDA \& Storytelling}$$</code></pre>
+
+      <h3>2. Phase 1 : Collecte &amp; Ingestion – Dompter le Chaos du Data Lake</h3>
+      <p class="lead">
+        C'est ici que vous gérez la Variété et le Volume. Le but est de créer un Data Lake : un réservoir centralisé où l'on stocke les données sous leur forme native (brute).
+      </p>
+      <p class="lead"><strong>Multimodalité et Sources :</strong></p>
+      <p class="lead">Structurées (CSV/SQL) : Les fichiers listings.csv contenant les prix et les caractéristiques des logements.</p>
+      <p class="lead">Semi-structurées (JSON/API) : Interroger des APIs de géolocalisation pour enrichir les quartiers.</p>
+      <p class="lead">Non-structurées (Texte/Images) : Des milliers de commentaires clients et des photos de façades.</p>
+      <p class="lead"><strong>Concepts Clés :</strong></p>
+      <p class="lead">Batch vs Temps Réel : Pour ce projet, nous travaillons en Batch (traitement par lots de fichiers historiques), mais un ingénieur doit anticiper le Temps Réel (streaming) si la Mairie voulait une alerte immédiate lors d'une nouvelle annonce suspecte.</p>
+      <p class="lead">Ingestion "Idempotente" : Votre script d'ingestion doit pouvoir être relancé dix fois sans créer de doublons. C'est la base de la fiabilité.</p>
+      <p class="lead">💡 Conseil d'expert : Ne modifiez jamais les fichiers dans le Data Lake. Gardez toujours une copie "Raw" (brute) pour pouvoir ré-entraîner vos modèles plus tard si vos besoins changent.</p>
+
+      <h3>3. Phase 2 : ETL &amp; Feature Engineering – La Raffinerie de l'IA</h3>
+      <p class="lead">L'ETL (Extract, Transform, Load) est l'étape où vous créez de la valeur. C'est ici que l'IA intervient pour "faire parler" les données muettes.</p>
+      <p class="lead">Extract : Lecture efficace des sources multimodales depuis le Data Lake.</p>
+      <p class="lead"><strong>Transform (Le "Génie" de l'Ingénieur) :</strong></p>
+      <p class="lead">Nettoyage &amp; Normalisation : Gérer les valeurs manquantes ($NaN$), convertir les devises, harmoniser les formats de date.</p>
+      <p class="lead"><strong>Enrichissement (IA) : C'est le cœur du projet. Vous allez créer des Features (variables) qui n'existent pas :</strong></p>
+      <p class="lead">Vision : Transformer une photo en un score de "Standing" (Luxe vs Standard).</p>
+      <p class="lead">NLP : Transformer un texte brut en un score de "Sentiment" ou de "Nuisance".</p>
+      <p class="lead">Load : Injection des données unifiées dans le Data Warehouse (PostgreSQL). Contrairement au Lake, le Warehouse est structuré selon un schéma (en étoile ou flocon) optimisé pour répondre aux questions métier.</p>
+
+      <h3>4. Phase 3 : EDA &amp; Rapport d'Impact – Le Storytelling Décisionnel</h3>
+      <p class="lead">L'EDA (Exploratory Data Analysis) n'est pas juste faire des graphiques ; c'est valider ou infirmer les hypothèses du Chapitre 1.</p>
+      <p class="lead">Analyse Critique : Vous cherchez les corrélations (ex: Prix vs Sentiment). Vous détectez les Outliers (anomalies) qui pourraient révéler des fraudes massives.</p>
+      <p class="lead">Synthèse : Vous produisez un rapport de 2 à 5 pages. Le Maire ne lira pas votre code Python ; il lira vos conclusions. Chaque graphique doit appuyer une recommandation d'action.</p>
+
+      <h3>5. L'Impératif de l'Automatisation : L'Ingénieur vs le Technicien</h3>
+      <p class="lead">La grande différence entre un bidouilleur et un Data Scientist professionnel, c'est l'Automatisation.</p>
+      <p class="quote">"Si vous devez faire une tâche manuellement plus de deux fois, automatisez-la."</p>
+      <p class="lead">Votre travail consiste à créer des Pipelines reproductibles. Pourquoi ?</p>
+      <p class="lead">Fiabilité : Si les données de juillet arrivent, votre pipeline doit générer le nouveau rapport en un clic.</p>
+      <p class="lead">Scalabilité : Votre système doit pouvoir passer du quartier du Marais à la ville entière sans réécrire le code.</p>
+      <p class="lead">Auditabilité : La Mairie doit pouvoir vérifier comment vous avez calculé vos scores. Votre code est votre preuve légale.</p>
+
+      <h3>6. La Diversité des Architectures : Choisir sa Chaîne de Valeur</h3>
+      <p class="lead">Il est crucial de comprendre que la pipeline "Data Lake $\rightarrow$ ETL $\rightarrow$ Data Warehouse" est le standard industriel classique, mais ce n'est pas la seule option. Selon le projet, l'architecture peut muter :</p>
+      <p class="lead"><strong>L'approche "Full Data Lake" (Modern Data Stack) :</strong></p>
+      <p class="lead">On stocke tout dans le Lake et on utilise des outils de calcul (comme Spark ou Presto) pour interroger directement les fichiers bruts.</p>
+      <p class="lead">Avantage : Très flexible et rapide à mettre en place.</p>
+      <p class="lead">Inconvénient : Peut devenir un "Data Swamp" (marécage de données) si personne ne documente ce qu'il y a dedans.</p>
+      <p class="lead"><strong>L'approche "Data Lakehouse" (Le meilleur des deux mondes) :</strong></p>
+      <p class="lead">C'est la tendance actuelle. On garde la souplesse du Data Lake (stockage d'images, fichiers texte) mais on y ajoute une couche logicielle qui permet d'avoir la rigueur et la performance du Data Warehouse.</p>
+      <p class="lead"><strong>L'approche "Direct Ingestion" (Small Data) :</strong></p>
+      <p class="lead">Pour des petits volumes, on peut parfois sauter l'étape du Data Lake et charger directement les données nettoyées dans une base SQL.</p>
+      <p class="lead">Risque : Si la source change ou si vous faites une erreur de calcul, la donnée d'origine est perdue.</p>
     </section>
     <nav class="book-nav">
       <a class="btn btn-soft" href="01-introduction.html">Chapitre precedent</a>
