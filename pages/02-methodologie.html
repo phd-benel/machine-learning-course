@@ -319,9 +319,70 @@
       </p>
       <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
 
-      <h3>4. Phase 3 : EDA &amp; Rapport d'Impact – Le Storytelling Décisionnel (L'Art de Convaincre la Mairie</h3>
+      <h3>4. Phase 3 : EDA &amp; Rapport d'Impact – Le Storytelling Décisionnel (L'Art de Convaincre la Mairie)</h3>
+
+      <p class="lead">
+        Votre Data Warehouse PostgreSQL est une mine d'or, mais la Maire de Paris ne lira jamais une table SQL. Pour elle, <code>SELECT * FROM listings WHERE score_nuisance &gt; 0.8</code> n'est qu'une ligne de code. Votre mission en Phase 3 est de <strong>donner une voix à la donnée</strong>. Vous allez transformer des colonnes de chiffres en une démonstration visuelle implacable : le <strong>Storytelling</strong>.
+      </p>
+
+      <p class="lead">
+        L'objectif n'est plus de stocker, mais d'explorer (EDA - Exploratory Data Analysis) pour trouver les preuves de vos hypothèses de départ. C'est ici que l'on crée le pont entre l'ingénierie et la décision politique. Comme on le voit sur la Figure suivante, l'EDA est l'entonnoir qui permet de passer des données brutes aux conclusions opérationnelles pour la Maire. C'est un processus systématique qui garantit que l'histoire que nous allons raconter est scientifiquement exacte.
+      </p>
+
+      <img src="../Fig9.png" class="chapter-image" style="width:100%; height:auto;" />
+
+      <p class="lead">
+        Pour mener à bien cette exploration, nous suivons un parcours rigoureux en 6 étapes, illustré par la Figure suivante. Ce tunnel permet de "nettoyer" une dernière fois l'esprit de l'analyste avant de tirer des conclusions.
+      </p>
+
+      <img src="../Fig10.webp" class="chapter-image" style="width:100%; height:auto;" />
+
+      <ul>
+        <li><strong>Distinguish Attributes :</strong> Identifier quelles colonnes sont des catégories (quartiers) et lesquelles sont des mesures (prix, scores).</li>
+        <li><strong>Univariate Analysis :</strong> Regarder chaque variable seule. Exemple : Quelle est la moyenne des prix dans le Marais ?</li>
+        <li><strong>Bi-/Multivariate Analysis :</strong> C'est le cœur du projet. On croise les variables. Exemple : Est-ce que le score de "Gentrification" augmente quand le prix augmente ?</li>
+        <li><strong>Detect Aberrant/Missing Values :</strong> Traiter les derniers oublis ou erreurs de saisie.</li>
+        <li><strong>Detect Outliers :</strong> Isoler les cas extrêmes (l'hôte qui possède 100 appartements à lui seul).</li>
+        <li><strong>Feature Engineering :</strong> Créer les derniers indicateurs de synthèse pour le rapport final.</li>
+      </ul>
+
+      <p class="lead"> C
+        Une fois ce travail de fond terminé, nous aboutissons au Storytelling.'est le moment où l'invisible devient visible.
+      </p>
+
+      <img src="../Fig11.webp" class="chapter-image" style="width:100%; height:auto;" />
+
+      <p class="lead">Plutôt que de longs discours, nous utilisons des outils visuels puissants :</p>
+      <ul>
+        <li><strong>Les Joint Plots (Hexagones) :</strong> Pour voir où se concentrent massivement les biens immobiliers et détecter des clusters de "standardisation".</li>
+        <li><strong>Les Scatter Plots avec Régression :</strong> Pour prouver mathématiquement la corrélation entre deux phénomènes (ex: hausse des prix vs baisse de l'authenticité).</li>
+        <li><strong>Les Pair Plots (Matrices) :</strong> Pour observer d'un seul coup d'œil toutes les relations possibles entre le prix, le standing, la localisation et le sentiment des voyageurs.</li>
+      </ul>
       
-      <h3>5. Autre: </h3>
+      <p class="quote">
+        Règle d'or : L'EDA sert à découvrir la vérité, pas à fabriquer une vérité qui arrange la Maire. Si vos graphiques montrent qu'un quartier n'est pas gentrifié, votre devoir est de le dire. La crédibilité de l'ingénieur repose sur son honnêteté intellectuelle face aux chiffres.
+      </p>
+
+      <p class="lead">
+        Une fois ces analyses visuelles terminées, votre rôle est de compiler vos découvertes dans un Rapport de Synthèse (de 2 à 10 pages). Ce document n'est pas un simple exercice technique ; c'est le support qui permettra à la Maire de valider ou d'infirmer ses trois hypothèses initiales avec des preuves irréfutables :
+      </p>
+
+      <ul>
+        <li><strong>L'Hypothèse de la Déshumanisation (Analyse Textuelle) :</strong> En croisant les commentaires et les scores de sentiment, vous prouvez si le lien social se brise réellement. L'absence physique des hôtes et la multiplication des "boîtes à clés" sont-elles devenues la norme dans le Marais ?</li>
+        <li><strong>L'Hypothèse de la "Machine à Cash" (Analyse Prix &amp; Volume) :</strong> Vos corrélations montrent-elles un lien direct entre la hausse des loyers pour les Parisiens et la concentration massive de biens entre les mains de quelques multi-propriétaires ?</li>
+        <li><strong>L'Hypothèse de la Standardisation (Analyse Image) :</strong> Vos scores d'authenticité confirment-ils que des immeubles entiers ont été transformés en "produits financiers" uniformes, vidés de toute âme résidentielle ?</li>
+      </ul>
+
+      <p class="lead">
+        Grâce à ce rapport, la Maire de Paris dispose désormais d'un dossier solide. Elle ne parle plus par "intuition", mais avec des preuves mathématiques et visuelles. Elle peut maintenant justifier ses décisions réglementaires auprès des autres décideurs, des acteurs économiques et des citoyens.
+      </p>
+      <p class="lead">
+        La Maire a tout compris, elle est confiante : vous lui avez donné les clés pour protéger l'identité du quartier face à l'industrialisation sauvage.
+      </p>
+      <img src="../Fig11.webp" class="chapter-image" style="width:100%; height:auto;" />
+
+
+      <h3>5. Autre:</h3>
       <p class="lead">Il est crucial de comprendre que la pipeline "Data Lake -> ETL -> Data Warehouse -> EDA" est le standard industriel classique, mais ce n'est pas la seule option. Selon le projet, l'architecture peut muter :</p>
       <p class="lead"><strong>L'approche "Full Data Lake" (Modern Data Stack) :</strong></p>
       <p class="lead">On stocke tout dans le Lake et on utilise des outils de calcul (comme Spark ou Presto) pour interroger directement les fichiers bruts.</p>
