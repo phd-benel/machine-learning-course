@@ -52,10 +52,13 @@
 │       │   └── reviews.csv
 │       └── /images
 │           └── (Dossier initialement vide, à remplir via script)
+│       └── /texts
+│           └── (Dossier initialement vide, à remplir via script)
 ├── /scripts
 │   ├── 00_data.ipynb 
 │   ├── 01_ingestion_images.py
-│   └── 02_sanity_check.py
+│   ├── 02_ingestion_textes.py
+│   └── 03_sanity_check.py
 └── README.md</code></pre>
 
       <p class="quote">
@@ -131,10 +134,32 @@
 
       <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
 
-      <h3>4. Le Bilan de Santé de la Donnée (Script 2)</h3>
+      <h3>4. Processus d'Ingestion du texte (Script 2)</h3>
 
       <p class="lead">
-        Faire confiance à un téléchargement est une erreur de débutant. Une fois le script 1 terminé, vous devez auditer votre Data Lake. Vous allez coder un second script (<code>02_sanity_check.py</code>) qui fera le contrôle qualité.
+        En parallèle des images, vous devez préparer la matière première NLP. L'objectif est de transformer <code>reviews.csv</code> en un corpus textuel structuré <strong>par annonce</strong>, pour que la Phase 2 puisse appliquer directement les modèles de sentiment, nuisance ou thématique.
+      </p>
+
+      <p class="lead"><strong>La logique algorithmique exigée pour l'ingestion texte :</strong></p>
+      <ol>
+        <li><strong>Lecture de la source :</strong> Ouvrir <code>reviews.csv</code> et lire les colonnes utiles (au minimum <code>listing_id</code> et le texte du commentaire).</li>
+        <li><strong>Regroupement par annonce :</strong> Fusionner tous les commentaires appartenant au même <code>listing_id</code>.</li>
+        <li><strong>Nettoyage léger :</strong> Supprimer les balises HTML simples (ex: <code>&lt;br/&gt;</code>), conserver l'UTF-8 pour ne pas perdre les langues (français, anglais, russe, allemand, etc.).</li>
+        <li><strong>Écriture des fichiers :</strong> Créer un fichier <code>/data/raw/texts/&lt;ID&gt;.txt</code> pour chaque annonce, avec un en-tête du type <em>"Commentaires pour l'annonce 2719440:"</em>, puis une liste à puces des avis fusionnés.</li>
+        <li><strong>Idempotence :</strong> Si <code>&lt;ID&gt;.txt</code> existe déjà, vous pouvez ignorer l'écriture ou régénérer de manière contrôlée (mode <code>--overwrite</code>), mais le comportement doit être explicite et reproductible.</li>
+        <li><strong>Robustesse :</strong> Les lignes corrompues ou incomplètes ne doivent pas faire échouer tout le pipeline ; logguez l'erreur et continuez.</li>
+      </ol>
+
+      <p class="quote">
+        <strong>Pourquoi cette étape est clé :</strong> un fichier texte par annonce crée une jointure naturelle avec <code>&lt;ID&gt;.jpg</code> et accélère toute la suite NLP (vectorisation, embeddings, scoring, classification).
+      </p>
+
+      <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
+
+      <h3>5. Le Bilan de Santé de la Donnée (Script 3)</h3>
+
+      <p class="lead">
+        Faire confiance à un téléchargement est une erreur de débutant. Une fois les scripts d'ingestion terminés, vous devez auditer votre Data Lake. Vous allez coder un troisième script (<code>03_sanity_check.py</code>) qui fera le contrôle qualité.
       </p>
 
       <p class="lead"><strong>La logique algorithmique exigée pour le Sanity Check :</strong></p>
@@ -155,7 +180,7 @@
 
       <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
 
-      <h3>5. Le Livrable Final</h3>
+      <h3>6. Le Livrable Final</h3>
 
       <p class="lead">
         Le code seul ne vaut rien s'il n'est pas documenté. Vous devez rédiger un fichier <code>README.md</code> à la racine de votre dossier. Ce fichier est votre rapport de livraison à destination de l'Architecte de Données.
@@ -165,13 +190,13 @@
       <ul>
         <li><strong>Titre et Contexte :</strong> Une brève description de la mission (Création du Data Lake pour ImmoVision 360).</li>
         <li><strong>Structure du Répertoire :</strong> Reproduisez l'arborescence physique de vos dossiers pour expliquer comment vous avez rangé la donnée.</li>
-        <li><strong>Notice d'Exécution :</strong> Expliquez pas à pas comment un autre ingénieur doit lancer vos scripts (ex: "1. Installez telle librairie. 2. Lancez le script 1. 3. Lancez le script 2").</li>
-        <li><strong>Audit des Données (Résultats du Sanity Check) :</strong> Vous devez écrire noir sur blanc les résultats de votre script 2. Je veux y lire le nombre exact d'images que vous avez réussi à ingérer, le nombre d'erreurs rencontrées, et votre taux de réussite.</li>
+        <li><strong>Notice d'Exécution :</strong> Expliquez pas à pas comment un autre ingénieur doit lancer vos scripts (ex: "1. Installez telle librairie. 2. Lancez le script 1 (images). 3. Lancez le script 2 (textes). 4. Lancez le script 3 (sanity check)").</li>
+        <li><strong>Audit des Données (Résultats du Sanity Check) :</strong> Vous devez écrire noir sur blanc les résultats de votre script 3. Je veux y lire le nombre exact d'images et de fichiers textes que vous avez réussi à ingérer, le nombre d'erreurs rencontrées, et votre taux de réussite.</li>
         <li><strong>Analyse des Pertes :</strong> Si vous avez 5000 lignes dans le CSV mais seulement 4800 images, rédigez un paragraphe expliquant techniquement <em>pourquoi</em> il y a une déperdition (liens morts expirés par Airbnb, blocage anti-bot, erreurs serveurs, etc.). C'est ici que l'on reconnaît un ingénieur d'un simple codeur.</li>
       </ul>
 
       <p class="quote">
-        <strong>Rendu attendu :</strong> Un lien vers un dépôt Git contenant l'architecture exacte, vos deux scripts <code>.py</code> opérationnels, et votre <code>README.md</code> complété.
+        <strong>Rendu attendu :</strong> Un lien vers un dépôt Git contenant l'architecture exacte, vos trois scripts <code>.py</code> opérationnels, et votre <code>README.md</code> complété.
       </p>
 
       <p class="lead">
