@@ -379,20 +379,23 @@
       <p class="lead">
         La Maire a tout compris, elle est confiante : vous lui avez donné les clés pour protéger l'identité du quartier face à l'industrialisation sauvage.
       </p>
-      <img src="../Fig11.webp" class="chapter-image" style="width:100%; height:auto;" />
+      <img src="../Fig12.png" class="chapter-image" style="width:100%; height:auto;" />
 
 
-      <h3>5. Autre:</h3>
-      <p class="lead">Il est crucial de comprendre que la pipeline "Data Lake -> ETL -> Data Warehouse -> EDA" est le standard industriel classique, mais ce n'est pas la seule option. Selon le projet, l'architecture peut muter :</p>
-      <p class="lead"><strong>L'approche "Full Data Lake" (Modern Data Stack) :</strong></p>
-      <p class="lead">On stocke tout dans le Lake et on utilise des outils de calcul (comme Spark ou Presto) pour interroger directement les fichiers bruts.</p>
-      <p class="lead">Avantage : Très flexible et rapide à mettre en place.</p>
-      <p class="lead">Inconvénient : Peut devenir un "Data Swamp" (marécage de données) si personne ne documente ce qu'il y a dedans.</p>
-      <p class="lead"><strong>L'approche "Data Lakehouse" (Le meilleur des deux mondes) :</strong></p>
-      <p class="lead">C'est la tendance actuelle. On garde la souplesse du Data Lake (stockage d'images, fichiers texte) mais on y ajoute une couche logicielle qui permet d'avoir la rigueur et la performance du Data Warehouse.</p>
-      <p class="lead"><strong>L'approche "Direct Ingestion" (Small Data) :</strong></p>
-      <p class="lead">Pour des petits volumes, on peut parfois sauter l'étape du Data Lake et charger directement les données nettoyées dans une base SQL.</p>
-      <p class="lead">Risque : Si la source change ou si vous faites une erreur de calcul, la donnée d'origine est perdue.</p>
+      <details style="margin-top:12px;">
+        <summary>Section 5 - Autres architectures (voir détails...)</summary>
+        <h3>5. Autre:</h3>
+        <p class="lead">Il est crucial de comprendre que la pipeline "Data Lake -> ETL -> Data Warehouse -> EDA" est le standard industriel classique, mais ce n'est pas la seule option. Selon le projet, l'architecture peut muter :</p>
+        <p class="lead"><strong>L'approche "Full Data Lake" (Modern Data Stack) :</strong></p>
+        <p class="lead">On stocke tout dans le Lake et on utilise des outils de calcul (comme Spark ou Presto) pour interroger directement les fichiers bruts.</p>
+        <p class="lead">Avantage : Très flexible et rapide à mettre en place.</p>
+        <p class="lead">Inconvénient : Peut devenir un "Data Swamp" (marécage de données) si personne ne documente ce qu'il y a dedans.</p>
+        <p class="lead"><strong>L'approche "Data Lakehouse" (Le meilleur des deux mondes) :</strong></p>
+        <p class="lead">C'est la tendance actuelle. On garde la souplesse du Data Lake (stockage d'images, fichiers texte) mais on y ajoute une couche logicielle qui permet d'avoir la rigueur et la performance du Data Warehouse.</p>
+        <p class="lead"><strong>L'approche "Direct Ingestion" (Small Data) :</strong></p>
+        <p class="lead">Pour des petits volumes, on peut parfois sauter l'étape du Data Lake et charger directement les données nettoyées dans une base SQL.</p>
+        <p class="lead">Risque : Si la source change ou si vous faites une erreur de calcul, la donnée d'origine est perdue.</p>
+      </details>
     </section>
     <nav class="book-nav">
       <a class="btn btn-soft" href="01-introduction.html">Chapitre precedent</a>
@@ -411,7 +414,7 @@
           <path d="M3 9.5L12 5l9 4.5-9 4.5-9-4.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
           <path d="M7 12v6c0 .8 2.2 2 5 2s5-1.2 5-2v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        <span>Badr-Eddine Benelmostafa</span>
+        <span>Badr-Eddine Benelmostafa - Avril 2026</span>
       </a>
     </footer>
   </main>
