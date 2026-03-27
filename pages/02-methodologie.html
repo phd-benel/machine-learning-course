@@ -211,10 +211,7 @@
         Le Data Lake est désormais rempli, mais pour la Maire de Paris, ce réservoir n'est encore qu'un immense "bruit" numérique. Elle ne peut pas fonder une politique d'urbanisme sur 5 000 images éparpillées et 10 000 commentaires bruts. Votre mission en Phase 2 est de <strong>structurer l'invisible</strong>.
       </p>
 
-      <h3>De la "Vérité Brute" à l'Indicateur Stratégique</h3>
-      <p class="lead">
-        Le Data Lake (Phase 1) contenait la <strong>vérité brute</strong> : des fichiers natifs, intacts, mais totalement illisibles pour un décideur humain. La Phase 2 est l'étape cruciale de la <strong>Transformation</strong>. C'est ici que l'ingénieur intervient pour extraire les données du lac, les nettoyer de leurs scories, et surtout les enrichir avec des indicateurs inédits.
-      </p>
+    
 
       <p class="lead">Nous allons donner du sens au chaos en transformant :</p>
       <ul>
@@ -223,7 +220,6 @@
         <li><strong>Des chiffres isolés</strong> en une base de données cohérente.</li>
       </ul>
 
-      <h3>L'Architecture "Silver" : La Naissance de la Connaissance</h3>
       <p class="lead">
         En ingénierie de données, nous passons de la couche <strong>Bronze</strong> (le vrac) à la couche <strong>Silver</strong> (la donnée raffinée). Ce processus repose sur un moteur à trois temps que tout Data Scientist doit maîtriser : l'<strong>ETL</strong> (Extract, Transform, Load).
       </p>
@@ -232,11 +228,21 @@
         <li><strong>Transform (Transformer) :</strong> Nettoyer les erreurs, normaliser les formats et injecter de l'intelligence pour créer des nouveaux scores.</li>
         <li><strong>Load (Charger) :</strong> Injecter le résultat final dans un <strong>Data Warehouse</strong>.</li>
       </ol>
-
-      <h3>L'Objectif Final : Le Data Warehouse</h3>
+      <img
+      class="chapter-image"
+      src="../Fig8.png"
+      style="height:auto; margin-top:10px;"
+      onerror="this.onerror=null;this.style.display='none';"
+    />
       <p class="lead">
         À la fin de cette phase, l'idée est d'aboutir à un <strong>Data Warehouse</strong> (une base de données structurée, par exemple sous <strong>PostgreSQL</strong>). Contrairement au lac de données, ce "magasin de données" est parfaitement organisé, indexé et <strong>prêt à être analysé et exploré</strong>. C'est cette base de données propre qui permettra de répondre précisément aux questions politiques de la municipalité.
       </p>
+      <img
+        class="chapter-image"
+        src="../Fig7.png"
+        style="height:auto; margin-top:10px;"
+        onerror="this.onerror=null;this.style.display='none';"
+      />
 
       <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
 
@@ -249,10 +255,7 @@
         <li><strong>La Connexion aux Sources :</strong> L'ingénieur doit écrire des connecteurs capables de lire aussi bien un fichier local qu'une partition sur un stockage distribué (S3/MinIO).</li>
         <li><strong>Le filtrage sélectif :</strong> On n'extrait pas forcément tout. Pour gagner du temps, on peut décider d'extraire uniquement les données concernant le périmètre du <strong>Marais</strong>, laissant le reste du Data Lake au repos.</li>
       </ul>
-      <p class="quote">
-        <strong>Le conseil du pro :</strong> L'extraction doit être <strong>incrémentale</strong>. Si vous avez déjà extrait les données de janvier, votre script doit être capable de ne récupérer que les "nouveautés" de février sans tout recommencer.
-      </p>
-
+     
       <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
 
       <h3>2. <strong>T</strong>ransform (Le Raffinage et l'Enrichissement)</h3>
@@ -269,14 +272,7 @@
       </ul>
 
       <h3>B. L'Enrichissement IA (La Création de Valeur)</h3>
-      <p class="lead">
-        C'est ici que l'on "augmente" la donnée. <strong>L'idée générale est de créer de nouvelles colonnes (features) qui n'existaient pas au départ :</strong>
-      </p>
-      <ul>
-        <li><strong>L'IA Vision :</strong> Elle scanne les photos et génère une étiquette : <em>"Style Professionnel/Hôtelier"</em> ou <em>"Style Résidentiel/Habité"</em>.</li>
-        <li><strong>L'IA NLP :</strong> Elle analyse le ton des commentaires. Elle ne dit pas juste "positif", elle identifie des thématiques comme <em>"Plainte Nuisance Sonore"</em> ou <em>"Absence d'Hôte Physique"</em>.</li>
-      </ul>
-
+      
       <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
 
       <h3>3. <strong>L</strong>oad (Le Chargement Structuré)</h3>
