@@ -7,6 +7,8 @@
   --border:#e5e7eb;
   --primary:#2563eb;
   --primary-soft:#eaf1ff;
+  --accent-soft:#fff3d6;
+  --accent-border:#ffd79a;
   --radius:14px;
   --shadow:0 8px 28px rgba(31,41,55,.06);
   --maxw:1120px;
@@ -53,6 +55,14 @@ a:hover{text-decoration:underline}
 h1,h2,h3{font-family:Merriweather,serif}
 h1{margin:.1rem 0 .8rem;font-size:clamp(1.4rem,2.7vw,2.2rem)}
 h2{margin:.1rem 0 .8rem;font-size:clamp(1.2rem,2.2vw,1.7rem)}
+.card h3{
+  background:var(--accent-soft);
+  border:1px solid var(--accent-border);
+  padding:6px 10px;
+  border-radius:10px;
+  display:inline-block;
+  margin:10px 0 8px;
+}
 .lead{
   color:var(--muted);
   line-height:1.8;

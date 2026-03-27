@@ -129,17 +129,17 @@
       <details style="margin-top:12px;">
         <summary>Voir détails...</summary>
 
-        <h3>🚩 La Check-list de l'Ingénieur </h3>
+        <h4>🚩 La Check-list de l'Ingénieur </h4>
 
         <p class="lead">
           Avant de coder votre script d'ingestion, un ingénieur doit valider ces 7 piliers. Ce ne sont pas des détails, ce sont les fondations de votre architecture de données.
         </p>
 
-        <h3>1. Format &amp; Préservation (Raw vs Processed)</h3>
+        <h4>1. Format &amp; Préservation (Raw vs Processed)</h4>
         <p class="lead"><strong>La question :</strong> Dois-je convertir mes images en binaire (Base64) ou mes CSV en formats compressés (Parquet) dès l'entrée ?</p>
         <p class="lead"><strong>L'élément de réponse :</strong> <strong>NON.</strong> Dans le Data Lake, on garde le <strong>format natif</strong> (.jpg, .csv). Pourquoi ? Parce que si votre futur modèle d'IA a besoin des métadonnées EXIF d'une photo (coordonnées GPS cachées dans l'image), une conversion prématurée pourrait les détruire à jamais.</p>
 
-        <h3>2. Stratégie de Partitionnement (L'Organisation)</h3>
+        <h4>2. Stratégie de Partitionnement (L'Organisation)</h4>
         <p class="lead"><strong>La question :</strong> Comment organiser mon Lake pour ne pas qu'il devienne un "Data Swamp" (marécage) illisible ?</p>
         <p class="lead"><strong>L'élément de réponse :</strong> Utilisez une structure <strong>temporelle et thématique</strong>.</p>
         <ul>
@@ -147,25 +147,25 @@
           <li><em>Pourquoi ?</em> Cela permet de rejouer les données d'une journée précise en cas d'erreur et facilite le balayage par les outils de calcul (Spark/Python).</li>
         </ul>
 
-        <h3>3. Vitesse d'Ingestion : Batch vs Streaming</h3>
+        <h4>3. Vitesse d'Ingestion : Batch vs Streaming</h4>
         <p class="lead"><strong>La question :</strong> Est-ce que je traite un stock de fichiers (Batch) ou un flux en continu (Streaming) ?</p>
         <p class="lead"><strong>L'élément de réponse :</strong> Pour l'étude du Marais, nous sommes en <strong>Batch</strong> (fichiers historiques). Cependant, votre code doit être <strong>modulaire</strong>. Un bon ingénieur anticipe le "Temps Réel" : si demain la Mairie veut une alerte dès qu'un nouvel appartement "industriel" est publié, votre script d'ingestion doit pouvoir s'adapter sans être réécrit de zéro.</p>
 
-        <h3>4. Le Principe d'Idempotence (La Sécurité)</h3>
+        <h4>4. Le Principe d'Idempotence (La Sécurité)</h4>
         <p class="lead"><strong>La question :</strong> Que se passe-t-il si mon script d'ingestion plante à 50% à cause d'une coupure réseau ?</p>
         <p class="lead"><strong>L'élément de réponse :</strong> Votre opération doit être <strong>Idempotente</strong>. Cela signifie que relancer le script 1 fois ou 100 fois doit donner le même résultat final, sans créer de doublons.</p>
         <p class="lead"><em>Technique :</em> Vérifiez si le fichier existe déjà dans le Lake avant de le copier, ou utilisez des sommes de contrôle (Hash MD5).</p>
 
-        <h3>5. Intégrité &amp; Cohérence (La Jointure Physique)</h3>
+        <h4>5. Intégrité &amp; Cohérence (La Jointure Physique)</h4>
         <p class="lead"><strong>La question :</strong> Ai-je bien une image pour chaque ligne de mon fichier CSV ?</p>
         <p class="lead"><strong>L'élément de réponse :</strong> C'est le test de la <strong>"Jointure Orpheline"</strong>. Un Data Lake n'impose pas de contrainte d'intégrité (contrairement au SQL). C'est donc à votre script de vérifier que l'image <code>img_123.jpg</code> citée dans le listing existe réellement dans le dossier images. Sans cette vérification, votre Phase 2 (IA) plantera sur des fichiers inexistants.</p>
 
-        <h3>6. Vérification Quantitative (Le Bilan)</h3>
+        <h4>6. Vérification Quantitative (Le Bilan)</h4>
         <p class="lead"><strong>La question :</strong> Ai-je bien reçu 100% des fichiers attendus ?</p>
         <p class="lead"><strong>L'élément de réponse :</strong> Ne faites jamais confiance au transfert. Votre script d'ingestion doit générer un <strong>log de succès</strong>.</p>
         <p class="lead"><em>Exemple :</em> "1500 lignes lues dans le CSV, 1498 images trouvées, 2 erreurs logguées". Cette traçabilité est la signature d'un travail professionnel.</p>
 
-        <h3>7. Architecture de Stockage : Local ou Distribué ?</h3>
+        <h4>7. Architecture de Stockage : Local ou Distribué ?</h4>
         <p class="lead"><strong>La question :</strong> Mon disque dur suffit-il, ou dois-je passer sur une architecture distribuée ?</p>
         <p class="lead"><strong>L'élément de réponse :</strong> Tout dépend du Volume et de la Disponibilité.</p>
         <ul>
@@ -196,7 +196,7 @@
           </table>
         </div>
 
-        <h3 style="margin-top:14px;">Résumé :</h3>
+        <h4 style="margin-top:14px;">Résumé :</h4>
         <p class="lead">
           En Phase 1, vous n'êtes pas encore un analyste, vous êtes un <strong>Logisticien</strong>. Votre but est de garantir que la "matière première" (la donnée) arrive à l'usine (la Phase 2) de manière complète, saine et reproductible.
         </p>
@@ -206,7 +206,7 @@
 
       
 
-      <h3>3. Phase 2 : ETL &amp; Feature Engineering – La Raffinerie de l'IA</h3>
+      <h3>3. Phase 2 : ETL &amp; Feature Engineering</h3>
       <p class="lead">
         Le Data Lake est désormais rempli, mais pour la Maire de Paris, ce réservoir n'est encore qu'un immense "bruit" numérique. Elle ne peut pas fonder une politique d'urbanisme sur 5 000 images éparpillées et 10 000 commentaires bruts. Votre mission en Phase 2 est de <strong>structurer l'invisible</strong>.
       </p>
@@ -246,7 +246,7 @@
 
       <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
 
-      <h3>1. <strong>E</strong>xtract (L'Extraction Intelligente)</h3>
+      <h4>1. <strong>E</strong>xtract (L'Extraction Intelligente)</h4>
       <p class="lead">
         L'extraction est l'acte de "lire" les sources hétérogènes que nous avons sécurisées en Phase 1.
       </p>
@@ -258,24 +258,52 @@
      
       <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
 
-      <h3>2. <strong>T</strong>ransform (Le Raffinage et l'Enrichissement)</h3>
+      <h4>2. <strong>T</strong>ransform (Le Raffinage et l'Enrichissement)</h4>
+      
       <p class="lead">
-        C'est l'étape la plus longue et la plus complexe (souvent 70% du temps d'un Data Scientist). Elle se divise en deux sous-étapes :
+        Dans cette étape, nous transformons le "minerai brut" du Data Lake en un produit fini. On ne se contente pas de nettoyer les erreurs, on <strong>augmente</strong> la donnée pour qu'elle réponde aux questions complexes de la Maire de Paris.
       </p>
 
-      <h3>A. Le Nettoyage (Data Cleaning)</h3>
-      <p class="lead">On répare la donnée brute pour la rendre mathématiquement exploitable :</p>
+      <h4>A. Le Nettoyage et la Normalisation (La mise aux normes)</h4>
+      <p class="lead">
+        Avant d'ajouter de la valeur, il faut que la base soit saine. C'est le "repassage" de la donnée :
+      </p>
       <ul>
-        <li><strong>Normalisation :</strong> Harmoniser les prix (tous en Euros), les surfaces (tous en <code>m^2</code>) et les formats de dates.</li>
-        <li><strong>Traitement des valeurs manquantes :</strong> Que faire si un hôte n'a pas mis de photo ? On crée une valeur par défaut ou on écarte la ligne pour ne pas fausser l'IA.</li>
-        <li><strong>Dédoublonnement :</strong> Utiliser des algorithmes de "fuzzy matching" pour détecter si deux annonces différentes décrivent en réalité le même appartement.</li>
+        <li><strong>Normalisation des formats :</strong> S'assurer que les prix sont tous en Euros, les surfaces en <code>m^2</code>, et les dates au format standard (<code>AAAA-MM-JJ</code>).</li>
+        <li><strong>Gestion des valeurs aberrantes (Outliers) :</strong> Identifier les données qui faussent les statistiques (ex: un appartement de 2 <code>m^2</code> ou un prix de 0 €).</li>
+        <li><strong>Dédoublonnement :</strong> Fusionner les annonces identiques présentes sur plusieurs plateformes pour ne pas fausser le volume réel de l'offre dans le Marais.</li>
       </ul>
 
-      <h3>B. L'Enrichissement IA (La Création de Valeur)</h3>
+      <h4>B. L'Enrichissement (Donner de la profondeur à la donnée)</h4>
+      <p class="lead">
+        Enrichir, c'est créer de <strong>nouvelles colonnes (features)</strong> qui n'existaient pas dans le Data Lake en croisant notre fichier avec d'autres savoirs. On distingue deux grandes familles :
+      </p>
+
+      <h4>1. L'Enrichissement Déterministe (Algorithmique &amp; Externe)</h4>
+      <p class="lead">On utilise des règles logiques ou des bases de données tierces :</p>
+      <ul>
+        <li><strong>Géocodage :</strong> Transformer une adresse en coordonnées GPS pour calculer la distance aux monuments ou aux zones de bruit.</li>
+        <li><strong>Croisement Légal (Lookup) :</strong> Vérifier si l'ID de l'annonce existe dans le registre officiel des loueurs de la Ville de Paris.</li>
+        <li><strong>Calculs Métier :</strong> Créer des indicateurs comme le "Prix moyen au <code>m^2</code>" ou le "Ratio de disponibilité annuelle".</li>
+        <li><strong>Contexte Temporel :</strong> Marquer les données selon les saisons touristiques ou les événements (ex: Fashion Week).</li>
+      </ul>
+
+      <h4>2. L'Enrichissement par Inférence (Intelligence Artificielle)</h4>
+      <p class="lead">
+        On utilise des modèles pour "deviner" des informations que l'œil humain ne peut pas traiter à grande échelle :
+      </p>
+      <ul>
+        <li><strong>IA Vision :</strong> Analyser les photos pour détecter si la décoration est "standardisée/hôtelière" ou "personnelle/habitée".</li>
+        <li><strong>IA NLP :</strong> Analyser les commentaires pour extraire un sentiment global ou détecter des mots-clés de nuisances (fêtes, bruit, clés sous le paillasson).</li>
+      </ul>
+
+      <p class="quote">
+        <strong>Règle d'or :</strong> Lors de l'enrichissement, ne remplacez jamais la donnée d'origine. Gardez la colonne brute (ex: <code>prix_brut</code>) et créez une nouvelle colonne enrichie (ex: <code>prix_nettoye</code>). Cela permet de vérifier vos calculs à tout moment sans avoir à retourner dans le Data Lake.
+      </p>
       
       <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
 
-      <h3>3. <strong>L</strong>oad (Le Chargement Structuré)</h3>
+      <h4>3. <strong>L</strong>oad (Le Chargement Structuré)</h4>
       <p class="lead">
         Une fois la donnée "propre" et "augmentée", elle doit être stockée de manière à ce qu'un humain ou un logiciel de visualisation puisse l'interroger instantanément.
       </p>
@@ -285,51 +313,11 @@
         <li><strong>La "Source Unique de Vérité" :</strong> À la fin du <strong>Load</strong>, vous avez une table parfaite où chaque ligne raconte l'histoire complète d'un logement : son prix, son standing détecté par l'IA, et le niveau de nuisance rapporté par les voisins.</li>
       </ul>
 
-      <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
-
-      <h3>🚩 Résumé pour vos étudiants : Les Enjeux de l'ETL</h3>
-      <div style="overflow:auto; margin-top:8px;">
-        <table style="width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--border); border-radius:12px; overflow:hidden;">
-          <thead>
-            <tr style="background:#f3f7ff;">
-              <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">Étape</th>
-              <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">Action de l'Ingénieur</th>
-              <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">Résultat pour la Maire</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="padding:10px; border-bottom:1px solid var(--border);"><strong>Extract</strong></td>
-              <td style="padding:10px; border-bottom:1px solid var(--border);">Lire les images, les textes et les prix.</td>
-              <td style="padding:10px; border-bottom:1px solid var(--border);">On a toute la matière première.</td>
-            </tr>
-            <tr>
-              <td style="padding:10px; border-bottom:1px solid var(--border);"><strong>Transform</strong></td>
-              <td style="padding:10px; border-bottom:1px solid var(--border);">Nettoyer les erreurs et calculer des scores IA.</td>
-              <td style="padding:10px; border-bottom:1px solid var(--border);">On comprend enfin le "Pourquoi" de la gentrification.</td>
-            </tr>
-            <tr>
-              <td style="padding:10px;"><strong>Load</strong></td>
-              <td style="padding:10px;">Ranger les données dans un Warehouse SQL.</td>
-              <td style="padding:10px;">On peut générer des cartes et des graphiques en un clic.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
-
-      <h3>💡 Questions à poser aux étudiants pour valider la Phase 2 :</h3>
-      <ol>
-        <li><strong>Fiabilité :</strong> Si votre étape <strong>Transform</strong> échoue sur une image corrompue, est-ce que toute votre pipeline s'arrête (Crash) ou est-ce qu'elle continue en isolant l'erreur (Robustesse) ?</li>
-        <li><strong>Auditabilité :</strong> Si la Maire vous demande <em>"Pourquoi cet appartement a un score de nuisance de 90% ?"</em>, pouvez-vous remonter jusqu'au commentaire brut dans le Data Lake qui a causé ce score ?</li>
-      </ol>
-
+      
       <p class="quote">
-        <strong>Cette structure vous permet de poser les bases de l'ingénierie avant de plonger, dans le chapitre suivant, dans les algorithmes spécifiques de Vision et de NLP !</strong>
+        <strong>Règle d'or :</strong> Une fois le Load terminé, votre Data Warehouse devient la seule et unique source de vérité. Si quelqu'un pose une question sur les prix dans le Marais, il ne doit plus regarder le CSV d'origine ni le Data Lake, mais uniquement cette base PostgreSQL. C'est la garantie que tout le monde travaille sur les mêmes chiffres validés.
       </p>
-
-      <p class="lead"><strong>Souhaitez-vous que nous passions à la structure de la <em>Phase 3 (EDA &amp; Storytelling)</em> pour boucler la méthodologie ?</strong></p>
+      <hr style="border:none; border-top:1px dashed var(--border); margin:12px 0;" />
 
       <h3>4. Phase 3 : EDA &amp; Rapport d'Impact – Le Storytelling Décisionnel</h3>
       <p class="lead">L'EDA (Exploratory Data Analysis) n'est pas juste faire des graphiques ; c'est valider ou infirmer les hypothèses du Chapitre 1.</p>
