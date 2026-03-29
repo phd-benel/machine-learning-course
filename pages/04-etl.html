@@ -230,6 +230,95 @@
         Dans votre script, documentez chaque colonne conservée avec un commentaire expliquant à quelle hypothèse elle se rattache. Un code qui explique <em>pourquoi</em> il garde une donnée est un code de qualité professionnelle.
       </p>
 
+      <hr style="border:none; border-top:1px dashed var(--border); margin:18px 0;" />
+
+      <h3><code>05_Transform</code> : l'alchimie et l'enrichissement par l'IA</h3>
+      <p class="lead">
+        Cette partie insiste sur l'importance de l'<strong>exploration des données (EDA — Exploratory Data Analysis)</strong> et du <strong>profiling</strong> <em>avant</em> de lancer des pipelines de transformation automatiques. L'objectif est de métamorphoser votre fichier filtré en une base propre et « intelligente », enrichie par l'IA — sans jamais transformer à l'aveugle. Règle d'or : <strong>comprendre ses données</strong>, puis coder.
+      </p>
+
+      <h4>1. L'exploration : comprendre avant d'agir (data profiling)</h4>
+      <p class="lead">
+        Avant de rédiger votre script <code>0.5_transform.py</code> (équivalent logique <code>05_transform.py</code>), prenez le temps d'explorer vos données. Utilisez votre notebook <code>00_data.ipynb</code> (ou de petits scripts d'exploration annexes) pour auditer l'état de santé du jeu de données.
+      </p>
+      <p class="lead"><strong>Que devez-vous chercher ?</strong></p>
+      <ul>
+        <li><strong>Les valeurs aberrantes (outliers) :</strong> un appartement à 0&nbsp;€ la nuit ? Ou à 15&nbsp;000&nbsp;€ ?</li>
+        <li><strong>Les formats incohérents :</strong> le prix est-il un nombre exploitable ou une chaîne avec symbole monétaire (ex. <code>"$120.00"</code>) ?</li>
+        <li><strong>Les valeurs manquantes (<code>NaN</code>) :</strong> quel pourcentage de cellules est vide ?</li>
+      </ul>
+
+      <p class="quote">
+        <strong>Théorie : que faire face aux valeurs manquantes ?</strong><br />
+        Face à des features manquantes, trois stratégies classiques :
+        <ul style="margin:10px 0 0; padding-left:18px;">
+          <li><strong>La suppression (drop) :</strong> si une donnée critique (<code>price</code>, identifiant, etc.) manque, la ligne peut devenir inutile — on la retire.</li>
+          <li><strong>L'imputation statistique :</strong> remplacer le vide par la moyenne ou la médiane de la colonne (ex. notes <code>review_scores</code>) sans trop fausser la distribution.</li>
+          <li><strong>L'imputation logique :</strong> donner du sens au vide. Ex. si <code>reviews_per_month</code> est vide car le logement est neuf, remplacer le <code>NaN</code> par <code>0</code> peut être la décision la plus juste.</li>
+        </ul>
+      </p>
+
+      <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
+
+      <h4>2. Le script de production (<code>0.5_transform.py</code>)</h4>
+      <p class="lead">
+        Une fois le diagnostic posé à l'exploration, vous codez le script final. Il automatise deux grandes étapes : le <strong>nettoyage de base</strong> et la <strong>création de nouvelles features</strong> propulsées par l'IA.
+      </p>
+
+      <p class="lead"><strong>A. Nettoyage et normalisation</strong></p>
+      <p class="lead">C'est le « repassage » de la donnée. Votre script applique systématiquement vos règles :</p>
+      <ul>
+        <li>convertir les prix en nombres réels (<code>float</code>) ;</li>
+        <li>gérer les <code>NaN</code> selon les stratégies définies ci-dessus ;</li>
+        <li>plafonner ou supprimer les valeurs aberrantes pour ne pas fausser les analyses pour la Maire de Paris.</li>
+      </ul>
+
+      <p class="lead"><strong>B. Enrichissement multimodal par l'IA (inférence)</strong></p>
+      <p class="lead">
+        Une fois la base saine, vous lui donnez une profondeur analytique : <strong>deux nouvelles colonnes (features)</strong> via l'API Google AI Studio et le modèle <code>gemini-1.5-flash</code> (ou équivalent validé en cours — respectez les quotas et la confidentialité des clés API, idéalement via variables d'environnement).
+      </p>
+
+      <p class="lead"><strong>Feature 1 — « Standardization Score » (image → texte)</strong></p>
+      <p class="lead">
+        L'IA « voit » chaque image pour estimer si le logement a une âme résidentielle ou ressemble à une chambre d'hôtel standardisée. La réponse est intégrée dans une nouvelle colonne, par exemple <code>Standardization_Score</code> (ou équivalent encodé numériquement selon votre grille).
+      </p>
+      <pre><code>import google.generativeai as genai
+import PIL.Image
+
+# Configuration de la clé API (préférez une variable d'environnement en production)
+genai.configure(api_key="VOTRE_CLE_API_ICI")
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+img = PIL.Image.open("data/raw/images/ID_123.jpg")
+
+prompt = """
+Analyse cette image et classifie-la strictement dans l'une de ces catégories :
+- 'Appartement industrialisé' (Déco minimaliste, style catalogue, standardisé, froid)
+- 'Appartement personnel' (Objets de vie, livres, décoration hétéroclite, chaleureux)
+- 'Autre' (Si l'image ne montre pas l'intérieur d'un logement)
+
+Réponds uniquement par le nom de la catégorie.
+"""
+response = model.generate_content([prompt, img])
+print(response.text)  # Cette valeur alimente votre nouvelle colonne</code></pre>
+      <p class="lead">Mappez la sortie du modèle vers votre colonne <code>Standardization_Score</code> (catégorie ou score numérique selon votre choix pédagogique).</p>
+
+      <p class="lead"><strong>Feature 2 — « Neighborhood Impact » (texte → texte)</strong></p>
+      <p class="lead">
+        Les fichiers <code>.txt</code> agrègent les commentaires voyageurs : l'expérience vécue. Utilisez le même modèle (<code>gemini-1.5-flash</code>) en lui passant le contenu du fichier texte pour classer le type d'expérience attendu : <strong>« Hôtélisé »</strong> (boîte à clés, consignes professionnelles, peu de contact humain) vs <strong>« Voisinage naturel »</strong> (rencontre avec l'hôte, conseils de quartier, vie locale).
+      </p>
+      <p class="lead">
+        <strong>Utilité métier :</strong> cette feature permet d'appuyer l'hypothèse sociale de la Maire — par exemple : « Dans ce quartier, X&nbsp;% des séjours relèvent d'un mode hôtélisé / peu humain. » Stockez le résultat dans une colonne dédiée, par exemple <code>neighborhood_impact</code>.
+      </p>
+
+      <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
+
+      <h4>3. Livrable de la phase Transform</h4>
+      <p class="lead">
+        L'exécution de <code>0.5_transform.py</code> doit parcourir chaque ligne de la base filtrée, appeler l'IA pour chaque image et chaque texte associés, puis consolider le tout dans un fichier unique :
+      </p>
+      <p class="lead"><code>data/processed/transformed_elysee.csv</code></p>
+
     </section>
     
     <nav class="book-nav">
