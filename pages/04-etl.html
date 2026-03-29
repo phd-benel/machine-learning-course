@@ -248,10 +248,10 @@
         <li><strong>Les valeurs manquantes (<code>NaN</code>) :</strong> quel pourcentage de cellules est vide ?</li>
       </ul>
 
-      <p class="quote">
+      <p>
         <strong>Théorie : que faire face aux valeurs manquantes ?</strong><br />
         Face à des features manquantes, trois stratégies classiques :
-        <ul style="margin:10px 0 0; padding-left:18px;">
+        <ul>
           <li><strong>La suppression (drop) :</strong> si une donnée critique (<code>price</code>, identifiant, etc.) manque, la ligne peut devenir inutile — on la retire.</li>
           <li><strong>L'imputation statistique :</strong> remplacer le vide par la moyenne ou la médiane de la colonne (ex. notes <code>review_scores</code>) sans trop fausser la distribution.</li>
           <li><strong>L'imputation logique :</strong> donner du sens au vide. Ex. si <code>reviews_per_month</code> est vide car le logement est neuf, remplacer le <code>NaN</code> par <code>0</code> peut être la décision la plus juste.</li>
@@ -269,7 +269,7 @@
       <p class="lead">C'est le « repassage » de la donnée. Votre script applique systématiquement vos règles :</p>
       <ul>
         <li>convertir les prix en nombres réels (<code>float</code>) ;</li>
-        <li>gérer les <code>NaN</code> selon les stratégies définies ci-dessus ;</li>
+        <li>gérer les <code>NaN</code> selon une stratégie choisie ;</li>
         <li>plafonner ou supprimer les valeurs aberrantes pour ne pas fausser les analyses pour la Maire de Paris.</li>
       </ul>
 
@@ -308,16 +308,102 @@ print(response.text)  # Cette valeur alimente votre nouvelle colonne</code></pre
         Les fichiers <code>.txt</code> agrègent les commentaires voyageurs : l'expérience vécue. Utilisez le même modèle (<code>gemini-1.5-flash</code>) en lui passant le contenu du fichier texte pour classer le type d'expérience attendu : <strong>« Hôtélisé »</strong> (boîte à clés, consignes professionnelles, peu de contact humain) vs <strong>« Voisinage naturel »</strong> (rencontre avec l'hôte, conseils de quartier, vie locale).
       </p>
       <p class="lead">
-        <strong>Utilité métier :</strong> cette feature permet d'appuyer l'hypothèse sociale de la Maire — par exemple : « Dans ce quartier, X&nbsp;% des séjours relèvent d'un mode hôtélisé / peu humain. » Stockez le résultat dans une colonne dédiée, par exemple <code>neighborhood_impact</code>.
+        Mappez la sortie du modèle vers votre colonne Neighborhood_Impact (catégorie ou score numérique selon votre choix pédagogique).
       </p>
 
       <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
 
-      <h4>3. Livrable de la phase Transform</h4>
       <p class="lead">
         L'exécution de <code>0.5_transform.py</code> doit parcourir chaque ligne de la base filtrée, appeler l'IA pour chaque image et chaque texte associés, puis consolider le tout dans un fichier unique :
       </p>
       <p class="lead"><code>data/processed/transformed_elysee.csv</code></p>
+
+      <hr style="border:none; border-top:1px dashed var(--border); margin:18px 0;" />
+
+      <h3><code>06_Load</code> : l'ancrage dans le Data Warehouse (PostgreSQL)</h3>
+      <p class="lead">
+        Vous avez extrait le signal du bruit et enrichi vos données grâce à l'intelligence artificielle. Votre fichier <code>transformed_elysee.csv</code> (Zone Silver) concentre l'information utile.
+      </p>
+      <p class="lead">
+        Dans l'ingénierie de données professionnelle, <strong>un fichier CSV n'est pas une finalité : c'est un format de transit.</strong> Pour que la Maire de Paris puisse interroger ces données, croiser les quartiers et brancher des tableaux de bord (Tableau, Power BI, etc.), la donnée doit quitter le monde volatil des fichiers plats pour entrer dans le sanctuaire du <strong>Data Warehouse</strong> : une <strong>base de données relationnelle</strong>. Nous utilisons <strong>PostgreSQL</strong>, référence industrielle largement adoptée.
+      </p>
+
+      <h4>1. Sécurité et bonnes pratiques : le fichier <code>.env</code></h4>
+      <p class="lead">
+        Avant la première ligne de connexion à la base, une règle absolue en entreprise : <strong>on ne code jamais un mot de passe en dur dans un script.</strong> Publier des identifiants sur un dépôt Git expose le système à une faille majeure.
+      </p>
+      <p class="lead"><strong>Solution :</strong> les variables d'environnement.</p>
+      <ul>
+        <li>Créez un fichier <code>.env</code> à la racine du projet (et vérifiez qu'il est bien ignoré par Git via <code>.gitignore</code>).</li>
+        <li>Y placer les identifiants, par exemple :</li>
+      </ul>
+      <pre><code>DB_USER=postgres
+DB_PASSWORD=mon_mot_de_passe_secret
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=immovision_db</code></pre>
+      <p class="lead">
+        Dans <code>0.6_load.py</code>, utilisez la librairie <code>python-dotenv</code> (<code>load_dotenv()</code>) pour charger ces valeurs de façon sécurisée, sans les afficher dans le code versionné.
+      </p>
+
+      <h4>2. Le pont entre Python et PostgreSQL : SQLAlchemy</h4>
+      <p class="lead">
+        Pour envoyer votre DataFrame vers PostgreSQL, on évite d'écrire des <code>INSERT</code> ligne à ligne à la main. On utilise un ORM — <strong>SQLAlchemy</strong> — qui fait le lien entre Pandas (Python) et le moteur SQL.
+      </p>
+      <p class="lead"><strong>Cœur possible de <code>0.6_load.py</code> :</strong></p>
+      <pre><code>import pandas as pd
+from sqlalchemy import create_engine
+import os
+from dotenv import load_dotenv
+
+# 1. Chargement des variables de sécurité
+load_dotenv()
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASSWORD")
+host = os.getenv("DB_HOST", "localhost")
+port = os.getenv("DB_PORT", "5432")
+dbname = os.getenv("DB_NAME", "immovision_db")
+
+# 2. Lecture de la Zone Silver
+df_silver = pd.read_csv("data/processed/transformed_elysee.csv")
+
+# 3. Création du moteur de connexion (le « tuyau »)
+engine = create_engine(
+    f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
+)
+
+# 4. L'injection (Load)
+df_silver.to_sql(
+    "elysee_listings_silver",
+    engine,
+    if_exists="replace",
+    index=False,
+)
+print("Données chargées avec succès dans le Data Warehouse.")</code></pre>
+
+      <h4>3. Le pilier de l'idempotence : <code>if_exists='replace'</code></h4>
+      <p class="lead">
+        Un pipeline doit pouvoir être relancé chaque jour (ou plus souvent) sans casser le système : c'est l'<strong>idempotence</strong>. Si vous réexécutez <code>0.6_load.py</code> :
+      </p>
+      <ul>
+        <li>le script ne doit pas échouer parce que la table existe déjà ;</li>
+        <li>il ne doit pas dupliquer les mêmes lignes indéfiniment.</li>
+      </ul>
+      <p class="lead">
+        L'argument <code>if_exists='replace'</code> fait recréer la table à chaque exécution avec les données les plus récentes. En production avancée, on pourrait préférer un <code>UPSERT</code> (mise à jour incrémentale) ; pour ce projet, le <code>replace</code> est un bon compromis pédagogique.
+      </p>
+
+      <h4>4. Livrable final : la base « master »</h4>
+      <p class="lead">
+        Après exécution du script, votre mission d'ingénierie sur cette phase est bouclée : la table <code>elysee_listings_silver</code> vit dans PostgreSQL. Chaque ligne représente un logement avec des types stricts (prix numériques, booléens réels, etc.) et les colonnes enrichies par l'IA (par ex. scores de type <code>standardization_score</code>, <code>neighborhood_impact</code> ou <code>social_impact_score</code> selon votre nommage dans <code>transformed_elysee.csv</code>).
+      </p>
+      <p class="lead">
+        Le terrain est prêt pour la <strong>Phase 3 — visualisation et analyse</strong> : cartes, graphiques et récit décisionnel pour la Maire.
+      </p>
+
+      <p class="quote" style="margin-top:14px;">
+        <strong>Phase 2 bouclée :</strong> Extract → Transform → Load — du Data Lake à une base relationnelle exploitable et requêtable.
+      </p>
 
     </section>
     
