@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chapitre 4 - ETL Multimodal</title>
+  <title>Chapitre 4 - Phase 2 : ETL &amp; Data Warehouse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
@@ -14,21 +14,224 @@
   <main class="container">
     <div class="progress-wrap"><div class="progress-text" id="progressText"></div><div class="progress-bar"><div class="progress" id="progressBar"></div></div></div>
     <section class="card">
-      <h2>Chapitre 4 - Coming soon !</h2>
-      <p class="lead" style="margin-top:10px;">
-        Cette section est en cours de preparation. Revenez plus tard pour le contenu complet :
-        transformation ETL multimodale, schematisation, et mise en forme pour l'analyse et la visualisation.
+      <h2>Phase 2 : De la « Matière Brute » à l'Intelligence Décisionnelle</h2>
+
+      <p class="lead">
+        Félicitations ! Votre <strong>Data Lake</strong> (la Zone Bronze) est désormais une réalité physique. Votre infrastructure de stockage reflète une base solide de données brutes prête à être exploitée :
       </p>
-      <div style="margin-top:14px; text-align:center;">
-        <img
-          class="chapter-image"
-          src="../Figures/FigCS.jpg"
-          alt="Coming soon"
-          style="width:200px; max-width:100%; height:auto; border-radius:12px;"
-          onerror="this.onerror=null;this.style.display='none';"
-        />
-      </div>
+      <pre><code>/ImmoVision360_Project
+├── /data
+│   └── /raw                          &lt;-- Zone "Bronze" (Données Brutes)
+│       ├── /tabular
+│       │   ├── listings.csv          &lt;-- +70 colonnes, format brut
+│       │   └── reviews.csv
+│       ├── /images/                  &lt;-- Milliers de fichiers [ID].jpg
+│       └── /texts/                   &lt;-- Milliers de fichiers [ID].txt
+├── /scripts
+│   ├── 00_data.ipynb
+│   ├── 01_ingestion_images.py
+│   ├── 02_ingestion_textes.py
+│   └── 03_sanity_check.py
+└── README.md</code></pre>
+
+      <p class="lead">
+        Cependant, en l'état, ces données sont massives, désorganisées et « muettes ». Un fichier CSV de 70 colonnes, des milliers de photos éparpillées et des blocs de commentaires bruts ne permettent pas de prendre des décisions politiques.
+      </p>
+      <p class="lead">
+        L'objectif de cette deuxième phase est d'opérer une mutation majeure : <strong>transformer votre Data Lake (non structuré et lourd) en un véritable Data Warehouse sous PostgreSQL.</strong> Vous allez créer la <strong>Zone Silver</strong> : un environnement ultra-structuré, typé et requêtable en temps réel.
+      </p>
+      <img src="../Figures/Fig14.png" class="chapter-image" style="width:100%; height:auto;" />
+
+      <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
+
+      <p class="lead">
+        Pour orchestrer cette métamorphose sans créer un code monolithique et illisible, nous adoptons un pipeline découpé en <strong>trois scripts distincts</strong>, autonomes et spécialisés.
+      </p>
+
+      <h4>1. <code>04_extract.py</code> : le filtre stratégique</h4>
+      <p class="lead">Son rôle est d'ouvrir la porte du Data Lake pour trier « le grain de l'ivraie ». Sur les 70 colonnes du CSV initial, seules quelques-unes portent le signal utile pour la Maire.</p>
+    
+
+      <h4>2. <code>05_transform.py</code> : l'alchimie des données</h4>
+      <p class="lead">C'est ici que s'opère la véritable valeur ajoutée. Ce script nettoie les données filtrées et les enrichit.</p>
+      <ul>
+        <li><strong>Action :</strong> nettoyage des valeurs manquantes (<code>NaN</code>) et <strong>feature engineering</strong> multimodal. Vous transformez les images (<code>.jpg</code>) et les textes (<code>.txt</code>) en nouvelles colonnes numériques (scores de standardisation, sentiment, nuisances).</li>
+      </ul>
+
+      <h4>3. <code>06_load.py</code> : l'ancrage relationnel</h4>
+      <p class="lead">C'est le point d'aboutissement du pipeline. La donnée quitte le monde volatil des fichiers CSV pour rejoindre la rigueur du SQL.</p>
+      <ul>
+        <li><strong>Action :</strong> injection propre du fichier « Silver » transformé dans une table <strong>PostgreSQL</strong> parfaitement typée.</li>
+        <li><strong>Résultat :</strong> un entrepôt de données prêt pour les requêtes complexes et la visualisation finale.</li>
+      </ul>
+
+
+      <p class="lead">
+        En séparant l'<strong>extraction</strong>, la <strong>transformation</strong> et le <strong>chargement</strong>, vous garantissez la maintenance et l'évolutivité de votre projet. Chaque étape est documentée, logguée et surtout <strong>idempotente</strong> : vous pouvez relancer le pipeline sans jamais corrompre votre base de données.
+      </p>
+      
+      <p class="lead">Voici l'arborescence cible une fois la Zone Silver et les scripts ETL en place :</p>
+      <pre><code>/ImmoVision360_Project
+├── /data
+│   ├── /raw                          &lt;-- Zone "Bronze" (Inchangée)
+│   │   ├── /tabular
+│   │   │   ├── listings.csv
+│   │   │   └── reviews.csv
+│   │   ├── /images/                  &lt;-- [ID].jpg
+│   │   └── /texts/                   &lt;-- [ID].txt
+│   │
+│   └── /processed                    &lt;-- Zone "Silver" (NOUVEAU)
+│       ├── filtered_elysee.csv        &lt;-- Généré par 0.4_extract.py
+│       └── transformed_elysee.csv     &lt;-- Généré par 0.5_transform.py
+│
+├── /scripts
+│   ├── 01_ingestion_images.py
+│   ├── 02_ingestion_textes.py
+│   ├── 03_sanity_check.py
+│   ├── 0.4_extract.py                 &lt;-- Filtrage &amp; Sélection métier (Pandas)
+│   ├── 0.5_transform.py               &lt;-- IA : Image2Feature &amp; Text2Feature
+│   └── 0.6_load.py                    &lt;-- Injection PostgreSQL (SQLAlchemy)
+│
+├── .env                               &lt;-- Config (DB_USER, DB_PASSWORD)
+├── .gitignore                         &lt;-- Exclut /data/* et .env
+└── README.md                          &lt;-- Documentation du Pipeline</code></pre>
+
+
+      <p class="quote" style="margin-top:12px;">
+        Les sections suivantes du support détaillent le développement de chaque script (<code>04_extract</code>, <code>05_transform</code>, <code>06_load</code>) dans l'ordre du pipeline.
+      </p>
+
+      <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
+
+      <h3><code>04_extract</code> : la stratégie de sélection des données</h3>
+      <p class="lead">
+        L'extraction est l'étape où l'ingénieur de données exerce son esprit critique. Le fichier <code>listings.csv</code> que vous avez ingéré contient plus de 70 colonnes. Stocker l'intégralité de ces données dans votre Data Warehouse serait une erreur stratégique : cela ralentit les calculs, sature la mémoire et brouille l'analyse.
+      </p>
+      <p class="lead">
+        Avant de coder, il faut cartographier la richesse du gisement de données. Voici une description des features du fichier <code>listings.csv</code> :
+      </p>
+
+      <details style="margin-top:12px;">
+        <summary>Description des colonnes de <code>listings.csv</code> (cliquer pour développer)</summary>
+
+        <p class="lead" style="margin-top:10px;"><strong>1. Identifiants et liens (IDs &amp; URLs)</strong></p>
+        <ul>
+          <li><code>id</code> : identifiant unique de l'annonce.</li>
+          <li><code>listing_url</code> : lien direct vers l'annonce sur Airbnb.</li>
+          <li><code>scrape_id</code> : identifiant interne de la session de collecte de données.</li>
+          <li><code>last_scraped</code> : date de la dernière extraction.</li>
+          <li><code>source</code> : origine de l'annonce (ex. « city scrape »).</li>
+          <li><code>picture_url</code> : URL de la photo principale.</li>
+        </ul>
+
+        <p class="lead"><strong>2. Informations sur l'hôte (Host)</strong></p>
+        <ul>
+          <li><code>host_id</code> : identifiant de l'hôte.</li>
+          <li><code>host_url</code> / <code>host_name</code> : profil et nom de l'hôte.</li>
+          <li><code>host_since</code> : date d'arrivée de l'hôte sur Airbnb.</li>
+          <li><code>host_location</code> / <code>host_about</code> : localisation et biographie.</li>
+          <li><code>host_response_time</code> / <code>host_response_rate</code> : réactivité aux messages.</li>
+          <li><code>host_acceptance_rate</code> : taux d'acceptation des demandes.</li>
+          <li><code>host_is_superhost</code> : statut de Superhost (t/f).</li>
+          <li><code>host_thumbnail_url</code> / <code>host_picture_url</code> : photos de profil.</li>
+          <li><code>host_neighbourhood</code> : quartier de l'hôte.</li>
+          <li><code>host_listings_count</code> / <code>host_total_listings_count</code> : nombre d'annonces de l'hôte.</li>
+          <li><code>host_verifications</code> : méthodes de vérification (email, téléphone, etc.).</li>
+          <li><code>host_has_profile_pic</code> / <code>host_identity_verified</code> : indicateurs de confiance.</li>
+        </ul>
+
+        <p class="lead"><strong>3. Localisation et description du bien (Location &amp; Description)</strong></p>
+        <ul>
+          <li><code>name</code> / <code>description</code> : nom et descriptif commercial.</li>
+          <li><code>neighborhood_overview</code> : présentation du quartier par l'hôte.</li>
+          <li><code>neighbourhood</code> / <code>neighbourhood_cleansed</code> : nom du quartier (brut et nettoyé).</li>
+          <li><code>neighbourhood_group_cleansed</code> : groupe de quartiers (souvent vide pour Paris).</li>
+          <li><code>latitude</code> / <code>longitude</code> : coordonnées GPS exactes.</li>
+          <li><code>property_type</code> : type de bien (appartement, loft, etc.).</li>
+          <li><code>room_type</code> : type de location (logement entier, chambre partagée, etc.).</li>
+        </ul>
+
+        <p class="lead"><strong>4. Caractéristiques physiques (Amenities &amp; Capacity)</strong></p>
+        <ul>
+          <li><code>accommodates</code> : nombre de voyageurs maximum.</li>
+          <li><code>bathrooms</code> / <code>bathrooms_text</code> : détails sur les salles de bain.</li>
+          <li><code>bedrooms</code> / <code>beds</code> : nombre de chambres et de lits.</li>
+          <li><code>amenities</code> : liste JSON des équipements (Wi-Fi, cuisine, etc.).</li>
+          <li><code>price</code> : prix par nuitée.</li>
+        </ul>
+
+        <p class="lead"><strong>5. Règles et séjour (Booking Rules)</strong></p>
+        <ul>
+          <li><code>minimum_nights</code> / <code>maximum_nights</code> : limites de durée de séjour.</li>
+          <li><code>minimum_minimum_nights</code> / <code>maximum_minimum_nights</code> : variantes de séjours minimums.</li>
+          <li><code>minimum_maximum_nights</code> / <code>maximum_maximum_nights</code> : variantes de séjours maximums.</li>
+          <li><code>minimum_nights_avg_ntm</code> / <code>maximum_nights_avg_ntm</code> : moyennes de durées de séjour.</li>
+        </ul>
+
+        <p class="lead"><strong>6. Disponibilité (Availability)</strong></p>
+        <ul>
+          <li><code>calendar_updated</code> : dernière mise à jour du calendrier.</li>
+          <li><code>has_availability</code> : disponibilité actuelle (t/f).</li>
+          <li><code>availability_30</code> / <code>60</code> / <code>90</code> / <code>365</code> : disponibilité sur les X prochains jours.</li>
+          <li><code>calendar_last_scraped</code> : date du dernier scrap du calendrier.</li>
+        </ul>
+
+        <p class="lead"><strong>7. Avis et évaluation (Reviews)</strong></p>
+        <ul>
+          <li><code>number_of_reviews</code> : volume total de commentaires.</li>
+          <li><code>number_of_reviews_ltm</code> / <code>l30d</code> : commentaires récents (12 mois / 30 jours).</li>
+          <li><code>first_review</code> / <code>last_review</code> : dates de début et de fin des avis.</li>
+          <li><code>review_scores_rating</code> : note globale (sur 5).</li>
+          <li><code>review_scores_accuracy</code> / <code>cleanliness</code> / <code>checkin</code> / <code>communication</code> / <code>location</code> / <code>value</code> : notes détaillées par critère.</li>
+          <li><code>reviews_per_month</code> : moyenne mensuelle de commentaires.</li>
+        </ul>
+
+        <p class="lead"><strong>8. Gestion et réglementation</strong></p>
+        <ul>
+          <li><code>license</code> : numéro d'enregistrement légal.</li>
+          <li><code>instant_bookable</code> : réservation instantanée activée (t/f).</li>
+          <li><code>calculated_host_listings_count</code> : nombre d'annonces gérées par l'hôte (total, logements entiers, chambres privées/partagées).</li>
+        </ul>
+      </details>
+
+      <p class="lead" style="margin-top:14px;">
+        Pour répondre à la Maire de Paris, nous n'allons pas « tout » garder. Nous allons sélectionner uniquement les colonnes qui servent de carburant à nos trois hypothèses majeures.
+      </p>
+
+      <p class="lead"><strong>A. Hypothèse économique : la concentration des biens</strong></p>
+      <p class="lead"><em>Question :</em> est-ce une économie de partage ou une industrie hôtelière masquée ?</p>
+      <ul>
+        <li><strong>Features à extraire :</strong> <code>calculated_host_listings_count</code> (détecteur de multipropriétés), <code>price</code>, <code>property_type</code>, <code>room_type</code> et <code>availability_365</code>.</li>
+        <li><strong>Indice de preuve :</strong> si 5 % des hôtes contrôlent 60 % des biens du quartier, vous prouvez une gestion industrielle.</li>
+      </ul>
+
+      <p class="lead"><strong>B. Hypothèse sociale : la déshumanisation de l'accueil (lien social)</strong></p>
+      <p class="lead"><em>Question :</em> le lien social se brise-t-il au profit de processus automatisés ?</p>
+      <p class="lead">
+        Le cœur de la preuve viendra des fichiers <code>.txt</code> (commentaires agrégés) et du NLP en phase transform. En complément, vous pouvez conserver dans l'extract des indicateurs tabulaires utiles : <code>host_response_time</code> et <code>host_response_rate</code> — les agences ou acteurs professionnels ont souvent des <strong>taux de réponse proches de 100&nbsp;%</strong> avec des <strong>délais très courts</strong> (gestion professionnelle), ce qui peut trancher avec un hôte « résident » plus irrégulier.
+      </p>
+
+      <p class="lead"><strong>C. Hypothèse visuelle : la standardisation « Airbnb-style »</strong></p>
+      <p class="lead"><em>Question :</em> les logements sont-ils devenus des produits financiers stériles ?</p>
+      <p class="lead">Aucune feature intéressante dans le CSV seul : nous utiliserons les <strong>images</strong> pour créer une feature au moment du transform.</p>
+
+      <h4>Implémentation technique : créer le DataFrame filtré</h4>
+      <p class="lead">
+        Le script <code>0.4_extract.py</code> doit effectuer cette sélection de manière propre et répétable (<strong>idempotence</strong>).
+      </p>
+      <p class="lead"><strong>Étapes du script :</strong></p>
+      <ol>
+        <li><strong>Chargement :</strong> lire le fichier <code>data/raw/tabular/listings.csv</code>.</li>
+        <li><strong>Sélection :</strong> définir une liste de colonnes <code>COLS_TO_KEEP</code> basée sur la réflexion métier ci-dessus.</li>
+        <li><strong>Filtrage géographique :</strong> ne traiter que le quartier de l'Élysée (même logique que en Phase 1).</li>
+        <li><strong>Sauvegarde :</strong> exporter le résultat dans <code>data/processed/filtered_elysee.csv</code>.</li>
+      </ol>
+      <p class="lead">
+        Dans votre script, documentez chaque colonne conservée avec un commentaire expliquant à quelle hypothèse elle se rattache. Un code qui explique <em>pourquoi</em> il garde une donnée est un code de qualité professionnelle.
+      </p>
+
     </section>
+    
     <nav class="book-nav">
       <a class="btn btn-soft" href="03-collecte.html">Chapitre precedent</a>
       <a class="btn btn-primary" href="05-exploration.html">Chapitre suivant</a>
