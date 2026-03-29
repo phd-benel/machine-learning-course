@@ -142,9 +142,13 @@
         En parallèle des images, vous devez préparer la matière première NLP. L'objectif est de transformer <code>reviews.csv</code> en un corpus textuel structuré <strong>par annonce</strong>, pour que la Phase 2 puisse appliquer directement les modèles de sentiment, nuisance ou thématique.
       </p>
 
+      <p class="quote">
+        <strong>Filtrage périmètre Élysée :</strong> Comme pour les images, vous ne devez pas ingérer l’ensemble des commentaires de Paris. L’ingestion texte doit <strong>filtrer sur le quartier de l’Élysée</strong> (via la jointure avec <code>listings.csv</code> : ne conserver que les <code>listing_id</code> dont le quartier / la zone correspond au périmètre « Élysée » défini dans votre notebook d’exploration). Ainsi, chaque fichier <code>&lt;ID&gt;.txt</code> reste aligné avec les mêmes annonces que vos images et vos analyses.
+      </p>
+
       <p class="lead"><strong>La logique algorithmique exigée pour l'ingestion texte :</strong></p>
       <ol>
-        <li><strong>Lecture de la source :</strong> Ouvrir <code>reviews.csv</code> et lire les colonnes utiles (au minimum <code>listing_id</code> et le texte du commentaire).</li>
+        <li><strong>Lecture et filtrage :</strong> Charger <code>listings.csv</code> pour obtenir la liste des <code>id</code> du périmètre <strong>Élysée</strong>, puis ouvrir <code>reviews.csv</code> et ne retenir que les lignes dont le <code>listing_id</code> appartient à ce sous-ensemble ; lire les colonnes utiles (au minimum <code>listing_id</code> et le texte du commentaire).</li>
         <li><strong>Regroupement par annonce :</strong> Fusionner tous les commentaires appartenant au même <code>listing_id</code>.</li>
         <li><strong>Nettoyage léger :</strong> Supprimer les balises HTML simples (ex: <code>&lt;br/&gt;</code>), conserver l'UTF-8 pour ne pas perdre les langues (français, anglais, russe, allemand, etc.).</li>
         <li><strong>Écriture des fichiers :</strong> Créer un fichier <code>/data/raw/texts/&lt;ID&gt;.txt</code> pour chaque annonce, avec un en-tête du type <em>"Commentaires pour l'annonce 2719440:"</em>, puis une liste à puces des avis fusionnés.</li>
@@ -161,21 +165,37 @@
       <h3>5. Le Bilan de Santé de la Donnée (Script 3)</h3>
 
       <p class="lead">
-        Faire confiance à un téléchargement est une erreur de débutant. Une fois les scripts d'ingestion terminés, vous devez auditer votre Data Lake. Vous allez coder un troisième script (<code>03_sanity_check.py</code>) qui fera le contrôle qualité.
+        Faire confiance à un téléchargement est une erreur de débutant. Une fois les scripts d'ingestion terminés, vous devez auditer votre Data Lake <strong>sur les deux bras multimodaux</strong> : images <strong>et</strong> textes. Vous allez coder un troisième script (<code>03_sanity_check.py</code>) qui fera le contrôle qualité.
       </p>
 
       <p class="lead"><strong>La logique algorithmique exigée pour le Sanity Check :</strong></p>
       <ol>
-        <li><strong>Comptage Théorique :</strong> Le script lit <code>listings.csv</code> et compte le nombre exact de lignes (ex: 5000 annonces). C'est le nombre d'images "attendues".</li>
-        <li><strong>Comptage Physique :</strong> Le script compte le nombre de fichiers <code>.jpg</code> réellement présents dans <code>/data/raw/images/</code> (ex: 4850 images).</li>
-        <li><strong>La Jointure Physique (Le Test Ultime) :</strong> Le script parcourt la liste des IDs du CSV un par un. Pour chaque ID, il vérifie physiquement sur le disque dur si le fichier <code>&lt;ID&gt;.jpg</code> est là.</li>
+        <li><strong>Référence commune (périmètre Élysée) :</strong> Reconstruire la même liste d’IDs que vos scripts 1 et 2 (annonces <strong>filtrées sur l’Élysée</strong> à partir de <code>listings.csv</code>). C’est la base de tous les comptages « attendus ».</li>
         <li>
-          <strong>Génération du Rapport :</strong> Le script doit imprimer dans le terminal un rapport clair :
+          <strong>Images — Comptage théorique / physique / jointure :</strong>
           <ul>
-            <li><em>Total annonces CSV : X</em></li>
-            <li><em>Total images téléchargées : Y</em></li>
-            <li><em>Taux de complétion : Z %</em></li>
-            <li><em>Liste des "Orphelins" : (Afficher les 5 premiers IDs dont l'image manque à l'appel).</em></li>
+            <li>Comptage théorique : nombre d’images attendues pour ces IDs (selon votre règle d’ingestion).</li>
+            <li>Comptage physique : nombre de fichiers <code>.jpg</code> présents dans <code>/data/raw/images/</code>.</li>
+            <li>Jointure : pour chaque ID attendu, vérifier l’existence de <code>&lt;ID&gt;.jpg</code> sur le disque ; lister les orphelins (image manquante).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Textes — Comptage théorique / physique / jointure :</strong>
+          <ul>
+            <li>Comptage théorique : nombre de fichiers <code>.txt</code> attendus (un par <code>listing_id</code> du périmètre Élysée ayant au moins un commentaire après filtrage, ou la règle que vous avez fixée dans le script 2 — à documenter dans le README).</li>
+            <li>Comptage physique : nombre de fichiers <code>.txt</code> réellement présents dans <code>/data/raw/texts/</code>.</li>
+            <li>Jointure : pour chaque ID concerné, vérifier l’existence de <code>&lt;ID&gt;.txt</code> ; lister les orphelins (fichier texte manquant ou vide de façon anormale).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Cohérence croisée (option avancée) :</strong> Signaler les IDs pour lesquels une image existe sans texte associé (ou l’inverse), si votre périmètre le permet — utile pour détecter des incohérences entre les deux pipelines.</li>
+        <li>
+          <strong>Génération du Rapport :</strong> Le script doit imprimer dans le terminal un rapport clair, par exemple :
+          <ul>
+            <li><em>Périmètre : Élysée — N annonces de référence</em></li>
+            <li><em>Images : attendues / présentes / taux de complétion % — 5 premiers IDs sans .jpg</em></li>
+            <li><em>Textes : attendus / présents dans texts/ / taux de complétion % — 5 premiers IDs sans .txt</em></li>
+            <li><em>Résumé des orphelins ou incohérences image/texte</em></li>
           </ul>
         </li>
       </ol>
@@ -214,7 +234,7 @@
       </p>
 
       <pre><code>data/raw/images/*</code></pre>
-      <pre><code>data/raw/texts/*</code></pre>*
+      <pre><code>data/raw/texts/*</code></pre>
       <pre><code>data/raw/tabular/*.csv</code></pre>
 
       <p class="lead">
