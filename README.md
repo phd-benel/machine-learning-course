@@ -27,3 +27,13 @@ In this module, students analyze the socio-economic impact of short-term rentals
 
 This repository powers the official course support website and is intended for live use through Vercel deployment.
 
+## Phase 2 — Student engineering deliverable (ETL)
+
+For the **Data Collection & Exploration** module, Phase 2 ends with a **Git repository** (typically GitHub) that demonstrates a complete **Extract → Transform → Load** path:
+
+- **Structure**: `data/raw` (Bronze), `data/processed` (Silver CSVs such as `filtered_elysee.csv`, `transformed_elysee.csv`), `scripts` (`0.4_extract.py`, `0.5_transform.py`, `0.6_load.py`, plus Phase 1 ingestion scripts as needed), `.gitignore`, and **no committed secrets** (use `.env.example` only).
+- **README**: must explain prerequisites, execution order, environment variables, and expected outputs.
+- **Evidence**: the README should include a **screenshot** showing **PostgreSQL** with the target database and the loaded table (e.g. `elysee_listings_silver`), e.g. from pgAdmin, DBeaver, or `psql`. The image can be stored under something like `docs/screenshots/` and referenced in Markdown.
+
+Full wording and checklist are in the course page `pages/04-etl.html` (section *Livrable de la Phase 2*).
+

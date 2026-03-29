@@ -88,9 +88,9 @@
 │   ├── 01_ingestion_images.py
 │   ├── 02_ingestion_textes.py
 │   ├── 03_sanity_check.py
-│   ├── 0.4_extract.py                 &lt;-- Filtrage &amp; Sélection métier (Pandas)
-│   ├── 0.5_transform.py               &lt;-- IA : Image2Feature &amp; Text2Feature
-│   └── 0.6_load.py                    &lt;-- Injection PostgreSQL (SQLAlchemy)
+│   ├── 04_extract.py                 &lt;-- Filtrage &amp; Sélection métier (Pandas)
+│   ├── 05_transform.py               &lt;-- IA : Image2Feature &amp; Text2Feature
+│   └── 06_load.py                    &lt;-- Injection PostgreSQL (SQLAlchemy)
 │
 ├── .env                               &lt;-- Config (DB_USER, DB_PASSWORD)
 ├── .gitignore                         &lt;-- Exclut /data/* et .env
@@ -322,7 +322,7 @@ print(response.text)  # Cette valeur alimente votre nouvelle colonne</code></pre
 
       <h3><code>06_Load</code> : l'ancrage dans le Data Warehouse (PostgreSQL)</h3>
       <p class="lead">
-        Vous avez extrait le signal du bruit et enrichi vos données grâce à l'intelligence artificielle. Votre fichier <code>transformed_elysee.csv</code> (Zone Silver) concentre l'information utile.
+        Vous avez extrait le signal du bruit et enrichi vos données grâce à l'intelligence artificielle. Votre fichier <code>transformed_elysee.csv</code> concentre l'information utile.
       </p>
       <p class="lead">
         Dans l'ingénierie de données professionnelle, <strong>un fichier CSV n'est pas une finalité : c'est un format de transit.</strong> Pour que la Maire de Paris puisse interroger ces données, croiser les quartiers et brancher des tableaux de bord (Tableau, Power BI, etc.), la donnée doit quitter le monde volatil des fichiers plats pour entrer dans le sanctuaire du <strong>Data Warehouse</strong> : une <strong>base de données relationnelle</strong>. Nous utilisons <strong>PostgreSQL</strong>, référence industrielle largement adoptée.
@@ -393,7 +393,6 @@ print("Données chargées avec succès dans le Data Warehouse.")</code></pre>
         L'argument <code>if_exists='replace'</code> fait recréer la table à chaque exécution avec les données les plus récentes. En production avancée, on pourrait préférer un <code>UPSERT</code> (mise à jour incrémentale) ; pour ce projet, le <code>replace</code> est un bon compromis pédagogique.
       </p>
 
-      <h4>4. Livrable final : la base « master »</h4>
       <p class="lead">
         Après exécution du script, votre mission d'ingénierie sur cette phase est bouclée : la table <code>elysee_listings_silver</code> vit dans PostgreSQL. Chaque ligne représente un logement avec des types stricts (prix numériques, booléens réels, etc.) et les colonnes enrichies par l'IA (par ex. scores de type <code>standardization_score</code>, <code>neighborhood_impact</code> ou <code>social_impact_score</code> selon votre nommage dans <code>transformed_elysee.csv</code>).
       </p>
@@ -403,6 +402,38 @@ print("Données chargées avec succès dans le Data Warehouse.")</code></pre>
 
       <p class="quote" style="margin-top:14px;">
         <strong>Phase 2 bouclée :</strong> Extract → Transform → Load — du Data Lake à une base relationnelle exploitable et requêtable.
+      </p>
+
+      <hr style="border:none; border-top:1px dashed var(--border); margin:18px 0;" />
+
+      <h3>Livrable de la Phase 2 : dépôt GitHub et README à jour</h3>
+      <p class="lead">
+        La Phase 2 se conclut par une remise <strong>professionnelle</strong> : votre travail doit être <strong>versionné</strong>, <strong>documenté</strong> et <strong>vérifiable</strong>. Le livrable attendu est un <strong>lien vers un dépôt Git</strong> (idéalement GitHub) reflétant l'arborescence du projet et l'état d'avancement réel du pipeline — pas seulement du code isolé.
+      </p>
+
+      <p class="lead"><strong>Ce que le dépôt doit contenir (minimum)</strong></p>
+      <ul>
+        <li>La structure de dossiers alignée avec le projet (dossiers <code>data/raw</code>, <code>data/processed</code>, <code>scripts</code>, fichiers <code>.gitignore</code>, <code>README.md</code> ; le fichier <code>.env</code> ne doit <strong>jamais</strong> être commité — uniquement un exemple <code>.env.example</code> sans secrets).</li>
+        <li>Les scripts de la chaîne ETL : <code>0.4_extract.py</code>, <code>0.5_transform.py</code>, <code>0.6_load.py</code> (et, si applicable, les scripts Phase 1 déjà intégrés au même repo).</li>
+        <li>Un <code>README.md</code> à jour, rédigé pour un ingénieur qui ne connaît pas votre machine : contexte, prérequis, ordre d'exécution, variables d'environnement, résultats attendus (fichiers Silver et schéma SQL).</li>
+      </ul>
+
+      <p class="lead"><strong>Preuve que PostgreSQL est bien en place</strong></p>
+      <p class="lead">
+        Le README doit inclure une <strong>capture d'écran</strong> prouvant que le Data Warehouse existe : par exemple la base <code>immovision_db</code> (ou le nom que vous avez configuré) et la présence de la table <code>elysee_listings_silver</code> — vue depuis <strong>pgAdmin</strong>, <strong>DBeaver</strong>, l'outil de votre choix, ou une session <code>psql</code> listant les tables. L'image ne remplace pas un script fonctionnel : elle <strong>atteste</strong> que le <code>Load</code> a été exécuté avec succès dans un environnement réel.
+      </p>
+
+      <p class="lead"><strong>Comment intégrer l'image dans le README sur GitHub</strong></p>
+      <ol>
+        <li>Ajoutez l'image dans le dépôt, par exemple <code>docs/screenshots/postgres_data_warehouse.png</code> (créez les dossiers si besoin).</li>
+        <li>Dans <code>README.md</code>, référencez-la en Markdown :<br />
+          <code>![Data Warehouse PostgreSQL — table elysee_listings_silver](docs/screenshots/postgres_data_warehouse.png)</code>
+        </li>
+        <li>Alternative : éditez le <code>README.md</code> directement sur GitHub (bouton « crayon ») et <strong>glissez-déposez</strong> la capture dans l'éditeur : GitHub insère souvent le lien ou le chemin relatif automatiquement.</li>
+      </ol>
+
+      <p class="quote" style="margin-top:12px;">
+        <strong>Lien à fournir :</strong> URL du dépôt Git (ex. <code>https://github.com/&lt;votre-compte&gt;/ImmoVision360-Project</code>) avec la dernière structure et un README à jour au moment de la remise. Remplacez l'exemple par votre URL réelle.
       </p>
 
     </section>
