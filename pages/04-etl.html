@@ -456,6 +456,8 @@ def classify_with_resilience(image_path, model, prompt, max_retries=3):
         <strong>Remarque importante :</strong> certaines annonces n'ont pas d'image et/ou pas de commentaires. Dans ce cas, votre pipeline ne doit pas planter. Vous devez renseigner une valeur par défaut (ex. <code>-1</code>) dans les colonnes IA correspondantes (ex. <code>Standardization_Score</code> et/ou <code>Neighborhood_Impact</code>) afin de garder une table finale complète et exploitable.
       </p>
 
+    
+
       <hr style="border:none; border-top:1px dashed var(--border); margin:18px 0;" />
 
       <h3><code>06_Load</code> : l'ancrage dans le Data Warehouse (PostgreSQL)</h3>
@@ -574,7 +576,20 @@ print("Données chargées avec succès dans le Data Warehouse.")</code></pre>
       <p class="quote" style="margin-top:12px;">
         <strong>Lien à fournir :</strong> URL du dépôt Git (ex. <code>https://github.com/&lt;votre-compte&gt;/ImmoVision360-Project</code>) avec la dernière structure et un README à jour au moment de la remise. Remplacez l'exemple par votre URL réelle.
       </p>
-
+      <p class="quote" style="margin-top:12px; background:#fff3d6; border-color:#ffd79a; border-left-color:#f59e0b;">
+        <strong style="color:#b45309;">À lire :</strong>
+        Compte tenu du temps imparti et des limitations de quota des API (services externes), il ne vous est pas demandé de transformer l'intégralité des images et des textes en features réelles pour le moment.
+        <br /><br />
+        <strong>Consignes pour cette étape :</strong>
+        <br />
+        - <strong>Génération de données fictives :</strong> pour les colonnes issues de la Vision (<code>Standardization_Score</code>) et du NLP (<code>Neighborhood_Impact</code>), veuillez remplir les champs avec des valeurs aléatoires (choisissez parmi : <code>1</code>, <code>0</code> ou <code>-1</code>).
+        <br />
+        - <strong>Intégration base de données :</strong> chargez l'ensemble de votre dataset (incluant ces valeurs aléatoires) dans une base de données <strong>PostgreSQL</strong>.
+        <br />
+        - <strong>Livrables :</strong> documentez votre processus dans le README et prenez des screenshots de votre base de données remplie pour prouver le bon fonctionnement du pipeline.
+        <br /><br />
+        Ne vous inquiétez pas pour la cohérence des données : je vous fournirai la base de données nettoyée et correcte pour la prochaine phase dédiée à l'EDA (Exploratory Data Analysis).
+      </p>
     </section>
     
     <nav class="book-nav">
