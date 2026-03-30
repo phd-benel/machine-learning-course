@@ -94,6 +94,9 @@
 │
 ├── .env                               &lt;-- Config (DB_USER, DB_PASSWORD)
 ├── .gitignore                         &lt;-- Exclut /data/* et .env
+├── README_DATALAKE.md                &lt;-- Description du Data Lake (brut/processed, conventions)
+├── README_EXTRACT.md                 &lt;-- Justification du choix d'extraction (features &amp; hypothèses)
+├── README_TRANSFORM.md               &lt;-- Justification &amp; description des transformations (CSV + images .jpg + textes .txt)
 └── README.md                          &lt;-- Documentation du Pipeline</code></pre>
 
 
@@ -227,7 +230,7 @@
         <li><strong>Sauvegarde :</strong> exporter le résultat dans <code>data/processed/filtered_elysee.csv</code>.</li>
       </ol>
       <p class="lead">
-        Dans votre script, documentez chaque colonne conservée avec un commentaire expliquant à quelle hypothèse elle se rattache. Un code qui explique <em>pourquoi</em> il garde une donnée est un code de qualité professionnelle.
+        Dans votre script, gardez des commentaires courts (ex: à quelle hypothèse se rattache une colonne). La documentation complète — qui justifie le <em>pourquoi</em> du choix des features et comment elles alimentent les hypothèses — se fait dans <code>README_EXTRACT.md</code>.
       </p>
 
       <hr style="border:none; border-top:1px dashed var(--border); margin:18px 0;" />
@@ -414,6 +417,7 @@ print("Données chargées avec succès dans le Data Warehouse.")</code></pre>
       <p class="lead"><strong>Ce que le dépôt doit contenir (minimum)</strong></p>
       <ul>
         <li>La structure de dossiers alignée avec le projet (dossiers <code>data/raw</code>, <code>data/processed</code>, <code>scripts</code>, fichiers <code>.gitignore</code>, <code>README.md</code> ; le fichier <code>.env</code> ne doit <strong>jamais</strong> être commité — uniquement un exemple <code>.env.example</code> sans secrets).</li>
+        <li>Les documents de justification : <code>README_DATALAKE.md</code>, <code>README_EXTRACT.md</code> (choix d'extraction &amp; mapping hypothèses/features) et <code>README_TRANSFORM.md</code> (transformations CSV + images <code>.jpg</code> + textes <code>.txt</code>).</li>
         <li>Les scripts de la chaîne ETL : <code>0.4_extract.py</code>, <code>0.5_transform.py</code>, <code>0.6_load.py</code> (et, si applicable, les scripts Phase 1 déjà intégrés au même repo).</li>
         <li>Un <code>README.md</code> à jour, rédigé pour un ingénieur qui ne connaît pas votre machine : contexte, prérequis, ordre d'exécution, variables d'environnement, résultats attendus (fichiers Silver et schéma SQL).</li>
       </ul>
