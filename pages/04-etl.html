@@ -98,6 +98,7 @@
 ├── README_EXTRACT.md                 &lt;-- Justification du choix d'extraction (features &amp; hypothèses)
 ├── README_TRANSFORM.md               &lt;-- Justification &amp; description des transformations (CSV + images .jpg + textes .txt)
 ├── README_DATAPROFILIING.md          &lt;-- Profiling sur filtered_elysee.csv (NaN, min/max, outliers)
+├── README_LOAD.md                    &lt;-- Documentation du chargement (PostgreSQL, table, méthode, idempotence)
 └── README.md                          &lt;-- Documentation du Pipeline</code></pre>
 
 
@@ -292,8 +293,27 @@
 
       <p class="lead"><strong>B. Enrichissement multimodal par l'IA (inférence)</strong></p>
       <p class="lead">
-        Une fois la base saine, vous lui donnez une profondeur analytique : <strong>deux nouvelles colonnes (features)</strong> via l'API Google AI Studio et le modèle <code>gemini-1.5-flash</code> (ou équivalent validé en cours — respectez les quotas et la confidentialité des clés API, idéalement via variables d'environnement).
+        Une fois la base saine, vous lui donnez une profondeur analytique : <strong>deux nouvelles colonnes (features)</strong> via l'API Google AI Studio et le modèle <code>gemini-2.5-flash</code>.
       </p>
+
+      <details style="margin-top:12px;">
+        <summary>API Google AI Studio (accès + étapes) — voir détails</summary>
+
+        <p class="lead" style="margin-top:10px;">
+          L'API Google AI Studio est accessible via <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer"><code>https://aistudio.google.com/</code></a>.
+          Suivez les étapes ci-dessous pour activer l'accès et récupérer votre clé API.
+        </p>
+
+        <img src="../Figures/fig15.png" class="chapter-image" style="width:100%; height:auto;" alt="AI Studio — étape 1" onerror="this.onerror=null;this.style.display='none';" />
+        <img src="../Figures/Fig16.png" class="chapter-image" style="width:100%; height:auto;" alt="AI Studio — étape 2" onerror="this.onerror=null;this.style.display='none';" />
+        <img src="../Figures/Fig17.png" class="chapter-image" style="width:100%; height:auto;" alt="AI Studio — étape 3" onerror="this.onerror=null;this.style.display='none';" />
+
+        <p class="quote" style="margin-top:12px;">
+          <strong>Important :</strong> ne mettez jamais votre clé en dur dans un script versionné. Utilisez des variables d'environnement (ex. <code>.env</code>) et ajoutez <code>.env</code> dans <code>.gitignore</code>.
+        </p>
+      </details>
+
+      
 
       <p class="lead"><strong>Feature 1 — « Standardization Score » (image → texte)</strong></p>
       <p class="lead">
@@ -304,7 +324,7 @@ import PIL.Image
 
 # Configuration de la clé API (préférez une variable d'environnement en production)
 genai.configure(api_key="VOTRE_CLE_API_ICI")
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 img = PIL.Image.open("data/raw/images/ID_123.jpg")
 
@@ -318,22 +338,123 @@ Réponds uniquement par le nom de la catégorie.
 """
 response = model.generate_content([prompt, img])
 print(response.text)  # Cette valeur alimente votre nouvelle colonne</code></pre>
-      <p class="lead">Mappez la sortie du modèle vers votre colonne <code>Standardization_Score</code> (catégorie ou score numérique selon votre choix pédagogique).</p>
+      <p class="lead">Mappez la sortie du modèle vers votre colonne <code>Standardization_Score</code> (catégorie ou score numérique selon votre choix).</p>
 
+      <p class="quote" style="margin-top:12px;">
+        <strong>Exemple de mapping (catégorie → score) :</strong> pour faciliter les statistiques et les requêtes SQL, vous pouvez convertir la catégorie texte en un score numérique simple :
+        <br />
+        <strong>1</strong> = <em>Appartement industrialisé</em> (standardisé, “Airbnb-style”) •
+        <strong>0</strong> = <em>Appartement personnel</em> (habité, objets de vie) •
+        <strong>-1</strong> = <em>Autre / aberrant</em> (photo non pertinente, corrompue, ou réponse non exploitable).
+      </p>
+
+    
+      <details style="margin-top:12px;">
+        <summary>Point d'attention (remarque) — quotas, robustesse et optimisation du traitement massif</summary>
+
+        <p class="lead" style="margin-top:10px;">
+          Passer d'une démonstration sur 5 images à un traitement industriel sur un dataset réel (ex: 2&nbsp;600 images) confronte l'ingénieur à une réalité incontournable : les limites structurelles des API de modèles de langage (LLM). Sans une stratégie de robustesse, votre pipeline s'effondrera dès les premières minutes.
+        </p>
+
+        <h4>1. Le mur du quota : comprendre l'erreur <code>429 Resource Exhausted</code></h4>
+        <p class="lead">
+          Dans sa version gratuite (Free Tier), Gemini 2.5 Flash impose des restrictions strictes. L'erreur <code>429</code> survient typiquement quand vous dépassez :
+        </p>
+        <ul>
+          <li><strong>RPM (Requests Per Minute)</strong> : le débit instantané (ex. 15 requêtes/minute).</li>
+          <li><strong>RPD (Requests Per Day)</strong> : le volume total quotidien (ex. 1&nbsp;500 requêtes/jour).</li>
+        </ul>
+        <p class="lead">
+          <strong>Constat :</strong> pour traiter 2&nbsp;600 images, un script séquentiel naïf (1 image = 1 requête) échouera mathématiquement sur le quota journalier, et/ou sera ralenti par le quota minute.
+        </p>
+
+        <h4>2. Stratégies de résilience et robustesse du code</h4>
+        <p class="lead">
+          Pour garantir un traitement intégral sans interruption humaine, votre script doit intégrer trois mécanismes : temporisation, gestion des exceptions et logique de retry.
+        </p>
+
+        <p class="lead"><strong>Implémentation : fonction de résilience (exponential backoff)</strong></p>
+        <pre><code>import time
+import PIL.Image
+import google.api_core.exceptions as exceptions
+
+def classify_with_resilience(image_path, model, prompt, max_retries=3):
+    \"\"\"
+    Tente la classification avec gestion de quota et fallback.
+    \"\"\"
+    for attempt in range(max_retries):
+        try:
+            img = PIL.Image.open(image_path)
+            response = model.generate_content([prompt, img])
+            return response.text.strip()
+
+        except exceptions.ResourceExhausted:
+            # Quota RPM atteint : attendre pour laisser le quota se réinitialiser
+            wait_time = 60
+            print(f\"Quota RPM atteint. Pause de {wait_time}s...\")
+            time.sleep(wait_time)
+
+        except exceptions.InvalidArgument:
+            print(f\"Image corrompue ou format invalide : {image_path}\")
+            return \"Format Error\"
+
+        except Exception as e:
+            print(f\"Tentative {attempt + 1} échouée : {e}\")
+            time.sleep(2 ** attempt)  # backoff exponentiel
+
+    return \"Timeout/Error\"</code></pre>
+
+        <h4>3. Recommandations pour le déploiement « industriel »</h4>
+        <p class="lead">
+          Pour mener à bien le traitement complet, appliquez ces trois principes de production.
+        </p>
+
+        <p class="lead"><strong>A. Système de checkpoints (sauvegarde progressive)</strong></p>
+        <ul>
+          <li><strong>Ne stockez pas tout en mémoire :</strong> si le script plante à l'image 1&nbsp;500, vous perdez des heures.</li>
+          <li><strong>Sauvegarde :</strong> écrivez vos résultats dans un CSV intermédiaire toutes les 50 lignes (ou N lignes).</li>
+          <li><strong>Reprise à froid :</strong> au démarrage, détectez les IDs déjà traités pour ne calculer que les manquants (économie de quota et de temps).</li>
+        </ul>
+
+        <p class="lead"><strong>B. Optimisation par batching (regroupement)</strong></p>
+        <p class="lead">
+          Gemini dispose d'une grande fenêtre de contexte. Au lieu d'envoyer 1 image par requête (1 RPM), vous pouvez en envoyer 10 (ou plus) et demander un résultat structuré.
+        </p>
+        <p class="lead"><strong>Exemple de prompt (sortie JSON attendue)</strong></p>
+        <p class="lead">
+          « Voici 10 images numérotées de 1 à 10. Classifie chacune selon les catégories définies. Réponds au format JSON :
+          <code>{\"1\": \"catégorie\", \"2\": \"catégorie\", ...}</code>. »
+        </p>
+        <p class="lead"><strong>Gain :</strong> vous divisez la consommation de quota par ~10 (à condition de parser proprement la sortie).</p>
+
+        <p class="lead"><strong>C. Stratégie multi-modèles (fallback)</strong></p>
+        <ul>
+          <li><strong>Plan A :</strong> Gemini 2.5 Flash (rapide, gratuit).</li>
+          <li><strong>Plan B :</strong> si le quota journalier est épuisé, basculer vers une autre API/modèle (ou une autre clé) pour terminer le traitement.</li>
+        </ul>
+
+        <p class="quote" style="margin-top:12px;">
+          <strong>Règle de production :</strong> votre pipeline doit être <em>idempotent</em>, <em>reprenable</em>, et <em>parcimonieux</em> en appels LLM. Documentez votre stratégie (quotas, checkpoints, batching) dans <code>README_TRANSFORM.md</code>.
+        </p>
+      </details>
       <p class="lead"><strong>Feature 2 — « Neighborhood Impact » (texte → texte)</strong></p>
       <p class="lead">
-        Les fichiers <code>.txt</code> agrègent les commentaires voyageurs : l'expérience vécue. Utilisez le même modèle (<code>gemini-1.5-flash</code>) en lui passant le contenu du fichier texte pour classer le type d'expérience attendu : <strong>« Hôtélisé »</strong> (boîte à clés, consignes professionnelles, peu de contact humain) vs <strong>« Voisinage naturel »</strong> (rencontre avec l'hôte, conseils de quartier, vie locale).
+        Les fichiers <code>.txt</code> agrègent les commentaires voyageurs : l'expérience vécue. Utilisez le même modèle (<code>gemini-2.5-flash</code>) en lui passant le contenu du fichier texte pour classer le type d'expérience attendu : <strong>« Hôtélisé »</strong> (boîte à clés, consignes professionnelles, peu de contact humain) vs <strong>« Voisinage naturel »</strong> (rencontre avec l'hôte, conseils de quartier, vie locale).
       </p>
       <p class="lead">
         Mappez la sortie du modèle vers votre colonne Neighborhood_Impact (catégorie ou score numérique selon votre choix pédagogique).
       </p>
 
       <hr style="border:none; border-top:1px dashed var(--border); margin:14px 0;" />
-
+      
       <p class="lead">
         L'exécution de <code>0.5_transform.py</code> doit parcourir chaque ligne de la base filtrée, appeler l'IA pour chaque image et chaque texte associés, puis consolider le tout dans un fichier unique :
       </p>
       <p class="lead"><code>data/processed/transformed_elysee.csv</code></p>
+
+      <p class="quote" style="margin-top:12px;">
+        <strong>Remarque importante :</strong> certaines annonces n'ont pas d'image et/ou pas de commentaires. Dans ce cas, votre pipeline ne doit pas planter. Vous devez renseigner une valeur par défaut (ex. <code>-1</code>) dans les colonnes IA correspondantes (ex. <code>Standardization_Score</code> et/ou <code>Neighborhood_Impact</code>) afin de garder une table finale complète et exploitable.
+      </p>
 
       <hr style="border:none; border-top:1px dashed var(--border); margin:18px 0;" />
 
@@ -431,14 +552,14 @@ print("Données chargées avec succès dans le Data Warehouse.")</code></pre>
       <p class="lead"><strong>Ce que le dépôt doit contenir (minimum)</strong></p>
       <ul>
         <li>La structure de dossiers alignée avec le projet (dossiers <code>data/raw</code>, <code>data/processed</code>, <code>scripts</code>, fichiers <code>.gitignore</code>, <code>README.md</code> ; le fichier <code>.env</code> ne doit <strong>jamais</strong> être commité — uniquement un exemple <code>.env.example</code> sans secrets).</li>
-        <li>Les documents de justification : <code>README_DATALAKE.md</code>, <code>README_EXTRACT.md</code> (choix d'extraction &amp; mapping hypothèses/features), <code>README_DATAPROFILIING.md</code> (profiling sur <code>filtered_elysee.csv</code>) et <code>README_TRANSFORM.md</code> (transformations CSV + images <code>.jpg</code> + textes <code>.txt</code>).</li>
+        <li>Les documents de justification : <code>README_DATALAKE.md</code>, <code>README_EXTRACT.md</code> (choix d'extraction &amp; mapping hypothèses/features), <code>README_DATAPROFILIING.md</code> (profiling sur <code>filtered_elysee.csv</code>), <code>README_TRANSFORM.md</code> (transformations CSV + images <code>.jpg</code> + textes <code>.txt</code>) et <code>README_LOAD.md</code> (chargement vers PostgreSQL / Data Warehouse).</li>
         <li>Les scripts de la chaîne ETL : <code>0.4_extract.py</code>, <code>0.5_transform.py</code>, <code>0.6_load.py</code> (et, si applicable, les scripts Phase 1 déjà intégrés au même repo).</li>
         <li>Un <code>README.md</code> à jour, rédigé pour un ingénieur qui ne connaît pas votre machine : contexte, prérequis, ordre d'exécution, variables d'environnement, résultats attendus (fichiers Silver et schéma SQL).</li>
       </ul>
 
       <p class="lead"><strong>Preuve que PostgreSQL est bien en place</strong></p>
       <p class="lead">
-        Le README doit inclure une <strong>capture d'écran</strong> prouvant que le Data Warehouse existe : par exemple la base <code>immovision_db</code> (ou le nom que vous avez configuré) et la présence de la table <code>elysee_listings_silver</code> — vue depuis <strong>pgAdmin</strong>, <strong>DBeaver</strong>, l'outil de votre choix, ou une session <code>psql</code> listant les tables. L'image ne remplace pas un script fonctionnel : elle <strong>atteste</strong> que le <code>Load</code> a été exécuté avec succès dans un environnement réel.
+        Le README_LOAD doit inclure une <strong>capture d'écran</strong> prouvant que le Data Warehouse existe : par exemple la base <code>immovision_db</code> (ou le nom que vous avez configuré) et la présence de la table <code>elysee_listings_silver</code> — vue depuis <strong>pgAdmin</strong>, <strong>DBeaver</strong>, l'outil de votre choix, ou une session <code>psql</code> listant les tables. L'image ne remplace pas un script fonctionnel : elle <strong>atteste</strong> que le <code>Load</code> a été exécuté avec succès dans un environnement réel.
       </p>
 
       <p class="lead"><strong>Comment intégrer l'image dans le README sur GitHub</strong></p>
