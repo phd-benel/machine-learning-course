@@ -313,55 +313,61 @@
 
       <h5>B. La Prédiction Temporelle (Forecasting &amp; Séries Temporelles)</h5>
       <p class="lead">
-        Plus complexe, cette forme de prédiction ne regarde pas seulement des données figées, mais analyse la dynamique d'un signal pour prévoir son
-        effondrement ou sa croissance future. C'est l'outil privilégié de l'industrie pour éviter les catastrophes.
+        Contrairement à la régression simple, cette forme de prédiction traite des données séquentielles. L'IA analyse l'historique d'un signal (la
+        "mémoire" du système) pour en projeter la trajectoire future. C'est l'outil de précision utilisé pour calculer la RUL (Remaining Useful Life),
+        c'est-à-dire le temps de vie restant avant une défaillance critique.
       </p>
-      <p class="lead"><strong>Exemple pédagogique : La Maintenance Prédictive</strong></p>
+      <p class="lead"><strong>Exemple pédagogique : La Maintenance Prédictive (Série Temporelle)</strong></p>
       <p class="lead">
-        On ne prédit plus une valeur isolée, mais le moment exact où une machine va cesser de fonctionner (Remaining Useful Life - RUL).
+        Imaginez un capteur sur une turbine. L'IA ne s'alarme pas d'une température haute isolée, mais de la vitesse d'augmentation et de la corrélation
+        entre les signaux sur une période donnée.
       </p>
 
       <div class="table-block">
-        <p class="table-caption">Le suivi en temps réel (Flux de données)</p>
+        <p class="table-caption">Le flux de données dynamique (Time Steps)</p>
         <div class="table-wrap">
-          <table class="data-table" aria-label="Suivi maintenance prédictive">
+          <table class="data-table" aria-label="Flux dynamique maintenance prédictive">
             <thead>
               <tr>
-                <th scope="col">Température (°C)</th>
-                <th scope="col">Vibration (Hz)</th>
-                <th scope="col">Heures de marche</th>
-                <th scope="col">Risque de Panne (Calcul IA)</th>
+                <th scope="col">Temps (<span class="math-inline">t</span>)</th>
+                <th scope="col">Température</th>
+                <th scope="col">Vibration</th>
+                <th scope="col">Tendance Détectée</th>
+                <th scope="col">Prédiction RUL (IA)</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="cell-num">75°C</td>
-                <td class="cell-num">45</td>
-                <td class="cell-num">1500</td>
-                <td>2% (Stable)</td>
+                <td><span class="math-inline">t</span><sub>0</sub></td>
+                <td class="cell-num">70°C</td>
+                <td class="cell-num">40 Hz</td>
+                <td>Régime nominal</td>
+                <td>500 cycles (Sain)</td>
               </tr>
               <tr>
-                <td class="cell-num">92°C</td>
-                <td class="cell-num">110</td>
-                <td class="cell-num">4800</td>
-                <td class="cell-highlight">85% (Alerte Critique)</td>
+                <td><span class="math-inline">t</span><sub>+50</sub></td>
+                <td class="cell-num">75°C</td>
+                <td class="cell-num">55 Hz</td>
+                <td>Augmentation lente</td>
+                <td>350 cycles (Usure)</td>
+              </tr>
+              <tr>
+                <td><span class="math-inline">t</span><sub>+100</sub></td>
+                <td class="cell-num">88°C</td>
+                <td class="cell-num">95 Hz</td>
+                <td>Accélération thermique</td>
+                <td class="cell-highlight">10 cycles (CRITIQUE)</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <p class="lead"><strong>Projets et domaines d'application :</strong></p>
-      <ul>
-        <li>
-          <strong>Infrastructures (Colas - Infracare) :</strong> En analysant le flux vidéo des routes, l'IA prédit l'évolution d'une fissure. Elle
-          n'attend pas que le nid-de-poule apparaisse ; elle prévoit sa formation pour intervenir au coût le plus bas.
-        </li>
-        <li>
-          <strong>Énergie &amp; Logistique (Air Liquide) :</strong> L'IA analyse les historiques de consommation pour prédire la demande mondiale de gaz
-          industriels. Cela permet d'optimiser toute la supply chain : on ne produit que ce que l'on sait, par prédiction, que l'on va livrer.
-        </li>
-      </ul>
+      <p class="lead">
+        <strong>L'analyse de l'IA :</strong> Au temps <span class="math-inline">t</span><sub>+100</sub>, l'IA ne dit pas simplement "il fait chaud".
+        Elle compare ce point aux 100 précédents et conclut que la courbe d'usure est devenue exponentielle. Elle prédit l'effondrement du système dans
+        10 cycles, bien avant que la machine ne s'arrête réellement.
+      </p>
 
       <h4>2. La Révolution de la Classification : Trier la Complexité du Réel</h4>
       <p class="lead">
