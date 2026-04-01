@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapitre 3 - Ingénierie et optimisation du modèle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body data-chapter-index="3" data-chapter-total="4">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img class="brand-logo" src="../Figures/logo.png" alt="Logo cours" onerror="this.style.display='none'" />
+        <div class="brand-text">Architecture et Ingénierie des Systèmes Apprenants</div>
+      </div>
+      <a class="btn btn-soft" href="../index.html">Sommaire</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="progress-wrap">
+      <div class="progress-text" id="progressText"></div>
+      <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+    </div>
+
+    <section class="card">
+      <h2>Chapitre 3 : Ingénierie et Optimisation du Modèle</h2>
+
+      <p class="lead">
+        Objectif : passer de la théorie à la réalité technique — entraînement, persistance, stabilité, évaluation et contraintes de calcul.
+      </p>
+
+      <h3>Mécanismes d’entraînement et persistance</h3>
+      <ul>
+        <li>Poids (weights) et itérations d’optimisation.</li>
+        <li>Sauvegarde et reprise : checkpoints, freeze/reload, reproductibilité.</li>
+      </ul>
+
+      <h3>Stabilité et généralisation</h3>
+      <ul>
+        <li>Sur-apprentissage (overfitting) et sous-apprentissage.</li>
+        <li>Régularisation : pénalités, dropout, early stopping, data augmentation (selon le domaine).</li>
+      </ul>
+
+      <h3>Introduction au parallélisme</h3>
+      <ul>
+        <li>Accélération matériel (GPU/TPU) et implications mémoire.</li>
+        <li>Distribution : data parallelism, model parallelism (vue d’ensemble).</li>
+      </ul>
+
+      <h3>Protocoles d’évaluation</h3>
+      <ul>
+        <li>Choix des métriques selon le risque métier et le déséquilibre de classes.</li>
+        <li>Validation : train/val/test, cross-validation, robustesse statistique.</li>
+      </ul>
+
+      <p class="quote">
+        À retenir : un modèle “performant” n’est pas un modèle “prêt” — l’évaluation, la stabilité et la reproductibilité font partie du
+        produit technique.
+      </p>
+
+      <div class="btn-row">
+        <button class="btn btn-soft" type="button" data-mark-read>Marquer comme lu</button>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <a class="btn btn-soft" href="02-chapitre-2-boite-a-outils.html">Chapitre précédent</a>
+      <a class="btn btn-primary" href="04-annexes-et-ressources.html">Chapitre suivant</a>
+    </nav>
+
+    <footer>
+      Chapitre 3/4
+      <span aria-hidden="true"> • </span>
+      By
+      <a href="https://scholar.google.com/citations?user=EdTFt2UAAAAJ&hl=fr" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 9.5L12 5l9 4.5-9 4.5-9-4.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M7 12v6c0 .8 2.2 2 5 2s5-1.2 5-2v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Badr-Eddine Benelmostafa - Avril 2026</span>
+      </a>
+    </footer>
+  </main>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

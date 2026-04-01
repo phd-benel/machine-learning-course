@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapitre 2 - Boîte à outils du Machine Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body data-chapter-index="2" data-chapter-total="4">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img class="brand-logo" src="../Figures/logo.png" alt="Logo cours" onerror="this.style.display='none'" />
+        <div class="brand-text">Architecture et Ingénierie des Systèmes Apprenants</div>
+      </div>
+      <a class="btn btn-soft" href="../index.html">Sommaire</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="progress-wrap">
+      <div class="progress-text" id="progressText"></div>
+      <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+    </div>
+
+    <section class="card">
+      <h2>Chapitre 2 : La Boîte à Outils du Machine Learning</h2>
+
+      <p class="lead">
+        Objectif : construire une taxonomie opérationnelle des familles de modèles et savoir sélectionner une approche en fonction de la
+        topologie du problème (supervisé, non-supervisé, décision séquentielle).
+      </p>
+
+      <h3>Apprentissage supervisé</h3>
+      <p class="lead">
+        Régression et classification : modèles linéaires (régression linéaire/logistique), méthodes à marge, ensembles, et montée en
+        complexité vers les réseaux de neurones.
+      </p>
+
+      <h3>Apprentissage non-supervisé</h3>
+      <p class="lead">
+        Partitionnement (K-Means, DBSCAN), réduction de dimension (PCA) et extraction de représentations pour visualiser, compresser ou
+        structurer des données sans labels.
+      </p>
+
+      <h3>Apprentissage par renforcement (RL)</h3>
+      <p class="lead">
+        Introduction à la prise de décision séquentielle : états, actions, récompenses, politiques. Illustration par Q-Learning.
+      </p>
+
+      <p class="quote">
+        À retenir : la “bonne” architecture dépend d’abord de la structure du signal (labels disponibles, temporalité, objectif) avant de
+        dépendre de la performance brute.
+      </p>
+
+      <details>
+        <summary>Exercice rapide (auto-évaluation)</summary>
+        <ol>
+          <li>Quel cadre choisir si tu as des labels et un objectif de prédiction chiffrée ?</li>
+          <li>Quel cadre choisir si tu veux segmenter une population sans labels ?</li>
+          <li>Quel cadre choisir si un agent doit apprendre par interaction avec un environnement ?</li>
+        </ol>
+      </details>
+
+      <div class="btn-row">
+        <button class="btn btn-soft" type="button" data-mark-read>Marquer comme lu</button>
+      </div>
+    </section>
+
+    <nav class="book-nav">
+      <a class="btn btn-soft" href="01-chapitre-1-fondations.html">Chapitre précédent</a>
+      <a class="btn btn-primary" href="03-chapitre-3-ingenierie.html">Chapitre suivant</a>
+    </nav>
+
+    <footer>
+      Chapitre 2/4
+      <span aria-hidden="true"> • </span>
+      By
+      <a href="https://scholar.google.com/citations?user=EdTFt2UAAAAJ&hl=fr" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 9.5L12 5l9 4.5-9 4.5-9-4.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M7 12v6c0 .8 2.2 2 5 2s5-1.2 5-2v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Badr-Eddine Benelmostafa - Avril 2026</span>
+      </a>
+    </footer>
+  </main>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Annexes et ressources</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body data-chapter-index="4" data-chapter-total="4">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img class="brand-logo" src="../Figures/logo.png" alt="Logo cours" onerror="this.style.display='none'" />
+        <div class="brand-text">Architecture et Ingénierie des Systèmes Apprenants</div>
+      </div>
+      <a class="btn btn-soft" href="../index.html">Sommaire</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="progress-wrap">
+      <div class="progress-text" id="progressText"></div>
+      <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+    </div>
+
+    <section class="card">
+      <h2>Annexes et ressources</h2>
+
+      <p class="lead">
+        Cette page regroupe des compléments (glossaire, références, outils) pour consolider les chapitres 1 à 3.
+      </p>
+
+      <h3>Glossaire (exemples)</h3>
+      <ul>
+        <li><strong>Loss / fonction de perte</strong> : critère d’optimisation utilisé pour ajuster les paramètres d’un modèle.</li>
+        <li><strong>Generalization</strong> : capacité à maintenir la performance sur des données inédites.</li>
+        <li><strong>Data leakage</strong> : fuite d’information du futur ou du label vers les variables d’entrée.</li>
+      </ul>
+
+      <h3>Références (à compléter)</h3>
+      <ul>
+        <li>Articles/chapitres de cours (liens), notebooks, datasets.</li>
+        <li>Documentation scikit-learn / PyTorch / TensorFlow (selon ton stack).</li>
+      </ul>
+
+      <details>
+        <summary>Checklist “bonne pratique” (reproductibilité)</summary>
+        <ul>
+          <li>Seed fixée + versioning des données.</li>
+          <li>Séparation train/val/test et métriques adaptées.</li>
+          <li>Tracking des expériences (simple tableau ou outil dédié).</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav class="book-nav">
+      <a class="btn btn-soft" href="03-chapitre-3-ingenierie.html">Chapitre précédent</a>
+      <a class="btn btn-primary" href="../index.html">Retour au sommaire</a>
+    </nav>
+
+    <footer>
+      Chapitre 4/4
+      <span aria-hidden="true"> • </span>
+      By
+      <a href="https://scholar.google.com/citations?user=EdTFt2UAAAAJ&hl=fr" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 9.5L12 5l9 4.5-9 4.5-9-4.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M7 12v6c0 .8 2.2 2 5 2s5-1.2 5-2v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Badr-Eddine Benelmostafa - Avril 2026</span>
+      </a>
+    </footer>
+  </main>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>
