@@ -232,58 +232,497 @@
         Cette rigueur opérationnelle libère la puissance de l'IA dans tous les secteurs stratégiques, illustrée par des cas réels d'utilisation :
       </p>
 
-      <h4>La Révolution de la Prédiction : Anticiper l'Avenir</h4>
+      <h4>1. La Révolution de la Prédiction : De la Réaction à l'Anticipation</h4>
       <p class="lead">
-        L'IA devient une boule de cristal industrielle.
-      </p>
-      <ul>
-        <li>Colas (Infracare) : Utilise la vision par ordinateur embarquée sur des véhicules pour détecter automatiquement les défauts routiers (fissures, nids-de-poule), transformant la maintenance réactive en maintenance prédictive.</li>
-        <li>Air Liquide : Optimise l'intégralité de sa supply chain, de la production à la livraison, via des modèles prédictifs complexes pour réduire les coûts et l'empreinte carbone.</li>
-      </ul>
-
-      <h4>La Révolution de la Classification : Trier la Complexité</h4>
-      <p class="lead">
-        L'IA devient un expert infatigable.
-      </p>
-      <ul>
-        <li>Santé : En 2023, la FDA a approuvé 223 dispositifs médicaux IA pour analyser des radiologies ou détecter des cellules cancéreuses avec une précision supérieure à celle de l'œil humain isolé.</li>
-        <li>Finance : L'AMF (Autorité des Marchés Financiers) traque les arnaques financières sur le web en classifiant automatiquement les signaux faibles et les comportements suspects.</li>
-      </ul>
-
-      <h4>La Révolution de la Génération : Créer le Nouveau</h4>
-      <p class="lead">
-        L'IA devient un copilote créatif.
-      </p>
-      <ul>
-        <li>Développement : Création automatisée de code informatique par les développeurs, accélérant la production logicielle.</li>
-        <li>Marketing : Composition musicale ou marketing ultra-personnalisé, à l'image de Starbucks qui parvient à augmenter son panier moyen de 6 % grâce à des recommandations d'IA.</li>
-      </ul>
-
-      <h3>6. Épilogue : Bienvenue dans l'Ère de l'Apprentissage</h3>
-
-      <h4>Histoire et contexte</h4>
-      <p class="lead">
-        En 2025, nous franchissons une nouvelle étape : celle de l'IA agentique. La machine ne se contente plus de répondre ; elle planifie et agit de
-        manière autonome pour remplir un objectif complexe. Cependant, cette puissance ravive les questions de sécurité et d'ancrage dans le réel,
-        poussant les "parrains" de l'IA (LeCun, Bengio) vers de nouvelles architectures plus sûres et plus intelligentes physiquement.
+        Si l'informatique classique se contentait de traiter le présent ou de compiler le passé, l'intelligence artificielle opère une rupture
+        fondamentale : elle devient une "boule de cristal" mathématique. Prédire, dans le contexte de l'IA, c'est utiliser la force statistique
+        pour réduire l'incertitude du futur. Cette capacité se manifeste sous deux formes principales : la prédiction d'une valeur ponctuelle et
+        la projection dans le temps.
       </p>
 
-      <h4>Contenu et faits marquants</h4>
+      <h5>A. La Prédiction de Valeur (Régression Statistique)</h5>
+      <p class="lead">
+        Ici, l'IA analyse un ensemble de caractéristiques à un instant <span class="math-inline">T</span> pour estimer un résultat numérique
+        précis. C'est la capacité de l'algorithme à comprendre les corrélations invisibles entre des facteurs hétérogènes.
+      </p>
+      <p class="lead"><strong>Exemple : L'estimation boursière</strong></p>
+      <p class="lead">
+        Imaginez un modèle entraîné sur des milliers de journées de trading. Il a appris que le volume d'échange et le sentiment des informations
+        influencent le prix final.
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Le Dataset d'entraînement (Le passé)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Dataset d'entraînement boursier">
+            <thead>
+              <tr>
+                <th scope="col">Volume d'échange</th>
+                <th scope="col">Sentiment Media (-1 à 1)</th>
+                <th scope="col">Taux d'intérêt</th>
+                <th scope="col">Variation du Prix (Sortie)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Élevé</td>
+                <td>0.7 (Positif)</td>
+                <td class="cell-num">2.5%</td>
+                <td class="cell-highlight">+ 1.2%</td>
+              </tr>
+              <tr>
+                <td>Faible</td>
+                <td>-0.4 (Négatif)</td>
+                <td class="cell-num">2.6%</td>
+                <td>- 0.8%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-block">
+        <p class="table-caption">L'Inférence (La prédiction du jour)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Inférence boursière">
+            <thead>
+              <tr>
+                <th scope="col">Volume d'échange</th>
+                <th scope="col">Sentiment Media</th>
+                <th scope="col">Taux d'intérêt</th>
+                <th scope="col">Variation attendue (IA)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Très Élevé</td>
+                <td>0.9 (Euphorie)</td>
+                <td class="cell-num">2.4%</td>
+                <td class="cell-highlight">[ ? ] → L'IA prédit +1.8%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead">
+        <strong>Applications réelles :</strong> Ce mécanisme est le cœur du Trading Haute Fréquence (ex: Renaissance Technologies) où des millions
+        de dollars sont engagés sur des prédictions calculées en microsecondes. On retrouve cette logique dans le Marketing Prédictif, comme chez
+        Starbucks, pour prédire le montant exact qu'un client est prêt à dépenser.
+      </p>
+
+      <h5>B. La Prédiction Temporelle (Forecasting &amp; Séries Temporelles)</h5>
+      <p class="lead">
+        Plus complexe, cette forme de prédiction ne regarde pas seulement des données figées, mais analyse la dynamique d'un signal pour prévoir son
+        effondrement ou sa croissance future. C'est l'outil privilégié de l'industrie pour éviter les catastrophes.
+      </p>
+      <p class="lead"><strong>Exemple pédagogique : La Maintenance Prédictive</strong></p>
+      <p class="lead">
+        On ne prédit plus une valeur isolée, mais le moment exact où une machine va cesser de fonctionner (Remaining Useful Life - RUL).
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Le suivi en temps réel (Flux de données)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Suivi maintenance prédictive">
+            <thead>
+              <tr>
+                <th scope="col">Température (°C)</th>
+                <th scope="col">Vibration (Hz)</th>
+                <th scope="col">Heures de marche</th>
+                <th scope="col">Risque de Panne (Calcul IA)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="cell-num">75°C</td>
+                <td class="cell-num">45</td>
+                <td class="cell-num">1500</td>
+                <td>2% (Stable)</td>
+              </tr>
+              <tr>
+                <td class="cell-num">92°C</td>
+                <td class="cell-num">110</td>
+                <td class="cell-num">4800</td>
+                <td class="cell-highlight">85% (Alerte Critique)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead"><strong>Projets et domaines d'application :</strong></p>
       <ul>
-        <li>Agents vs Chatbots : Un chatbot répond passivement à une question ("Quel temps fait-il?"), tandis qu'un agent IA planifie et exécute ("Organise mon voyage à Rome selon mon budget").</li>
-        <li>Modèles du Monde (Yann LeCun) : Pour surmonter les hallucinations des LLMs, LeCun propose l'architecture AMI (Advanced Machine Intelligence) qui apprend la physique du monde réel par observation vidéo.</li>
-        <li>Sécurité de l'IA (Yoshua Bengio) : Pivot vers la recherche sur des IA "honnêtes par design" (Scientist AI) pour empêcher les capacités de déception ou de manipulation observées chez les modèles avancés.</li>
-        <li>La responsabilité de l'Architecte : L'IA reste un miroir ; son aptitude au bien ou au mal dépend des motivations humaines et de la rigueur de l'alignement éthique.</li>
+        <li>
+          <strong>Infrastructures (Colas - Infracare) :</strong> En analysant le flux vidéo des routes, l'IA prédit l'évolution d'une fissure. Elle
+          n'attend pas que le nid-de-poule apparaisse ; elle prévoit sa formation pour intervenir au coût le plus bas.
+        </li>
+        <li>
+          <strong>Énergie &amp; Logistique (Air Liquide) :</strong> L'IA analyse les historiques de consommation pour prédire la demande mondiale de gaz
+          industriels. Cela permet d'optimiser toute la supply chain : on ne produit que ce que l'on sait, par prédiction, que l'on va livrer.
+        </li>
       </ul>
 
+      <h4>2. La Révolution de la Classification : Trier la Complexité du Réel</h4>
+      <p class="lead">
+        Si la prédiction cherche à deviner une valeur numérique future, la classification consiste à "ranger" le monde dans des catégories. C'est la
+        capacité de l'IA à agir comme un expert infatigable qui analyse des milliers de signaux pour rendre un verdict précis : Sain ou Malade ?
+        Authentique ou Frauduleux ? Obstacle ou Route ? On distingue deux niveaux de maturité dans cette discipline : la décision binaire et la
+        catégorisation multidimensionnelle.
+      </p>
+
+      <h5>A. La Classification Binaire (La Décision Oui/Non)</h5>
+      <p class="lead">
+        C'est la forme la plus pure de l'intelligence discriminante. L'IA apprend à tracer une frontière (une "frontière de décision") entre deux états
+        opposés. Elle ne calcule plus une probabilité de prix, mais une probabilité d'appartenance à un groupe.
+      </p>
+      <p class="lead"><strong>Exemple pédagogique : Le Diagnostic Médical</strong></p>
+      <p class="lead">
+        Un modèle de Vision par Ordinateur analyse des images de radiologie. Il a appris à distinguer les tissus sains des cellules suspectes en
+        fonction de la densité et de la forme.
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Le Dataset d'entraînement (Historique clinique)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Dataset d'entraînement diagnostic médical">
+            <thead>
+              <tr>
+                <th scope="col">Densité Cellulaire</th>
+                <th scope="col">Forme des contours</th>
+                <th scope="col">Âge de la lésion</th>
+                <th scope="col">Diagnostic (Sortie)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Très Haute</td>
+                <td>Irrégulière</td>
+                <td>3 mois</td>
+                <td class="cell-highlight">Positif (Malin)</td>
+              </tr>
+              <tr>
+                <td>Faible</td>
+                <td>Lisse / Ronde</td>
+                <td>1 mois</td>
+                <td>Négatif (Bénin)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-block">
+        <p class="table-caption">L'Inférence (Nouveau patient)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Inférence diagnostic médical">
+            <thead>
+              <tr>
+                <th scope="col">Densité Cellulaire</th>
+                <th scope="col">Forme des contours</th>
+                <th scope="col">Âge de la lésion</th>
+                <th scope="col">Verdict de l'IA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Haute</td>
+                <td>Irrégulière</td>
+                <td>2 mois</td>
+                <td class="cell-highlight">[ ? ] → Alerte : Positif</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead">
+        <strong>Applications réelles :</strong> En 2023, la FDA a franchi un cap historique en approuvant 223 dispositifs médicaux basés sur l'IA. Ces
+        systèmes ne remplacent pas le médecin, mais agissent comme un "super-filtre" capable de détecter des micro-signaux cancéreux invisibles à l'œil
+        humain, réduisant ainsi les faux négatifs de manière drastique.
+      </p>
+
+      <h5>B. La Classification Multiclasse (L'Expertise Contextuelle)</h5>
+      <p class="lead">
+        Ici, l'IA ne choisit pas entre deux options, mais doit identifier la nature exacte d'un signal parmi une multitude de catégories possibles.
+        C'est l'outil indispensable pour surveiller des environnements complexes où tout bouge en même temps.
+      </p>
+      <p class="lead"><strong>Exemple pédagogique : La Surveillance des Marchés Financiers</strong></p>
+      <p class="lead">L'IA analyse des flux de transactions pour classer le comportement d'un acteur du marché.</p>
+
+      <div class="table-block">
+        <p class="table-caption">Le flux de données (Signaux faibles)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Flux surveillance marchés financiers">
+            <thead>
+              <tr>
+                <th scope="col">Fréquence d'achat</th>
+                <th scope="col">Pays d'origine</th>
+                <th scope="col">Volume atypique</th>
+                <th scope="col">Catégorie de signal (Sortie)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1000/seconde</td>
+                <td>Paradis Fiscal</td>
+                <td>Oui</td>
+                <td class="cell-highlight">Suspicion de Fraude</td>
+              </tr>
+              <tr>
+                <td>1/heure</td>
+                <td>France</td>
+                <td>Non</td>
+                <td>Activité Normale</td>
+              </tr>
+              <tr>
+                <td>50/minute</td>
+                <td>USA</td>
+                <td>Oui</td>
+                <td>Spéculation Agressive</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead"><strong>Projets et domaines d'application :</strong></p>
+      <ul>
+        <li>
+          <strong>Finance (AMF - France) :</strong> L'Autorité des Marchés Financiers utilise ces modèles pour traquer les manipulations de cours et
+          les arnaques sur le web. L'IA classe automatiquement des millions de messages et de transactions pour isoler uniquement les comportements
+          "toxiques".
+        </li>
+        <li>
+          <strong>Cybersécurité :</strong> Les antivirus modernes ne cherchent plus une signature de virus connue (statique). Ils classifient le
+          comportement d'un logiciel : si un programme commence à chiffrer des fichiers à haute vitesse, l'IA le classe immédiatement comme
+          "Ransomware" et bloque le système.
+        </li>
+      </ul>
+
+      <h4>3. La Révolution de la Génération : Créer l'Inédit</h4>
+      <p class="lead">
+        Si la prédiction et la classification consistent à analyser l'existant, la génération marque une rupture historique : l'IA devient capable de
+        produire du contenu nouveau (texte, image, code, molécule). On passe d'une IA discriminative (qui sépare le vrai du faux) à une IA générative
+        (qui synthétise une réalité). Ce n'est plus une "boule de cristal", c'est un copilote créatif.
+      </p>
+
+      <h5>A. La Génération de Code et de Structures (Logique Formelle)</h5>
+      <p class="lead">
+        Ici, l'IA utilise sa compréhension des syntaxes rigoureuses pour transformer une intention humaine (langage naturel) en un langage machine
+        exécutable. Elle ne "devine" pas seulement le mot suivant, elle respecte une grammaire logique stricte.
+      </p>
+      <p class="lead"><strong>Exemple pédagogique : Le Copilote du Développeur</strong></p>
+      <p class="lead">
+        Le modèle a été entraîné sur des milliards de lignes de code Open Source. Il comprend la relation entre un commentaire d'intention et la
+        structure algorithmique correspondante.
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Le Dataset d'entraînement (Le savoir-faire accumulé)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Dataset d'entraînement génération de code">
+            <thead>
+              <tr>
+                <th scope="col">Intention (Prompt)</th>
+                <th scope="col">Contexte (Langage)</th>
+                <th scope="col">Code Généré (Sortie)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>"Calculer la moyenne"</td>
+                <td>Python</td>
+                <td class="cell-highlight"><code>return sum(list) / len(list)</code></td>
+              </tr>
+              <tr>
+                <td>"Connexion Base de données"</td>
+                <td>SQL</td>
+                <td><code>SELECT * FROM users WHERE...</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-block">
+        <p class="table-caption">L'Inférence (L'assistance en temps réel)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Inférence génération de code">
+            <thead>
+              <tr>
+                <th scope="col">Intention de l'utilisateur</th>
+                <th scope="col">Langage</th>
+                <th scope="col">Production de l'IA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>"Créer une fonction de tri"</td>
+                <td>C++</td>
+                <td class="cell-highlight">[ ? ] → Génération d'un algorithme complet</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead">
+        <strong>Applications réelles :</strong> Des outils comme GitHub Copilot ou Cursor révolutionnent l'ingénierie logicielle. On estime que près de
+        40 % du code produit aujourd'hui dans les grandes entreprises technologiques est suggéré ou généré par une IA, permettant aux ingénieurs de se
+        concentrer sur l'architecture plutôt que sur la syntaxe.
+      </p>
+
+      <h5>B. La Génération de Contenu et d'Expériences (Multimodalité)</h5>
+      <p class="lead">
+        Dans ce domaine, l'IA utilise des modèles de probabilité massifs pour générer des contenus riches (images, textes marketing, musique). Elle
+        apprend la "distribution" des données pour créer quelque chose qui ressemble statistiquement au réel, tout en étant unique.
+      </p>
+      <p class="lead"><strong>Exemple pédagogique : Le Marketing Ultra-Personnalisé</strong></p>
+      <p class="lead">
+        L'IA analyse le profil d'un consommateur pour générer une offre ou un message qui résonnera spécifiquement avec lui.
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Le flux de données (Contexte client)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Flux marketing ultra-personnalisé">
+            <thead>
+              <tr>
+                <th scope="col">Historique d'achat</th>
+                <th scope="col">Moment de la journée</th>
+                <th scope="col">Localisation</th>
+                <th scope="col">Contenu Généré (Sortie)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Café glacé</td>
+                <td>08h00</td>
+                <td>Gare</td>
+                <td class="cell-highlight">"Bonjour ! Votre dose d'énergie est prête..."</td>
+              </tr>
+              <tr>
+                <td>Thé chaud</td>
+                <td>16h00</td>
+                <td>Bureau</td>
+                <td>"Une pause douceur pour votre après-midi ?"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead"><strong>Projets et domaines d'application :</strong></p>
+      <ul>
+        <li>
+          <strong>Marketing (Starbucks) :</strong> Grâce à des modèles génératifs et prédictifs combinés, Starbucks envoie des millions d'offres
+          différentes chaque semaine. Chaque client reçoit un message et une promotion uniques, générés pour maximiser l'engagement. Résultat : une
+          augmentation du panier moyen de 6 %.
+        </li>
+        <li>
+          <strong>Design &amp; Médias :</strong> Des outils comme Midjourney ou Sora permettent de passer du concept à l'image ou à la vidéo en
+          quelques secondes. Ce n'est plus du "stockage", c'est de la création à la demande, utilisée aujourd'hui dans le prototypage industriel et la
+          publicité.
+        </li>
+      </ul>
+
+      <h4>4. L'Orchestration : La Convergence des Facultés</h4>
+      <p class="lead">
+        Dans le monde réel, un système d'intelligence artificielle se contente rarement d'une seule tâche. Les architectures les plus puissantes sont
+        dites multitâches : elles orchestrent simultanément la prédiction et la classification pour comprendre un environnement complexe.
+      </p>
+      <p class="lead">
+        Le meilleur exemple de cette convergence est la Vision par Ordinateur (Computer Vision), et plus particulièrement la Détection d'Objets.
+      </p>
+
+      <h5>L'Exemple du Système de Détection (Type YOLO)</h5>
+      <p class="lead">
+        Lorsqu'un algorithme analyse une image pour détecter des défauts sur une route ou identifier des véhicules, il effectue deux opérations
+        cognitives en une fraction de seconde :
+      </p>
+      <p class="lead">
+        <strong>La Régression (Prédire) :</strong> L'IA doit prédire les coordonnées exactes
+        (<span class="math-inline">x</span>, <span class="math-inline">y</span>, <span class="math-inline">w</span>,
+        <span class="math-inline">h</span>) d'un cadre (Bounding Box) autour de l'objet. C'est une prédiction de valeurs numériques.
+      </p>
+      <p class="lead">
+        <strong>La Classification :</strong> Une fois l'objet localisé, l'IA doit décider s'il s'agit d'un "Nid-de-poule", d'une "Fissure" ou d'une
+        "Signalisation".
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Le Dataset Multitâche (L'apprentissage complexe)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Dataset multitâche détection d'objets">
+            <thead>
+              <tr>
+                <th scope="col">Image Input</th>
+                <th scope="col">Pixels / Tenseurs</th>
+                <th scope="col">Sortie 1 : Localisation (Prédire)</th>
+                <th scope="col">Sortie 2 : Nature (Classifier)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Photo Route A</td>
+                <td><code>[0.2, 0.5, ...]</code></td>
+                <td class="cell-highlight"><code>[x=120, y=450, w=50, h=30]</code></td>
+                <td>Nid-de-poule</td>
+              </tr>
+              <tr>
+                <td>Photo Route B</td>
+                <td><code>[0.1, 0.8, ...]</code></td>
+                <td class="cell-highlight"><code>[x=300, y=150, w=100, h=10]</code></td>
+                <td>Fissure longitudinale</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-block">
+        <p class="table-caption">L'Inférence (L'action en production)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Inférence détection temps réel">
+            <thead>
+              <tr>
+                <th scope="col">Nouvelle Image</th>
+                <th scope="col">Analyse de l'IA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Flux vidéo temps réel</td>
+                <td class="cell-highlight">[ ? ] → L'IA dessine un cadre (Prédit) ET nomme l'obstacle (Classe)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead">
+        <strong>Cas d'usage industriel : L'Inspection d'Infrastructures</strong> — C'est ici que le MLOps prend tout son sens. Des entreprises comme
+        Colas ou des gestionnaires de réseaux électriques utilisent ces systèmes combinés. L'IA ne se contente pas de dire "il y a un problème"
+        (Classification) ; elle prédit où il se trouve précisément sur l'image et peut même, dans un troisième temps, prédire la vitesse de
+        dégradation du défaut (Prédiction temporelle).
+      </p>
+
+      <h5>Vers des Systèmes Autonomes</h5>
+      <p class="lead">Cette orchestration atteint son paroxysme dans les Véhicules Autonomes ou les Drones d'inspection :</p>
+      <ul>
+        <li>Classifier les obstacles (piéton, voiture, trottoir).</li>
+        <li>Prédire la trajectoire future du piéton (où sera-t-il dans 2 secondes ?).</li>
+        <li>Générer la commande de freinage ou de changement de direction optimale.</li>
+      </ul>
+
+      
       <p class="quote">
         Résumé : Nous ne sommes plus de simples programmeurs de codes statiques. Nous sommes les tuteurs de systèmes qui évoluent. La machine n'exécute
         plus, elle apprend. Elle ne subit plus, elle interprète. Bienvenue dans le monde des machines qui apprennent.
       </p>
 
-      <div class="btn-row">
-        <button class="btn btn-soft" type="button" data-mark-read>Marquer comme lu</button>
-      </div>
+    
 
     </section>
 
