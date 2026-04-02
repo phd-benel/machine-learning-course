@@ -136,52 +136,90 @@
         Au sein de chaque famille (Supervisé, Non-Supervisé, Renforcement), il existe une graduation technique. On distingue généralement deux grandes
         approches selon la structure mathématique de l'outil :
       </p>
-      <p class="lead">
-        <strong>Le Machine Learning "Classique" (Small Data / Tabular) :</strong> Ce sont des modèles souvent fondés sur la statistique et la géométrie.
-        Ils sont extrêmement efficaces sur des données structurées (tableaux Excel, bases de données SQL).
-      </p>
-      <p class="lead">
-        <strong>Exemples pour l'apprentissage supervisé</strong> (pour des tâches de prédiction ou de classification avec des données labellisées) :
-      </p>
-      <ul>
-        <li>Régression Linéaire</li>
-        <li>Arbres de Décision</li>
-        <li>Random Forest</li>
-        <li>SVM (Machines à Vecteurs de Support)</li>
-      </ul>
-      <p class="lead">
-        <strong>Exemples pour l'apprentissage non supervisé</strong> (pour découvrir des structures ou des motifs cachés dans des données non
-        labellisées) :
-      </p>
-      <ul>
-        <li>K-Means (Clustering)</li>
-        <li>PCA (Analyse en Composantes Principales - Réduction de Dimensionnalité)</li>
-        <li>DBSCAN (Density-Based Spatial Clustering)</li>
-      </ul>
-      <p class="lead">
-        <strong>Exemples pour le Reinforcement Learning</strong> (pour apprendre à un agent à prendre des décisions optimales par essai-erreur dans un
-        environnement) :
-      </p>
-      <ul>
-        <li>Q-Learning</li>
-      </ul>
 
-      <p class="lead">
-        <strong>Le Deep Learning (Big Data / Unstructured) :</strong> Fondé sur des réseaux de neurones profonds, il excelle là où les règles sont trop
-        complexes pour être écrites manuellement. Il est le roi des données non structurées (images, sons, texte).
-      </p>
-      <p class="lead">
-        <strong>Exemples pour le supervisé :</strong> Réseaux de neurones convolutifs (CNN) pour la classification d'images, Transformers pour la
-        traduction de texte (LLM), et Réseaux récurrents (RNN/LSTM) pour l'analyse de séries temporelles.
-      </p>
-      <p class="lead">
-        <strong>Exemples pour le non supervisé :</strong> Auto-encodeurs (Autoencoders) pour la compression de données ou la réduction de bruit, et
-        Modèles de diffusion (Diffusion Models) pour la génération de contenus ou l'apprentissage de représentations latentes.
-      </p>
-      <p class="lead">
-        <strong>Exemples pour le reinforcement learning :</strong> Deep Q-Networks (DQN) pour la maîtrise de jeux vidéo complexes (comme Atari), et
-        algorithmes Actor-Critic utilisés pour le contrôle robotique de précision et la conduite autonome.
-      </p>
+      <h4>L'Éventail des Modèles : du Machine Learning au Deep Learning</h4>
+
+      <div class="tool-compare" aria-label="Comparaison Machine Learning classique et Deep Learning">
+        <div class="tool-panel tool-panel--classic">
+          <div class="tool-panel__head">
+            <span class="tool-panel__head-main">Machine Learning « Classique »</span>
+            <span class="tool-panel__head-sub">Small Data · Données tabulaires</span>
+          </div>
+          <div class="tool-panel__body">
+            <p class="lead">
+              Modèles souvent fondés sur la statistique et la géométrie, très efficaces sur des données structurées (tableaux Excel, bases SQL).
+            </p>
+            <div class="tool-example-stack">
+              <div class="tool-example-block">
+                <h5 class="tool-example-block__title">Apprentissage supervisé</h5>
+                <p class="tool-example-block__hint">Prédiction ou classification avec données labellisées.</p>
+                <ul class="tool-chip-list">
+                  <li>Régression linéaire</li>
+                  <li>Arbres de décision</li>
+                  <li>Random Forest</li>
+                  <li>SVM (Machines à Vecteurs de Support)</li>
+                </ul>
+              </div>
+              <div class="tool-example-block">
+                <h5 class="tool-example-block__title">Apprentissage non supervisé</h5>
+                <p class="tool-example-block__hint">Structures ou motifs cachés dans des données non labellisées.</p>
+                <ul class="tool-chip-list">
+                  <li>K-Means (clustering)</li>
+                  <li>PCA (composantes principales, réduction de dimension)</li>
+                  <li>DBSCAN (clustering par densité)</li>
+                </ul>
+              </div>
+              <div class="tool-example-block">
+                <h5 class="tool-example-block__title">Reinforcement Learning</h5>
+                <p class="tool-example-block__hint">Décisions optimales par essais-erreurs dans un environnement.</p>
+                <ul class="tool-chip-list">
+                  <li>Q-Learning</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-panel tool-panel--deep">
+          <div class="tool-panel__head">
+            <span class="tool-panel__head-main">Deep Learning</span>
+            <span class="tool-panel__head-sub">Big Data · Données non structurées</span>
+          </div>
+          <div class="tool-panel__body">
+            <p class="lead">
+              Réseaux de neurones profonds : ils excellent lorsque les règles sont trop complexes pour être écrites à la main. Adaptés aux images, sons
+              et texte.
+            </p>
+            <div class="tool-example-stack">
+              <div class="tool-example-block">
+                <h5 class="tool-example-block__title">Supervisé</h5>
+                <p class="tool-example-block__hint">Tâches avec paires entrée–sortie (labels).</p>
+                <ul class="tool-chip-list">
+                  <li>CNN — classification d'images</li>
+                  <li>Transformers — traduction / LLM</li>
+                  <li>RNN / LSTM — séries temporelles</li>
+                </ul>
+              </div>
+              <div class="tool-example-block">
+                <h5 class="tool-example-block__title">Non supervisé</h5>
+                <p class="tool-example-block__hint">Représentations, débruitage, génération.</p>
+                <ul class="tool-chip-list">
+                  <li>Auto-encodeurs — compression, réduction de bruit</li>
+                  <li>Modèles de diffusion — génération de contenu, espaces latents</li>
+                </ul>
+              </div>
+              <div class="tool-example-block">
+                <h5 class="tool-example-block__title">Reinforcement learning</h5>
+                <p class="tool-example-block__hint">Politiques apprises par interaction.</p>
+                <ul class="tool-chip-list">
+                  <li>DQN — jeux type Atari</li>
+                  <li>Actor-Critic — robotique, conduite autonome</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <img class="cover-image" src="../Figures/Fig25.png" alt="Illustration Machine Learning et Deep Learning" loading="lazy" />
 
