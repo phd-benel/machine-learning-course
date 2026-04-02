@@ -625,7 +625,7 @@
           Observez l'écart visuel entre votre droite et les points : c'est cet écart que nous allons réduire.
         </p>
 
-        <p class="lead"><strong>Itération 1 : le premier apprentissage</strong></p>
+        <p class="lead"><strong>Itération 1 : le premier apprentissage</strong> <span aria-hidden="true">🔄</span></p>
         <p class="lead"><strong>A. Prédiction &amp; erreur (forward pass)</strong></p>
         <ul>
           <li>
@@ -642,7 +642,7 @@
             <div class="math-display" role="math" aria-label="Gradient pour deux points">
               Grad = (1/2) × [ (<span class="math-inline">x</span><sub>1</sub> · err<sub>1</sub>) + (<span class="math-inline">x</span><sub>2</sub> · err<sub>2</sub>) ]
             </div>
-            <span style="font-size:.92rem;">(avec err<sub>i</sub> = <span class="math-inline">Ŷ</span><sub>i</sub> − <span class="math-inline">y</span><sub>i</sub> pour chaque point.)</span>
+            <span class="exercise-math-note">(avec err<sub>i</sub> = <span class="math-inline">Ŷ</span><sub>i</sub> − <span class="math-inline">y</span><sub>i</sub> pour chaque point.)</span>
           </li>
           <li>
             Mettez à jour votre poids :
@@ -657,7 +657,7 @@
           <span class="math-inline">w</span> que vous venez de calculer. La droite a-t-elle pivoté vers le haut ?
         </p>
 
-        <p class="lead"><strong>Itération 2 : l'affinage du modèle</strong></p>
+        <p class="lead"><strong>Itération 2 : l'affinage du modèle</strong> <span aria-hidden="true">🔄</span></p>
         <p class="lead"><strong>A. Nouvelle prédiction (forward pass)</strong></p>
         <ul>
           <li>Repartez du nouveau <span class="math-inline">w</span> calculé à l'étape précédente.</li>
@@ -675,7 +675,7 @@
           </li>
         </ul>
 
-        <p class="lead"><strong>État final : le modèle « éduqué »</strong></p>
+        <p class="lead"><strong>État final : le modèle « éduqué »</strong> <span aria-hidden="true">🏁</span></p>
         <p class="lead">
           <strong>Graphique n°3 :</strong> tracez la droite finale. Comparez-la avec la toute première droite du graphique n°1.
         </p>
