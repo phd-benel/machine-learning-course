@@ -402,7 +402,19 @@
       <div class="math-display" role="math" aria-label="MSE">MSE = (1/N) × Σ<sub>i=1</sub><sup>N</sup> (Ŷ<sub>i</sub> − Y<sub>i</sub>)²</div>
       <p class="lead">Si la loss est gigantesque, le modèle (la droite) est très éloigné des points.</p>
       <p class="lead">Si la loss tend vers 0, le modèle a parfaitement compris la logique de la distribution.</p>
-      <img class="cover-image" src="../Figures/FIg31.png"  loading="lazy" />
+      <img class="cover-image" src="../Figures/FIg31.png" loading="lazy" />
+
+      <h5>Pourquoi le « Carré » ? La Géométrie de l'Erreur</h5>
+      <p class="lead">
+        Vous vous demanderez peut-être pourquoi nous élevons l'erreur au carré au lieu de simplement prendre la valeur absolue
+        (|<span class="math-inline">Y</span> − <span class="math-inline">Ŷ</span>|). La réponse réside dans la forme géométrique que cela crée.
+      </p>
+      <p class="lead">
+        En utilisant le carré, la fonction de coût (MSE) dessine une courbe <strong>convexe</strong> (en forme de bol ou de parabole). Cette forme est
+        « parfaite » pour l'optimisation : elle ne possède qu'un seul point le plus bas, le <strong>minimum global</strong>. Cela garantit que notre
+        algorithme ne restera pas bloqué dans un faux creux et pourra toujours « glisser » vers la solution idéale. De plus, mathématiquement, une fonction
+        au carré est « lisse » (dérivable partout), ce qui permet à l'ordinateur de calculer précisément la pente à chaque instant.
+      </p>
 
       <h5>C. L'Optimiseur : La Descente de Gradient (Gradient Descent)</h5>
       <p class="lead">
@@ -439,6 +451,8 @@
       <p class="lead">
         Pour maîtriser cette mécanique, rien ne vaut la rigueur d'un calcul manuel. Faisons tourner une itération d'apprentissage à la main.
       </p>
+      
+      <div class="section-divider" role="separator" aria-hidden="true"></div>
 
       <h4>3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
       <p class="lead">
