@@ -832,15 +832,164 @@
 
       <h4>3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
       <p class="lead">
-        Contrairement à ce que son nom indique, elle sert à la <strong>classification binaire</strong>. Elle reprend la logique de la régression mais
-        « écrase » le résultat entre 0 et 1 grâce à une fonction mathématique (la sigmoïde).
+        Jusqu'ici, nous avons appris à tracer une droite qui prédit un <strong>nombre continu</strong> : un prix, une température, une consommation. Or, une
+        grande partie des problèmes industriels ne demandent pas « combien ? », mais « lequel ? » : cet e-mail est-il un spam ? Ce patient est-il à risque ?
+        Cette transaction est-elle frauduleuse ? La cible <span class="math-inline">Y</span> devient une <strong>étiquette de classe</strong> — souvent codée
+        0 ou 1 — et le modèle le plus simple pour aborder cette branche de l'apprentissage supervisé s'appelle, un peu paradoxalement, la
+        <strong>régression logistique</strong>.
       </p>
       <p class="lead">
-        <strong>Logique :</strong> Elle ne prédit pas une valeur, mais une <strong>probabilité</strong> d'appartenir à une classe.
+        Le nom prête à confusion : il ne s'agit pas de prolonger une droite dans le temps, mais de <strong>régresser une probabilité</strong> à partir d'une
+        combinaison linéaire des caractéristiques, puis de la contraindre dans l'intervalle ]0 ; 1[. Tout le reste — features, poids, biais, boucle
+        d'entraînement, descente de gradient — reprend la même mécanique que vous connaissez déjà ; ce qui change, c'est la <strong>nature de la sortie</strong>
+        et la <strong>fonction de coût</strong> adaptée aux probabilités.
+      </p>
+
+      <h5>A. Une autre cible : la classe au lieu du nombre</h5>
+      <p class="lead">
+        Imaginez un filtre anti-spam. Pour chaque message, vous disposez de variables <span class="math-inline">X</span> : présence du mot « urgent », nombre de
+        liens, longueur du texte… La vérité que vous souhaitez prédire n'est pas un montant en euros : c'est une décision <em>oui / non</em>. On encode
+        classiquement la classe « positive » (spam, défaut, malade…) par <span class="math-inline">Y</span> = 1 et l'autre par
+        <span class="math-inline">Y</span> = 0.
       </p>
       <p class="lead">
-        <strong>Usage :</strong> Score de crédit (approuvé/refusé), diagnostic médical simple.
+        Une régression linéaire « naïve » pourrait produire des valeurs comme −0,3 ou 1,7 : difficile à interpréter comme une chance d'appartenir à une classe,
+        et mathématiquement mal adaptée au bruit typique des étiquettes. La régression logistique impose une discipline : le modèle ne sort plus un nombre
+        quelconque, mais une <strong>probabilité estimée</strong> <span class="math-inline">Ŷ</span> ∈ ]0 ; 1[, lisible comme « confiance » du système dans
+        la classe 1.
       </p>
+
+      <h5>B. Le même squelette linéaire, une sortie resserrée : score et sigmoïde</h5>
+      <p class="lead">
+        Comme pour la droite prédictive, on commence par un <strong>score affine</strong> — la combinaison linéaire que vous savez déjà écrire :
+      </p>
+      <div class="math-display" role="math" aria-label="Score linéaire">z = <span class="math-inline">w</span> · <span class="math-inline">X</span> + <span class="math-inline">b</span></div>
+      <p class="lead">
+        Ici encore, <span class="math-inline">w</span> et <span class="math-inline">b</span> sont ajustés par l'apprentissage ; la nouveauté est la couche qui
+        suit. On passe <span class="math-inline">z</span> dans la <strong>fonction sigmoïde</strong> σ, qui « comprime » toute la droite réelle dans l'intervalle
+        ouvert entre 0 et 1 :
+      </p>
+      <div class="math-display" role="math" aria-label="Sigmoïde">
+        σ(<span class="math-inline">z</span>) = 1 / (1 + e<sup>−<span class="math-inline">z</span></sup>)
+      </div>
+      <p class="lead">
+        Lorsque <span class="math-inline">z</span> est très négatif, σ(<span class="math-inline">z</span>) se rapproche de 0 ; lorsqu'il est très positif, de 1 ;
+        au voisinage de 0, la courbe est la plus pentue : c'est là que le modèle est le plus « indécis ». La prédiction finale s'écrit :
+      </p>
+      <div class="math-display" role="math" aria-label="Probabilité estimée">
+        <span class="math-inline">Ŷ</span> = σ(<span class="math-inline">z</span>) = P(<span class="math-inline">Y</span> = 1 | <span class="math-inline">X</span>)
+      </div>
+      <p class="lead">
+        Autrement dit : la machine ne dit pas « oui » ou « non » brutalement ; elle rend un <strong>degré de conviction</strong>. C'est ensuite à vous (ou à une
+        règle métier) de transformer ce nombre en décision — par exemple en fixant un <strong>seuil</strong> à 0,5 : au-dessus, on classe en 1 ; en dessous, en
+        0. Ce seuil n'est pas gravé dans le marbre : dans un contexte médical où l'on veut rater le moins possible les cas graves, on pourra l'abaisser pour
+        déclencher plus d'alertes.
+      </p>
+
+      <h5>C. Pourquoi changer de fonction de coût ? (Entropie croisée)</h5>
+      <p class="lead">
+        La MSE, si efficace pour ajuster une droite sur des prix, n'est pas le meilleur choix ici : mesurer l'écart au carré entre une probabilité prédite et
+        une étiquette 0/1 peut rendre l'optimisation plus capricieuse et ne correspond pas à la manière dont on évalue habituellement la qualité d'un
+        classifieur probabiliste.
+      </p>
+      <p class="lead">
+        On préfère la <strong>loss de log-vraisemblance</strong> (ou <strong>entropie croisée binaire</strong>) : elle pénalise fortement une prédiction confiante
+        mais fausse — par exemple annoncer 0,99 quand la vérité est 0 — et récompense les probabilités calibrées. Pour un jeu de <span class="math-inline">N</span>
+        exemples, on minimise en moyenne :
+      </p>
+      <div class="math-display" role="math" aria-label="Entropie croisée binaire">
+        Loss = − (1/<span class="math-inline">N</span>) × Σ<sub>i=1</sub><sup>N</sup> [
+        <span class="math-inline">Y</span><sub>i</sub> ln(<span class="math-inline">Ŷ</span><sub>i</sub>) + (1 −
+        <span class="math-inline">Y</span><sub>i</sub>) ln(1 − <span class="math-inline">Ŷ</span><sub>i</sub>) ]
+      </div>
+      <p class="lead">
+        L'intuition : si <span class="math-inline">Y</span><sub>i</sub> = 1, seul le terme ln(<span class="math-inline">Ŷ</span><sub>i</sub>) compte — il faut que
+        <span class="math-inline">Ŷ</span><sub>i</sub> soit grand ; si <span class="math-inline">Y</span><sub>i</sub> = 0, c'est ln(1 −
+        <span class="math-inline">Ŷ</span><sub>i</sub>) qui domine. Comme pour la régression linéaire, on <strong>dérive</strong> cette loss par rapport aux
+        paramètres et on applique la <strong>descente de gradient</strong> : vous retrouvez le même « randonneur », mais sur un autre paysage d'erreur.
+      </p>
+
+      <h5>D. Frontière de décision et lecture du modèle</h5>
+      <p class="lead">
+        Lorsque vous ne travaillez qu'avec les features brutes (sans les enrichir), le score <span class="math-inline">z</span> est une fonction affine des
+        entrées : l'ensemble des points où <span class="math-inline">z</span> = 0 (donc
+        <span class="math-inline">Ŷ</span> = 0,5 avec le seuil usuel) forme une <strong>frontière linéaire</strong> — une droite en 2D, un plan en 3D, un
+        hyperplan en dimension supérieure. C'est à la fois la force du modèle (simplicité, rapidité) et sa limite : si la frontière « naturelle » entre les
+        classes est courbe ou très tortueuse, une régression logistique seule restera trop rigide — d'où l'intérêt des features non linéaires ou d'autres familles
+        d'algorithmes (que nous aborderons plus loin).
+      </p>
+      <p class="lead">
+        Côté interprétation, le signe et la taille des poids indiquent comment chaque variable pousse vers la classe 1 ou 0 — dans le même esprit qu'une
+        régression linéaire, mais avec l'effet filtré par la sigmoïde. Les <strong>odds</strong> (rapport
+        P/(1−P)) se linéarisent souvent en fonction de <span class="math-inline">X</span> ; c'est un pont utile vers la statistique, sans obligation de le
+        manipuler à la main en ingénierie courante.
+      </p>
+
+      <h5>E. Mini-exemple : scoring crédit (narratif)</h5>
+      <p class="lead">
+        Supposons deux seules variables pour prédire le défaut de paiement : le revenu mensuel (normalisé) et le taux d'endettement. Après entraînement, le
+        modèle pourrait estimer une probabilité de défaut de <strong>8 %</strong> pour un profil A et de <strong>41 %</strong> pour un profil B. La banque ne lit
+        pas « oui/non » dans la table : elle lit un <strong>score de risque</strong>, puis applique une politique (refus au-dessus de 30 %, par exemple). La
+        régression logistique sert donc souvent de <strong>premier moteur de score</strong>, simple à auditer et à expliquer devant un comité de conformité —
+        avant même d'envisager des modèles plus lourds.
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Illustration schématique — pas des données réelles</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Exemple fictif de scores de défaut">
+            <thead>
+              <tr>
+                <th scope="col">Profil</th>
+                <th scope="col">Probabilité estimée de défaut (<span class="math-inline">Ŷ</span>)</th>
+                <th scope="col">Décision type (seuil 30 %)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A — endettement faible</td>
+                <td class="cell-num">0,08</td>
+                <td>Acceptation</td>
+              </tr>
+              <tr>
+                <td>B — endettement élevé</td>
+                <td class="cell-num">0,41</td>
+                <td>Refus ou examen manuel</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <section class="logistic-conclusion" aria-labelledby="logistic-conclusion-title">
+        <h5 id="logistic-conclusion-title" class="logistic-conclusion__title">En synthèse : la régression logistique dans votre boîte à outils</h5>
+        <p class="lead">
+          <strong>Ce que vous réutilisez sans tout réapprendre :</strong> la notion de features, de paramètres <span class="math-inline">w</span> et
+          <span class="math-inline">b</span>, la minimisation itérative d'une loss par gradient — le cœur du métier reste identique.
+        </p>
+        <p class="lead">
+          <strong>Ce qui est spécifique :</strong> une sortie probabiliste via la sigmoïde, une entropie croisée à la place de la MSE, une frontière de décision
+          linéaire (dans l'espace des entrées telles qu'elles sont données au modèle), et une lecture « risque / confiance » plutôt qu'une valeur physique.
+        </p>
+        <ul>
+          <li>
+            <strong>Atouts :</strong> rapidité, interprétabilité, baseline solide pour la classification binaire, extension naturelle au multi-classe (<em>softmax</em>
+            — souvent vue comme la généralisation de la couche sigmoïde).
+          </li>
+          <li>
+            <strong>Limites :</strong> même rigidité qu'une séparation linéaire si les entrées ne sont pas adaptées ; sensibilité au déséquilibre fort des classes
+            (beaucoup plus de 0 que de 1) — problème que l'on traite alors avec le rééchantillonnage, des poids de classe ou des métriques adaptées (à détailler en
+            ingénierie des données).
+          </li>
+        </ul>
+        <p class="lead">
+          En pratique, commencez souvent par cette régression « logistique » avant des architectures plus profondes : si elle suffit, vous gagnez en simplicité
+          et en confiance ; si elle plafonne, votre échec contrôlé vous indique déjà que la structure du problème dépasse une simple frontière — et oriente le
+          choix des outils suivants dans ce chapitre.
+        </p>
+      </section>
+
+      <div class="section-divider" role="separator" aria-hidden="true"></div>
 
       <details class="content-soon">
         <summary>
