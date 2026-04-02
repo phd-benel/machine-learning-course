@@ -872,6 +872,8 @@
       <div class="math-display" role="math" aria-label="Sigmoïde">
         σ(<span class="math-inline">z</span>) = 1 / (1 + e<sup>−<span class="math-inline">z</span></sup>)
       </div>
+      <img class="cover-image" src="../Figures/FIG38.avif" loading="lazy" />
+
       <p class="lead">
         Lorsque <span class="math-inline">z</span> est très négatif, σ(<span class="math-inline">z</span>) se rapproche de 0 ; lorsqu'il est très positif, de 1 ;
         au voisinage de 0, la courbe est la plus pentue : c'est là que le modèle est le plus « indécis ». La prédiction finale s'écrit :
@@ -885,81 +887,82 @@
         0. Ce seuil n'est pas gravé dans le marbre : dans un contexte médical où l'on veut rater le moins possible les cas graves, on pourra l'abaisser pour
         déclencher plus d'alertes.
       </p>
+      <img class="cover-image" src="../Figures/Fig37.png" loading="lazy" />
 
-      <h5>C. Pourquoi changer de fonction de coût ? (Entropie croisée)</h5>
+      <h5>C. Pourquoi changer de fonction de coût ? (L'entropie croisée)</h5>
       <p class="lead">
-        La MSE, si efficace pour ajuster une droite sur des prix, n'est pas le meilleur choix ici : mesurer l'écart au carré entre une probabilité prédite et
-        une étiquette 0/1 peut rendre l'optimisation plus capricieuse et ne correspond pas à la manière dont on évalue habituellement la qualité d'un
-        classifieur probabiliste.
+        En passant de la prédiction de prix à la classification, l'objectif change : on ne cherche plus à minimiser une distance en euros, mais à
+        <strong>maximiser la confiance du modèle dans la bonne réponse</strong>. La MSE (<span class="math-inline">Mean Squared Error</span>), si efficace pour
+        ajuster une droite, devient ici un frein.
       </p>
+
+      <p class="lead"><strong>1. L'analyse visuelle : la punition « gentille » vs « radicale »</strong></p>
       <p class="lead">
-        On préfère la <strong>loss de log-vraisemblance</strong> (ou <strong>entropie croisée binaire</strong>) : elle pénalise fortement une prédiction confiante
-        mais fausse — par exemple annoncer 0,99 quand la vérité est 0 — et récompense les probabilités calibrées. Pour un jeu de <span class="math-inline">N</span>
-        exemples, on minimise en moyenne :
+        Sur un graphique classique (erreur en fonction de la probabilité prédite lorsque la vérité est <span class="math-inline">Y</span> = 1, souvent matérialisée
+        par une ligne de référence horizontale), on comprend immédiatement le problème :
+      </p>
+      <ul>
+        <li>
+          <strong>Courbe bleue (MSE) :</strong> même si le modèle se trompe lourdement en prédisant une probabilité proche de 0 alors que
+          <span class="math-inline">Y</span> = 1, l'erreur au carré reste bornée (elle ne dépasse pas 1,0 dans le pire cas). Le gradient — la pente du paysage
+          d'erreur — devient très faible à gauche : le modèle reçoit peu d'instruction de correction alors qu'il est du mauvais côté.
+        </li>
+        <li>
+          <strong>Courbe rouge (log-loss / entropie croisée) :</strong> lorsque la prédiction s'éloigne de la vérité, la perte croît très fortement ; lorsque
+          <span class="math-inline">Ŷ</span> s'approche de 0 alors que <span class="math-inline">Y</span> = 1, la pénalité tend vers l'infini. Le modèle ne peut
+          pas « se sentir à l'aise » dans une erreur confiante.
+        </li>
+      </ul>
+
+      <p class="lead"><strong>2. La formule de l'entropie croisée binaire (BCE)</strong></p>
+      <p class="lead">
+        Pour évaluer la qualité d'un classifieur probabiliste sur un jeu de <span class="math-inline">N</span> exemples, on utilise :
       </p>
       <div class="math-display" role="math" aria-label="Entropie croisée binaire">
         Loss = − (1/<span class="math-inline">N</span>) × Σ<sub>i=1</sub><sup>N</sup> [
         <span class="math-inline">Y</span><sub>i</sub> ln(<span class="math-inline">Ŷ</span><sub>i</sub>) + (1 −
         <span class="math-inline">Y</span><sub>i</sub>) ln(1 − <span class="math-inline">Ŷ</span><sub>i</sub>) ]
       </div>
-      <p class="lead">
-        L'intuition : si <span class="math-inline">Y</span><sub>i</sub> = 1, seul le terme ln(<span class="math-inline">Ŷ</span><sub>i</sub>) compte — il faut que
-        <span class="math-inline">Ŷ</span><sub>i</sub> soit grand ; si <span class="math-inline">Y</span><sub>i</sub> = 0, c'est ln(1 −
-        <span class="math-inline">Ŷ</span><sub>i</sub>) qui domine. Comme pour la régression linéaire, on <strong>dérive</strong> cette loss par rapport aux
-        paramètres et on applique la <strong>descente de gradient</strong> : vous retrouvez le même « randonneur », mais sur un autre paysage d'erreur.
-      </p>
 
-      <h5>D. Frontière de décision et lecture du modèle</h5>
-      <p class="lead">
-        Lorsque vous ne travaillez qu'avec les features brutes (sans les enrichir), le score <span class="math-inline">z</span> est une fonction affine des
-        entrées : l'ensemble des points où <span class="math-inline">z</span> = 0 (donc
-        <span class="math-inline">Ŷ</span> = 0,5 avec le seuil usuel) forme une <strong>frontière linéaire</strong> — une droite en 2D, un plan en 3D, un
-        hyperplan en dimension supérieure. C'est à la fois la force du modèle (simplicité, rapidité) et sa limite : si la frontière « naturelle » entre les
-        classes est courbe ou très tortueuse, une régression logistique seule restera trop rigide — d'où l'intérêt des features non linéaires ou d'autres familles
-        d'algorithmes (que nous aborderons plus loin).
-      </p>
-      <p class="lead">
-        Côté interprétation, le signe et la taille des poids indiquent comment chaque variable pousse vers la classe 1 ou 0 — dans le même esprit qu'une
-        régression linéaire, mais avec l'effet filtré par la sigmoïde. Les <strong>odds</strong> (rapport
-        P/(1−P)) se linéarisent souvent en fonction de <span class="math-inline">X</span> ; c'est un pont utile vers la statistique, sans obligation de le
-        manipuler à la main en ingénierie courante.
-      </p>
+      <p class="lead"><strong>3. Décomposition pas à pas (l'intuition)</strong></p>
+      <p class="lead">Le génie de cette formule est qu'elle « sélectionne » le bon terme selon la classe réelle :</p>
+      <p class="lead"><strong>Si <span class="math-inline">Y</span><sub>i</sub> = 1 :</strong></p>
+      <ul>
+        <li>Le terme (1 − <span class="math-inline">Y</span><sub>i</sub>) s'annule ; il reste −ln(<span class="math-inline">Ŷ</span><sub>i</sub>).</li>
+        <li>
+          Si <span class="math-inline">Ŷ</span><sub>i</sub> → 1, alors ln(<span class="math-inline">Ŷ</span><sub>i</sub>) → 0 : peu d'erreur.
+        </li>
+        <li>
+          Si <span class="math-inline">Ŷ</span><sub>i</sub> → 0, alors ln(<span class="math-inline">Ŷ</span><sub>i</sub>) → −∞ : avec le signe « − » devant, la
+          perte devient très grande — le modèle est sévèrement puni.
+        </li>
+      </ul>
+      <p class="lead"><strong>Si <span class="math-inline">Y</span><sub>i</sub> = 0 :</strong></p>
+      <ul>
+        <li>C'est le premier terme qui s'annule ; seul −ln(1 − <span class="math-inline">Ŷ</span><sub>i</sub>) compte.</li>
+        <li>On punit le modèle s'il s'approche de 1 alors que la vérité est 0.</li>
+      </ul>
 
-      <h5>E. Mini-exemple : scoring crédit (narratif)</h5>
+      <p class="lead"><strong>4. Le « randonneur » sur un nouveau paysage</strong></p>
       <p class="lead">
-        Supposons deux seules variables pour prédire le défaut de paiement : le revenu mensuel (normalisé) et le taux d'endettement. Après entraînement, le
-        modèle pourrait estimer une probabilité de défaut de <strong>8 %</strong> pour un profil A et de <strong>41 %</strong> pour un profil B. La banque ne lit
-        pas « oui/non » dans la table : elle lit un <strong>score de risque</strong>, puis applique une politique (refus au-dessus de 30 %, par exemple). La
-        régression logistique sert donc souvent de <strong>premier moteur de score</strong>, simple à auditer et à expliquer devant un comité de conformité —
-        avant même d'envisager des modèles plus lourds.
+        Comme pour la régression linéaire, on utilise la <strong>descente de gradient</strong> pour optimiser les poids. Le paysage a toutefois changé :
       </p>
-
-      <div class="table-block">
-        <p class="table-caption">Illustration schématique — pas des données réelles</p>
-        <div class="table-wrap">
-          <table class="data-table" aria-label="Exemple fictif de scores de défaut">
-            <thead>
-              <tr>
-                <th scope="col">Profil</th>
-                <th scope="col">Probabilité estimée de défaut (<span class="math-inline">Ŷ</span>)</th>
-                <th scope="col">Décision type (seuil 30 %)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>A — endettement faible</td>
-                <td class="cell-num">0,08</td>
-                <td>Acceptation</td>
-              </tr>
-              <tr>
-                <td>B — endettement élevé</td>
-                <td class="cell-num">0,41</td>
-                <td>Refus ou examen manuel</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <ul>
+        <li>
+          <strong>Relief plus informatif :</strong> contrairement à la MSE, qui peut produire un plateau « mou » lorsque la probabilité prédite est très mauvaise,
+          la log-loss maintient une pente forte là où l'erreur est grave — le gradient reste utile pour corriger.
+        </li>
+        <li>
+          <strong>Descente guidée :</strong> le « randonneur » reçoit une correction d'autant plus marquée qu'il est du mauvais côté, ce qui favorise une convergence
+          vers des probabilités mieux calibrées lorsque l'optimisation est bien réglée.
+        </li>
+      </ul>
+      <p class="lead">
+        <strong>Ce qu'il faut retenir pour l'examen :</strong> on utilise l'entropie croisée parce que, dans le cadre logistique linéaire, le problème d'optimisation
+        est bien posé (convexité du critère en les paramètres), et parce qu'elle sanctionne sévèrement les prédictions à la fois <em>fausses</em> et
+        <em>très confiantes</em>. C'est le moteur mathématique de presque toutes les chaînes de classification supervisée modernes — avant même d'ajouter des
+        couches plus profondes.
+      </p>
 
       <section class="logistic-conclusion" aria-labelledby="logistic-conclusion-title">
         <h5 id="logistic-conclusion-title" class="logistic-conclusion__title">En synthèse : la régression logistique dans votre boîte à outils</h5>
