@@ -896,11 +896,11 @@
         ajuster une droite, devient ici un frein.
       </p>
 
-      <p class="lead"><strong>1. L'analyse visuelle : la punition « gentille » vs « radicale »</strong></p>
       <p class="lead">
-        Sur un graphique classique (erreur en fonction de la probabilité prédite lorsque la vérité est <span class="math-inline">Y</span> = 1, souvent matérialisée
-        par une ligne de référence horizontale), on comprend immédiatement le problème :
+        Sur le graphique suivant, on comprend immédiatement le problème :
       </p>
+      <img class="cover-image" src="../Figures/Fig39.png" loading="lazy" />
+
       <ul>
         <li>
           <strong>Courbe bleue (MSE) :</strong> même si le modèle se trompe lourdement en prédisant une probabilité proche de 0 alors que
@@ -914,9 +914,8 @@
         </li>
       </ul>
 
-      <p class="lead"><strong>2. La formule de l'entropie croisée binaire (BCE)</strong></p>
       <p class="lead">
-        Pour évaluer la qualité d'un classifieur probabiliste sur un jeu de <span class="math-inline">N</span> exemples, on utilise :
+        Pour évaluer la qualité d'un classifieur probabiliste sur un jeu de <span class="math-inline">N</span> exemples, on utilise la fonction de perte nommée "log-loss / entropie croisée" :
       </p>
       <div class="math-display" role="math" aria-label="Entropie croisée binaire">
         Loss = − (1/<span class="math-inline">N</span>) × Σ<sub>i=1</sub><sup>N</sup> [
@@ -924,7 +923,6 @@
         <span class="math-inline">Y</span><sub>i</sub>) ln(1 − <span class="math-inline">Ŷ</span><sub>i</sub>) ]
       </div>
 
-      <p class="lead"><strong>3. Décomposition pas à pas (l'intuition)</strong></p>
       <p class="lead">Le génie de cette formule est qu'elle « sélectionne » le bon terme selon la classe réelle :</p>
       <p class="lead"><strong>Si <span class="math-inline">Y</span><sub>i</sub> = 1 :</strong></p>
       <ul>
@@ -943,9 +941,8 @@
         <li>On punit le modèle s'il s'approche de 1 alors que la vérité est 0.</li>
       </ul>
 
-      <p class="lead"><strong>4. Le « randonneur » sur un nouveau paysage</strong></p>
       <p class="lead">
-        Comme pour la régression linéaire, on utilise la <strong>descente de gradient</strong> pour optimiser les poids. Le paysage a toutefois changé :
+        Enfin comme pour la régression linéaire, on utilise la <strong>descente de gradient</strong> pour optimiser les poids. Le paysage a toutefois changé :
       </p>
       <ul>
         <li>
@@ -957,38 +954,90 @@
           vers des probabilités mieux calibrées lorsque l'optimisation est bien réglée.
         </li>
       </ul>
-      <p class="lead">
-        <strong>Ce qu'il faut retenir pour l'examen :</strong> on utilise l'entropie croisée parce que, dans le cadre logistique linéaire, le problème d'optimisation
-        est bien posé (convexité du critère en les paramètres), et parce qu'elle sanctionne sévèrement les prédictions à la fois <em>fausses</em> et
-        <em>très confiantes</em>. C'est le moteur mathématique de presque toutes les chaînes de classification supervisée modernes — avant même d'ajouter des
-        couches plus profondes.
-      </p>
+      
 
       <section class="logistic-conclusion" aria-labelledby="logistic-conclusion-title">
-        <h5 id="logistic-conclusion-title" class="logistic-conclusion__title">En synthèse : la régression logistique dans votre boîte à outils</h5>
+        <h5 id="logistic-conclusion-title" class="logistic-conclusion__title">
+          Conclusion : la régression logistique ou l'art de « trancher »
+        </h5>
         <p class="lead">
-          <strong>Ce que vous réutilisez sans tout réapprendre :</strong> la notion de features, de paramètres <span class="math-inline">w</span> et
-          <span class="math-inline">b</span>, la minimisation itérative d'une loss par gradient — le cœur du métier reste identique.
+          Si la régression linéaire était un organisme apprenant à <strong>mesurer</strong>, la régression logistique est ce même organisme apprenant à
+          <strong>choisir</strong>. Elle possède toujours son « petit cerveau » (les paramètres <span class="math-inline">w</span> et <span class="math-inline">b</span>),
+          mais elle a développé un nouveau filtre : la <strong>sigmoïde</strong>. Ce filtre lui permet de ne plus répondre par un nombre quelconque sur toute la droite
+          réelle, mais par une <strong>probabilité</strong> entre 0 et 1.
         </p>
+
+        <h5>L'IA qui voit le monde comme une « frontière »</h5>
         <p class="lead">
-          <strong>Ce qui est spécifique :</strong> une sortie probabiliste via la sigmoïde, une entropie croisée à la place de la MSE, une frontière de décision
-          linéaire (dans l'espace des entrées telles qu'elles sont données au modèle), et une lecture « risque / confiance » plutôt qu'une valeur physique.
+          Comme sa cousine linéaire, cette IA reste attachée à une géométrie simple : une combinaison linéaire des entrées. Mais la vision n'est plus celle d'une
+          <em>tendance</em> à prolonger : c'est celle d'une <strong>séparation</strong>. Elle ne cherche pas d'abord une courbe complexe entre les points ; elle cherche
+          une <strong>ligne de démarcation</strong> entre deux camps.
         </p>
+        <p class="table-caption" style="margin:12px 0 8px;">Figure : deux classes et frontière linéaire</p>
+        <img
+          class="cover-image cover-image--compact"
+          src="../Figures/Fig40.png"
+          alt="Deux classes séparées par une droite frontière dans le plan x1, x2"
+          loading="lazy"
+        />
+        <p class="lead">
+          Comme on le voit sur cette illustration, l'intelligence du modèle consiste à tracer une « ligne dans le sable » — ici, une frontière que l'on peut
+          résumer par exemple par l'équation suivante (les notations dépendent du repère choisi) :
+        </p>
+        <div class="math-display" role="math" aria-label="Exemple de frontière linéaire">
+          <span class="math-inline">x</span><sub>2</sub> = −<span class="math-inline">x</span><sub>1</sub> + 4
+        </div>
         <ul>
           <li>
-            <strong>Atouts :</strong> rapidité, interprétabilité, baseline solide pour la classification binaire, extension naturelle au multi-classe (<em>softmax</em>
-            — souvent vue comme la généralisation de la couche sigmoïde).
+            D'un côté de la frontière, le modèle classe les exemples comme appartenant à la classe « Étoile » (<span class="math-inline">y</span> = 1).
           </li>
           <li>
-            <strong>Limites :</strong> même rigidité qu'une séparation linéaire si les entrées ne sont pas adaptées ; sensibilité au déséquilibre fort des classes
-            (beaucoup plus de 0 que de 1) — problème que l'on traite alors avec le rééchantillonnage, des poids de classe ou des métriques adaptées (à détailler en
-            ingénierie des données).
+            De l'autre, comme « Point bleu » (<span class="math-inline">y</span> = 0) — les noms symboliques de la figure servent ici d'étiquettes pédagogiques.
           </li>
         </ul>
+
+        <h5>Son intelligence : la frontière de décision</h5>
         <p class="lead">
-          En pratique, commencez souvent par cette régression « logistique » avant des architectures plus profondes : si elle suffit, vous gagnez en simplicité
-          et en confiance ; si elle plafonne, votre échec contrôlé vous indique déjà que la structure du problème dépasse une simple frontière — et oriente le
-          choix des outils suivants dans ce chapitre.
+          Sa force est de transformer un nuage de points en <strong>deux territoires</strong> lisibles. Sa mémoire reste sobre : une fois entraînée, elle ne retient
+          pas la position de chaque individu dans la base ; elle retient l'<strong>emplacement de la frontière</strong> (en pratique, les paramètres qui définissent la
+          droite — ou l'hyperplan — de séparation). Un nouvel exemple est classé instantanément selon le côté où il tombe.
+        </p>
+
+        <p class="lead"><strong>Pourquoi l'utiliser ? (Les atouts)</strong></p>
+        <p class="lead">C'est l'outil de référence de l'ingénieur pour la classification binaire lorsque la simplicité prime :</p>
+        <ul>
+          <li>
+            <strong>Interprétabilité :</strong> on peut expliquer quels poids ont fait pencher la décision — utile pour un dossier accepté ou refusé, un score
+            conformité, etc.
+          </li>
+          <li>
+            <strong>Rapidité et légèreté :</strong> peu de ressources ; adapté au temps réel et aux systèmes contraints.
+          </li>
+          <li>
+            <strong>Baseline solide :</strong> avant d'engager du deep learning, on compare souvent à cette droite (ou hyperplan). Si une séparation linéaire suffit,
+            inutile de complexifier.
+          </li>
+        </ul>
+
+        <h5>Les limites du « trancheur » linéaire</h5>
+        <p class="lead">L'intelligence de la régression logistique a les défauts de sa simplicité :</p>
+        <ul>
+          <li>
+            <strong>Rigidité de la droite :</strong> comme sur le graphique, la frontière « coupe » rectiligne. Si les classes sont entremêlées selon une forme
+            circulaire, en spirale ou fortement non linéaire, le modèle restera en peine — on parle alors de <strong>sous-apprentissage</strong> (
+            <span class="math-inline">underfitting</span>) tant qu'on n'enrichit pas les entrées ou le modèle.
+          </li>
+          <li>
+            <strong>Sensibilité au déséquilibre :</strong> avec 1&nbsp;000 exemples d'une classe et très peu de l'autre, le modèle peut minimiser l'erreur en
+            prédisant systématiquement la majorité — la minorité est alors ignorée. Il faut alors rééquilibrer les données, pondérer les classes ou adapter les métriques.
+          </li>
+        </ul>
+
+        <p class="lead">
+          <strong>Conclusion : le premier test de vérité.</strong> La régression logistique est une <strong>sentinelle</strong> : on la lance en premier pour sonder
+          la complexité d'un problème de classification. Si elle parvient à séparer les données comme sur la figure ci-dessus, vous avez une solution souvent élégante
+          et auditable. Si elle échoue, le message est limpide : la frontière naturelle de votre problème n'est probablement pas une simple droite — et il sera temps
+          d'offrir au système plus de flexibilité (features, modèles plus riches, non-linéarités).
         </p>
       </section>
 
