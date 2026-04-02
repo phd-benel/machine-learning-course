@@ -601,7 +601,7 @@
               <span class="math-inline">Y</span>)
             </div>
             <img
-            class="cover-image cover-image--compact"
+            class="cover-image"
             src="../Figures/Fig35.png"
             loading="lazy"
           />
@@ -609,34 +609,75 @@
         </ul>
 
         <span class="exercise-block-title">3. Travail à réaliser (2 itérations)</span>
-        <p class="lead">
-          Pour chaque itération (<strong>epoch</strong>), vous devez remplir le tableau de bord suivant et dessiner l'état du modèle.
-        </p>
-        <p class="lead"><strong>Étape A : prédiction &amp; erreur (forward pass)</strong></p>
+
+        <p class="lead"><strong>Étape 0 : état initial (le modèle « ignorant »)</strong></p>
+        <p class="lead">Avant de commencer, votre IA ne connaît rien du monde.</p>
         <ul>
-          <li>Calculez la prédiction pour chaque point : <span class="math-inline">Ŷ</span><sub>1</sub> et <span class="math-inline">Ŷ</span><sub>2</sub>.</li>
-          <li>Calculez l'erreur de prédiction (le résidu) : (<span class="math-inline">Ŷ</span> − <span class="math-inline">Y</span>) pour chaque point.</li>
           <li>
-            <strong>Visualisation 1 :</strong> sur un graphique 2D (<span class="math-inline">X</span>, <span class="math-inline">Y</span>), placez les points
-            réels (A et B) et tracez la droite actuelle <span class="math-inline">y</span> = <span class="math-inline">w</span> ·
-            <span class="math-inline">x</span>.
+            <strong>Initialisation :</strong> prenez le poids <span class="math-inline">w</span> = 0,5.
+          </li>
+          <li>
+            <strong>Graphique n°1 :</strong> sur un repère (<span class="math-inline">X</span>, <span class="math-inline">Y</span>), placez vos points réels A
+            (1, 2) et B (2, 4). Tracez la droite initiale <span class="math-inline">y</span> = 0,5 · <span class="math-inline">x</span>.
           </li>
         </ul>
-        <p class="lead"><strong>Étape B : calcul du gradient &amp; mise à jour (backward pass)</strong></p>
+        <p class="lead">
+          Observez l'écart visuel entre votre droite et les points : c'est cet écart que nous allons réduire.
+        </p>
+
+        <p class="lead"><strong>Itération 1 : le premier apprentissage</strong></p>
+        <p class="lead"><strong>A. Prédiction &amp; erreur (forward pass)</strong></p>
         <ul>
-          <li>Appliquez la formule du gradient pour trouver la direction de la pente.</li>
           <li>
-            Mettez à jour le poids avec la formule de descente :
-            <div class="math-display" role="math" aria-label="Mise à jour du poids">
-              <span class="math-inline">w</span><sub>nouveau</sub> = <span class="math-inline">w</span><sub>ancien</sub> − (<span class="math-inline">α</span> ×
-              Grad)
+            Calculez la prédiction pour chaque point : <span class="math-inline">Ŷ</span><sub>1</sub> (pour <span class="math-inline">x</span> = 1) et
+            <span class="math-inline">Ŷ</span><sub>2</sub> (pour <span class="math-inline">x</span> = 2).
+          </li>
+          <li>Calculez l'erreur (le résidu) pour chaque point : (<span class="math-inline">Ŷ</span> − <span class="math-inline">Y</span>).</li>
+          <li>Calculez la <strong>loss</strong> totale (MSE) pour voir à quel point le modèle se trompe.</li>
+        </ul>
+        <p class="lead"><strong>B. Correction du « cerveau » (backward pass &amp; optimisation)</strong></p>
+        <ul>
+          <li>
+            Appliquez la formule du gradient :
+            <div class="math-display" role="math" aria-label="Gradient pour deux points">
+              Grad = (1/2) × [ (<span class="math-inline">x</span><sub>1</sub> · err<sub>1</sub>) + (<span class="math-inline">x</span><sub>2</sub> · err<sub>2</sub>) ]
+            </div>
+            <span style="font-size:.92rem;">(avec err<sub>i</sub> = <span class="math-inline">Ŷ</span><sub>i</sub> − <span class="math-inline">y</span><sub>i</sub> pour chaque point.)</span>
+          </li>
+          <li>
+            Mettez à jour votre poids :
+            <div class="math-display" role="math" aria-label="Mise à jour du poids itération 1">
+              <span class="math-inline">w</span><sub>nouveau</sub> = <span class="math-inline">w</span><sub>ancien</sub> − (0,1 × Grad)
             </div>
           </li>
         </ul>
-        <p class="lead"><strong>Étape C : analyse</strong></p>
+        <p class="lead"><strong>C. Visualisation intermédiaire</strong></p>
         <p class="lead">
-          <strong>Visualisation 2 :</strong> sur le même graphique (ou un nouveau), tracez la nouvelle droite avec le
-          <span class="math-inline">w</span><sub>nouveau</sub>. Observez-vous un rapprochement vers les points réels ?
+          <strong>Graphique n°2 :</strong> sur un nouveau repère, replacez les points A et B. Tracez la nouvelle droite avec le
+          <span class="math-inline">w</span> que vous venez de calculer. La droite a-t-elle pivoté vers le haut ?
+        </p>
+
+        <p class="lead"><strong>Itération 2 : l'affinage du modèle</strong></p>
+        <p class="lead"><strong>A. Nouvelle prédiction (forward pass)</strong></p>
+        <ul>
+          <li>Repartez du nouveau <span class="math-inline">w</span> calculé à l'étape précédente.</li>
+          <li>Recalculez les nouvelles prédictions <span class="math-inline">Ŷ</span><sub>1</sub> et <span class="math-inline">Ŷ</span><sub>2</sub>.</li>
+          <li>Recalculez la nouvelle loss : est-elle plus petite que la précédente ?</li>
+        </ul>
+        <p class="lead"><strong>B. Nouvelle mise à jour (backward pass)</strong></p>
+        <ul>
+          <li>Recalculez le nouveau gradient (la pente est-elle moins raide ?).</li>
+          <li>
+            Mettez à jour le poids une deuxième fois :
+            <div class="math-display" role="math" aria-label="Mise à jour du poids itération 2">
+              <span class="math-inline">w</span><sub>final</sub> = <span class="math-inline">w</span><sub>actuel</sub> − (0,1 × Grad)
+            </div>
+          </li>
+        </ul>
+
+        <p class="lead"><strong>État final : le modèle « éduqué »</strong></p>
+        <p class="lead">
+          <strong>Graphique n°3 :</strong> tracez la droite finale. Comparez-la avec la toute première droite du graphique n°1.
         </p>
       </aside>
 
