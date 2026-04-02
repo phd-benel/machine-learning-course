@@ -635,6 +635,75 @@
         </p>
       </aside>
 
+      <details class="expand-panel">
+        <summary>2.bis. La régression linéaire multiple : quand l'IA prend du volume</summary>
+        <div class="expand-panel__body">
+          <p class="lead">
+            Jusqu'à présent, nous avons imaginé une IA avec une seule entrée (<span class="math-inline">X</span> = surface). Mais dans la réalité, le prix d'un
+            appartement dépend de bien d'autres facteurs : le nombre de chambres, l'étage, l'ancienneté, la distance du centre-ville, etc.
+          </p>
+
+          <h5>De la droite à l'hyperplan</h5>
+          <p class="lead">
+            Dès que nous ajoutons une deuxième caractéristique (p. ex. le nombre de chambres), nous ne dessinons plus une droite sur une feuille de papier, mais
+            un <strong>plan</strong> dans un espace en 3D. Si nous ajoutons 10 caractéristiques, nous créons un <strong>hyperplan</strong> dans un espace à
+            11 dimensions.
+          </p>
+          <p class="lead">L'équation de notre « petit cerveau » s'agrandit alors ainsi :</p>
+          <div class="math-display" role="math" aria-label="Régression linéaire multiple">
+            <span class="math-inline">Ŷ</span> = <span class="math-inline">w</span><sub>1</sub> · <span class="math-inline">X</span><sub>1</sub> +
+            <span class="math-inline">w</span><sub>2</sub> · <span class="math-inline">X</span><sub>2</sub> + <span class="math-inline">w</span><sub>3</sub> ·
+            <span class="math-inline">X</span><sub>3</sub> + … + <span class="math-inline">w</span><sub>n</sub> · <span class="math-inline">X</span><sub>n</sub> +
+            <span class="math-inline">b</span>
+          </div>
+
+          <h5>La magie de la vectorisation : parler la langue des GPU</h5>
+          <p class="lead">
+            Si vous deviez calculer cela avec des boucles <code>for</code> en programmation (en calculant chaque
+            <span class="math-inline">w</span> · <span class="math-inline">X</span> l'un après l'autre), votre IA serait extrêmement lente. Pour résoudre ce
+            problème, on utilise la <strong>vectorisation</strong>.
+          </p>
+          <p class="lead">Au lieu de voir des nombres isolés, l'IA regroupe tout dans des <strong>vecteurs</strong> et des <strong>matrices</strong> :</p>
+          <ul>
+            <li>
+              <strong>Vecteur <span class="math-inline">W</span> :</strong> regroupe tous les poids [<span class="math-inline">w</span><sub>1</sub>,
+              <span class="math-inline">w</span><sub>2</sub>, …, <span class="math-inline">w</span><sub>n</sub>].
+            </li>
+            <li><strong>Vecteur <span class="math-inline">X</span> :</strong> regroupe toutes les caractéristiques d'un appartement.</li>
+          </ul>
+          <p class="lead">Le calcul devient alors une simple opération d'algèbre linéaire (un produit scalaire) :</p>
+          <div class="math-display" role="math" aria-label="Forme vectorisée">
+            <span class="math-inline">Ŷ</span> = <span class="math-inline">W</span><sup>T</sup> · <span class="math-inline">X</span> +
+            <span class="math-inline">b</span>
+          </div>
+          <p class="lead">
+            Pourquoi est-ce révolutionnaire ? Parce que les processeurs modernes (et surtout les <strong>GPU</strong>) sont conçus pour calculer des produits de
+            matrices des milliers de fois plus vite que des additions isolées en boucle. C'est grâce à cette vectorisation que l'on peut entraîner des modèles
+            sur des millions de données.
+          </p>
+
+          <h5>Le problème reste le même : seul le calcul s'alourdit</h5>
+          <p class="lead">
+            Il est crucial de comprendre que même avec 1&nbsp;000 entrées, la <strong>logique</strong> de résolution ne change absolument pas :
+          </p>
+          <ul>
+            <li>
+              <strong>Forward pass :</strong> on multiplie le vecteur des poids par le vecteur des entrées.
+            </li>
+            <li><strong>Loss :</strong> on calcule toujours l'écart (MSE) entre notre prédiction et la réalité.</li>
+            <li>
+              <strong>Optimisation :</strong> on calcule le gradient pour chaque poids (<span class="math-inline">w</span><sub>1</sub>,
+              <span class="math-inline">w</span><sub>2</sub>, …). On ajuste chaque « bouton de réglage » un par un pour descendre dans la vallée de l'erreur.
+            </li>
+          </ul>
+          <p class="lead">
+            <strong>Ce qu'il faut retenir :</strong> passer d'une entrée à mille entrées ne rend pas l'IA « plus intelligente » dans sa logique — elle devient
+            juste plus « musclée » en calcul. Le principe du randonneur qui descend la montagne reste strictement le même, sauf que la montagne n'a plus 2
+            dimensions, mais 1&nbsp;000 !
+          </p>
+        </div>
+      </details>
+
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
       <h4>3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
