@@ -1041,6 +1041,57 @@
         </p>
       </section>
 
+      <details class="expand-panel">
+        <summary>IA multiclasse — le softmax</summary>
+        <div class="expand-panel__body">
+          <p class="lead">
+            Jusqu'ici, notre « petit organisme » était <strong>binaire</strong> : il ne répondait qu'à une seule question du type « Est-ce du luxe ? Oui ou non ? ».
+            Or, dans la réalité, l'IA doit souvent choisir entre <strong>plusieurs catégories</strong> : s'agit-il d'un appartement, d'une villa ou d'un bureau ?
+          </p>
+          <p class="lead">
+            C'est ici que le modèle fait évoluer son « cerveau » pour passer de la <strong>sigmoïde</strong> (deux classes) à la <strong>softmax</strong> (plusieurs
+            classes concurrentes).
+          </p>
+
+          <h5>1. De la frontière unique au partage du territoire</h5>
+          <p class="lead">
+            En classification binaire, l'IA trace une <strong>seule frontière</strong> pour séparer deux mondes (comme sur la figure précédente). En multiclasse,
+            imaginez qu'elle doive <strong>découper la carte</strong> en plusieurs zones. Au lieu d'un seul score scalaire, elle calcule un <strong>score par classe</strong>
+            : autant de valeurs brutes qu'il y a de catégories à discriminer.
+          </p>
+          <p class="lead">Si l'on distingue trois types de biens, le modèle produit en parallèle :</p>
+          <ul>
+            <li>un score « Appartement » ;</li>
+            <li>un score « Villa » ;</li>
+            <li>un score « Bureau ».</li>
+          </ul>
+
+          <h5>2. La softmax : l'arbitre du « gâteau » de probabilités</h5>
+          <p class="lead">
+            Ces scores peuvent être quelconques (positifs, négatifs, très grands). Pour obtenir une décision lisible, il faut les convertir en
+            <strong>probabilités</strong> : nombres positifs qui s'additionnent exactement à <span class="math-inline">1</span> (soit 100&nbsp;%).
+          </p>
+          <p class="lead">
+            La <strong>softmax</strong> joue ce rôle d'<strong>arbitre</strong> : elle transforme le vecteur de scores en une <strong>distribution</strong> sur les
+            classes. C'est une sorte de compétition : chaque classe reçoit une part du « gâteau » ; si la classe « Villa » emporte environ 0,80, il ne reste que
+            0,20 à répartir entre les autres.
+          </p>
+          <p class="lead">
+            L'IA ne se contente plus d'étiquetter brutalement : elle peut dire, par exemple : « Je pense à environ 80&nbsp;% que c'est une villa, 15&nbsp;% bureau,
+            5&nbsp;% appartement » — ce qui est précieux pour la transparence et le seuil métier.
+          </p>
+
+          <h5>3. Une géométrie de territoires</h5>
+          <p class="lead">
+            Sur un graphique comme la figure&nbsp;40, vous voyiez une droite séparer deux ensembles. Avec plusieurs classes et une couche linéaire suivie d'une softmax,
+            on visualise souvent <strong>plusieurs régions</strong> : autant de « districts » que de classes, séparés par des frontières qui se rencontrent — comme une
+            carte électorale ou un pavage de l'espace des features. L'espace n'est plus coupé en deux moitiés seulement : il est <strong>partitionné</strong> entre les
+            catégories, sous l'hypothèse (comme en logistique) que des séparateurs encore linéaires suffisent dans l'espace choisi — sinon, il faudra enrichir les entrées
+            ou changer de famille de modèles.
+          </p>
+        </div>
+      </details>
+
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
       <details class="content-soon">
