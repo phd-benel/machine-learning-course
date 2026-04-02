@@ -407,14 +407,33 @@
       <h5>Pourquoi le « Carré » ? La Géométrie de l'Erreur</h5>
       <p class="lead">
         Vous vous demanderez peut-être pourquoi nous élevons l'erreur au carré au lieu de simplement prendre la valeur absolue
-        (|<span class="math-inline">Y</span> − <span class="math-inline">Ŷ</span>|). La réponse réside dans la forme géométrique que cela crée.
+        (|<span class="math-inline">Y</span> − <span class="math-inline">Ŷ</span>|). La réponse réside dans la forme géométrique que cela crée, comme on peut
+        l'observer sur le graphique <strong>« Géométrie de l'Erreur : MSE vs MAE »</strong> (figure ci-dessous).
       </p>
       <p class="lead">
-        En utilisant le carré, la fonction de coût (MSE) dessine une courbe <strong>convexe</strong> (en forme de bol ou de parabole). Cette forme est
-        « parfaite » pour l'optimisation : elle ne possède qu'un seul point le plus bas, le <strong>minimum global</strong>. Cela garantit que notre
-        algorithme ne restera pas bloqué dans un faux creux et pourra toujours « glisser » vers la solution idéale. De plus, mathématiquement, une fonction
-        au carré est « lisse » (dérivable partout), ce qui permet à l'ordinateur de calculer précisément la pente à chaque instant.
+        En utilisant le carré, la fonction de coût (MSE, en bleu sur l'image) dessine une courbe <strong>convexe</strong> (en forme de bol ou de parabole).
+        Cette forme est « parfaite » pour l'optimisation : elle ne possède qu'un seul point le plus bas, le minimum global (représenté par le point vert à
+        <span class="math-inline">w</span> = 2). Cela garantit que notre algorithme ne restera pas bloqué dans un faux creux et pourra toujours « glisser »
+        vers la solution idéale.
       </p>
+      <p class="lead">
+        De plus, mathématiquement, une fonction au carré est « lisse » (dérivable partout), ce qui permet à l'ordinateur de calculer précisément la pente à
+        chaque instant. À l'inverse, on remarque sur le graphique que la fonction MAE (en rouge pointillé) présente une cassure nette au niveau du minimum
+        (un point « pointu »). Cette absence de dérivabilité au point critique rend les calculs d'optimisation beaucoup plus complexes et instables pour
+        les algorithmes de descente de gradient.
+      </p>
+      <p class="lead">
+        Enfin, un avantage majeur du MSE illustré par la courbe bleue est sa sensibilité aux grandes erreurs : plus on s'éloigne du minimum, plus la courbe
+        du MSE monte de manière exponentielle par rapport à celle du MAE. Cela signifie que le modèle « punit » beaucoup plus sévèrement les erreurs
+        importantes, forçant ainsi l'algorithme à les corriger prioritairement pour atteindre la précision maximale.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : Géométrie de l'Erreur — MSE vs MAE</p>
+      <img
+        class="cover-image"
+        src="../Figures/FIg32.png"
+        alt="Géométrie de l'erreur : courbes MSE (bleu) et MAE (rouge pointillé), minimum global en w égal 2"
+        loading="lazy"
+      />
 
       <h5>C. L'Optimiseur : La Descente de Gradient (Gradient Descent)</h5>
       <p class="lead">
@@ -451,7 +470,7 @@
       <p class="lead">
         Pour maîtriser cette mécanique, rien ne vaut la rigueur d'un calcul manuel. Faisons tourner une itération d'apprentissage à la main.
       </p>
-      
+
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
       <h4>3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
