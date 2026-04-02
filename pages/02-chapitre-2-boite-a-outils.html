@@ -710,6 +710,78 @@
         </div>
       </details>
 
+      <section class="lr-conclusion" aria-labelledby="lr-conclusion-title">
+        <h5 id="lr-conclusion-title" class="lr-conclusion__title">Conclusion : la régression linéaire en synthèse</h5>
+        <p class="lead">
+          Si l'on devait comparer les modèles d'IA à des êtres vivants, la régression linéaire serait un <strong>organisme unicellulaire</strong>. C'est l'IA
+          dans sa forme la plus pure et la plus simple. Elle possède un « petit cerveau » composé de seulement deux paramètres :
+          <span class="math-inline">w</span> (le poids) et <span class="math-inline">b</span> (le biais).
+        </p>
+
+        <h5>L'IA qui voit le monde en « lignes droites »</h5>
+        <p class="lead">
+          Cette IA a une vision du monde très spécifique : elle est convaincue que tout phénomène peut être expliqué par une relation
+          <strong>proportionnelle</strong>. Pour elle, la complexité de la réalité (prix de l'immobilier, consommation d'énergie, croissance d'une plante) se
+          résume à une droite infinie.
+        </p>
+        <ul>
+          <li>
+            <strong>Son intelligence :</strong> elle consiste à ajuster ses deux seuls paramètres (<span class="math-inline">w</span> et
+            <span class="math-inline">b</span>) pour que sa droite traverse le nuage de données de la manière la plus centrale possible.
+          </li>
+          <li>
+            <strong>Sa mémoire :</strong> elle ne stocke pas les données. Une fois entraînée, elle « oublie » les milliers de points qu'elle a vus pour ne garder
+            que deux nombres : l'inclinaison de sa pente et son point de départ.
+          </li>
+        </ul>
+
+        <h5>Pourquoi l'utiliser ? (Les avantages)</h5>
+        <p class="lead">
+          Malgré sa simplicité apparente, ce « petit cerveau » est l'un des outils les plus utiles en ingénierie pour plusieurs raisons :
+        </p>
+        <ul>
+          <li>
+            <strong>Interprétabilité totale (boîte blanche) :</strong> contrairement aux modèles complexes, on comprend exactement pourquoi l'IA a pris une
+            décision. Si <span class="math-inline">w</span> = 10, on sait que chaque unité de <span class="math-inline">X</span> augmente
+            <span class="math-inline">Y</span> de 10. C'est crucial en physique, en économie ou partout où l'on doit <em>expliquer</em> le résultat.
+          </li>
+          <li>
+            <strong>Sobriété numérique :</strong> elle demande très peu de puissance de calcul et de mémoire. Elle peut tourner sur un microcontrôleur ou un
+            smartphone modeste.
+          </li>
+          <li>
+            <strong>Robustesse :</strong> sur de petits jeux de données bien structurés, elle est souvent plus fiable qu'un réseau de neurones qui risquerait de
+            surapprendre le bruit.
+          </li>
+        </ul>
+
+        <h5>Les limites du « petit cerveau »</h5>
+        <p class="lead">
+          L'intelligence de la régression linéaire s'arrête là où la complexité commence. Ses limites reflètent sa structure :
+        </p>
+        <ul>
+          <li>
+            <strong>Hypothèse de linéarité :</strong> le monde n'est pas toujours une droite. Si la relation entre vos données est plutôt courbe (exponentielle,
+            sinusoïdale, etc.), le modèle sera « aveugle » à cette courbure : il forcera une droite là où elle n'est pas adaptée, ce qui peut produire un
+            <strong>sous-apprentissage</strong> (<span class="math-inline">underfitting</span>).
+          </li>
+          <li>
+            <strong>Sensibilité aux valeurs aberrantes :</strong> à cause du carré dans la MSE, un seul point extrême (p. ex. une maison vendue à dix fois son prix
+            par erreur) peut attirer la droite comme un aimant et fausser la prédiction pour tous les autres points.
+          </li>
+          <li>
+            <strong>Vision limitée pour les interactions complexes :</strong> elle peine à modéliser des situations où de nombreuses caractéristiques
+            <span class="math-inline">X</span> s'influencent mutuellement de façon non linéaire.
+          </li>
+        </ul>
+
+        <p class="lead">
+          <strong>Conclusion :</strong> la régression linéaire est votre <strong>point de départ</strong> — le modèle que l'on teste en premier.
+          Si elle suffit, pourquoi s'encombrer d'un modèle plus lourd ? Si elle échoue, c'est souvent le signal que la « vérité » de vos données est plus riche
+          qu'une simple droite, et qu'il est temps de passer à des modèles dotés de plus de paramètres — et donc de plus de flexibilité.
+        </p>
+      </section>
+
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
       <h4>3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
