@@ -147,6 +147,15 @@ h2{margin:.1rem 0 .8rem;font-size:clamp(1.2rem,2.2vw,1.7rem)}
   background:#f4f7ff;border:1px solid #dce6ff;border-left:4px solid var(--primary);
   border-radius:10px;padding:12px 14px;color:#334155;
 }
+.quote.quote--closing{
+  text-align:center;
+  background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);
+  border:1px solid #fcd34d;
+  border-left:4px solid #f59e0b;
+  color:#b45309;
+  font-weight:600;
+  font-size:1.02rem;
+}
 .book-nav{
   display:flex;justify-content:space-between;gap:10px;margin-top:16px
 }
