@@ -294,12 +294,142 @@
 
       <h4>2. La Régression Linéaire : La Droite Prédictive</h4>
       <p class="lead">
-        C'est l'outil le plus simple et le plus transparent. On part du postulat que la relation entre les données peut être résumée par une ligne
-        droite.
+        Pour comprendre comment une machine apprend, il faut commencer par l'exemple le plus épuré possible. Imaginons que vous receviez un fichier Excel
+        contenant l'historique des ventes immobilières d'un quartier. C'est un cas d'école de l'apprentissage supervisé : pour chaque exemple, vous
+        possédez la réponse (le prix de vente). Comme vous cherchez à prédire un nombre continu, on parle de <strong>régression</strong>.
       </p>
-      <p class="lead"><strong>Usage :</strong> Prédire des tendances continues.</p>
+
+      <div class="table-block">
+        <p class="table-caption">Le dataset brut</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Dataset immobilier surface et prix">
+            <thead>
+              <tr>
+                <th scope="col">Surface en m² (<span class="math-inline">X</span>)</th>
+                <th scope="col">Prix de vente (<span class="math-inline">Y</span>)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="cell-num">30</td>
+                <td>120 000 €</td>
+              </tr>
+              <tr>
+                <td class="cell-num">45</td>
+                <td>165 000 €</td>
+              </tr>
+              <tr>
+                <td class="cell-num">60</td>
+                <td>210 000 €</td>
+              </tr>
+              <tr>
+                <td class="cell-num">85</td>
+                <td>285 000 €</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <p class="lead">
-        <strong>Force :</strong> Interprétabilité totale (on sait exactement quel poids <span class="math-inline">w</span> influence le résultat).
+        Face à ce tableau, que fait un esprit humain (et que fera un data scientist) ? Il <strong>visualise</strong>. Si l'on place ces données sur un
+        graphique — la surface sur l'axe horizontal, le prix sur l'axe vertical — on observe une nuée de points.
+      </p>
+      <p class="lead">
+        Instinctivement, notre cerveau repère une corrélation évidente : plus la surface augmente, plus le prix monte. Mieux encore, notre œil trace
+        naturellement une ligne imaginaire au milieu de ce nuage de points pour résumer la tendance.
+      </p>
+      <p class="lead">
+        C'est ici qu'intervient la réalité du métier : dans la vraie vie, les points ne sont jamais parfaitement alignés. Un appartement de 60 m² au
+        rez-de-chaussée coûtera moins cher qu'un 60 m² avec balcon au dernier étage. Les données sont « bruyantes ». Pourtant, malgré ces imperfections, nous
+        pouvons abstraire cette réalité et la modéliser mathématiquement par une <strong>droite</strong>.
+      </p>
+      <p class="lead">
+        Cette droite mathématique qui traverse nos données pour en capturer la logique générale, c'est notre première intelligence artificielle. On
+        l'appelle la <strong>régression linéaire</strong>.
+      </p>
+      <p class="lead">
+        Maintenant que nous avons l'intuition géométrique, comment apprendre à un ordinateur, qui n'a pas d'yeux, à trouver cette droite parfaite de
+        manière purement calculatoire ?
+      </p>
+
+      <h5>A. La Terminologie Fondamentale</h5>
+      <p class="lead">
+        Pour que la machine puisse apprendre, nous devons traduire notre droite visuelle en une équation mathématique simple :
+      </p>
+      <div class="math-display" role="math" aria-label="Ŷ égal w fois X plus b">Ŷ = w · X + b</div>
+      <p class="lead">Décodons ce vocabulaire, qui sera la base absolue de tout modèle, jusqu'aux réseaux de neurones les plus profonds :</p>
+      <ul>
+        <li>
+          <strong><span class="math-inline">X</span> (feature / caractéristique) :</strong> l'information d'entrée (la surface).
+        </li>
+        <li>
+          <strong><span class="math-inline">Ŷ</span> (prédiction / inférence) :</strong> ce que la machine devine (le prix estimé). Le « chapeau » rappelle
+          que c'est une estimation du modèle, pas la vérité absolue du marché.
+        </li>
+        <li>
+          <strong><span class="math-inline">w</span> (weight / poids) :</strong> le coefficient multiplicateur (la pente de la droite). Il représente
+          l'importance de <span class="math-inline">X</span>. Ex. : chaque mètre carré supplémentaire ajoute « w » euros au prix final.
+        </li>
+        <li>
+          <strong><span class="math-inline">b</span> (bias / biais) :</strong> l'ordonnée à l'origine. C'est la valeur de base, le point de départ de la
+          droite. Ex. : le coût intrinsèque du terrain, même si la surface bâtie était de 0.
+        </li>
+      </ul>
+      <p class="lead">
+        Le but de l'apprentissage automatique est de trouver les valeurs idéales de <span class="math-inline">w</span> et <span class="math-inline">b</span>.
+        Au début de l'entraînement, la machine initialise ces paramètres totalement au hasard. La droite tracée est donc aberrante et les prédictions
+        catastrophiques. L'IA va devoir s'améliorer étape par étape.
+      </p>
+
+      <h5>B. Mesurer l'Erreur : La Fonction de Coût (Loss Function)</h5>
+      <p class="lead">
+        Pour qu'un algorithme s'améliore, il doit d'abord pouvoir chiffrer sa propre erreur. C'est le rôle de la <strong>loss function</strong>. Pour une
+        régression, on utilise le plus souvent l'<strong>erreur quadratique moyenne</strong> (MSE — Mean Squared Error).
+      </p>
+      <p class="lead">
+        L'ordinateur compare sa prédiction (<span class="math-inline">Ŷ</span>) avec le vrai prix historique (<span class="math-inline">Y</span>) pour
+        chaque appartement du dataset. Il calcule la différence et la met au carré (cela évite que des erreurs négatives et positives ne s'annulent entre
+        elles, et pénalise lourdement les grosses erreurs géométriques).
+      </p>
+      <div class="math-display" role="math" aria-label="MSE">MSE = (1/N) × Σ<sub>i=1</sub><sup>N</sup> (Ŷ<sub>i</sub> − Y<sub>i</sub>)²</div>
+      <p class="lead">Si la loss est gigantesque, le modèle (la droite) est très éloigné des points.</p>
+      <p class="lead">Si la loss tend vers 0, le modèle a parfaitement compris la logique de la distribution.</p>
+
+      <h5>C. L'Optimiseur : La Descente de Gradient (Gradient Descent)</h5>
+      <p class="lead">
+        Maintenant que le modèle sait qu'il a tort, comment doit-il corriger ses poids <span class="math-inline">w</span> et <span class="math-inline">b</span> ?
+        On utilise un moteur d'optimisation, dont le plus célèbre est la <strong>descente de gradient</strong>.
+      </p>
+      <p class="lead">
+        Imaginez un randonneur les yeux bandés au sommet d'une colline (l'erreur maximale). Son objectif est de descendre au fond de la vallée (l'erreur
+        minimale).
+      </p>
+      <ul>
+        <li>Il tâte le sol avec son pied pour sentir l'inclinaison de la pente (mathématiquement : le calcul de la dérivée partielle, le <strong>gradient</strong>).</li>
+        <li>Il fait un pas dans la direction qui descend le plus abruptement.</li>
+        <li>
+          La taille de son pas est régie par un paramètre crucial : le <strong>taux d'apprentissage</strong> (learning rate, <span class="math-inline">α</span>).
+          S'il est trop grand, il risque de sauter par-dessus la vallée. S'il est trop petit, il mettra une éternité à descendre.
+        </li>
+      </ul>
+      <p class="lead">À chaque étape, le modèle met à jour son poids selon cette formule de correction :</p>
+      <div class="math-display" role="math" aria-label="Mise à jour des poids">w<sub>nouveau</sub> = w<sub>ancien</sub> − α × Gradient</div>
+
+      <h5>D. La Boucle d'Apprentissage (Training Loop)</h5>
+      <p class="lead">
+        Le processus d'« entraînement » d'une IA n'est au final que la répétition mécanique (les <strong>epochs</strong>) de ces trois étapes fondamentales
+        :
+      </p>
+      <ol>
+        <li><strong>Forward pass :</strong> le modèle fait une prédiction avec ses poids actuels.</li>
+        <li><strong>Calcul de la loss :</strong> on évalue son degré d'erreur mathématique.</li>
+        <li><strong>Backward pass (optimisation) :</strong> on calcule le gradient et on ajuste les poids pour faire baisser l'erreur au tour suivant.</li>
+      </ol>
+
+      <h5>Exercice sur papier : apprendre « from scratch »</h5>
+      <p class="lead">
+        Pour maîtriser cette mécanique, rien ne vaut la rigueur d'un calcul manuel. Faisons tourner une itération d'apprentissage à la main.
       </p>
 
       <h4>3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
@@ -315,75 +445,19 @@
       </p>
 
       <h4>4. Support Vector Machines (SVM) : L'Art de la Frontière</h4>
-      <p class="lead">
-        Le SVM est un algorithme géométrique puissant. Son but est de trouver l'<strong>hyperplan</strong> (la frontière) qui sépare deux classes avec la
-        plus grande marge possible.
-      </p>
-      <p class="lead">
-        <strong>Le « kernel trick » :</strong> Sa force réside dans sa capacité à projeter des données complexes dans un espace de dimension supérieure
-        pour réussir à les séparer, même si elles semblent mélangées au départ.
-      </p>
+      
+      <img class="cover-image" src="../Figures/FigCS.jpg"  loading="lazy" />
+
 
       <h4>5. Arbres de Décision et Random Forest : La Force du Collectif</h4>
-      <p class="lead">
-        L'arbre de décision imite le raisonnement humain en posant une série de questions binaires (ex. : « La surface est-elle &gt; 50 m² ? »).
-      </p>
-      <p class="lead">
-        <strong>Le problème :</strong> Un seul arbre est souvent trop spécifique et fait du surapprentissage (<span class="math-inline">overfitting</span>).
-      </p>
-      <p class="lead">
-        <strong>La solution (Random Forest) :</strong> On crée une forêt de centaines d'arbres différents qui votent tous pour la décision finale. C'est
-        l'un des algorithmes les plus robustes et les plus utilisés aujourd'hui pour les données tabulaires (Excel/SQL).
-      </p>
+      <img class="cover-image" src="../Figures/FigCS.jpg"  loading="lazy" />
+
 
       <h4>6. Les Réseaux de Neurones : L'Approche Bio-Inspirée</h4>
-      <p class="lead">
-        Ici, on ne cherche plus une simple droite ou une règle de décision. On empile des couches de « neurones » artificiels.
-      </p>
-      <p class="lead">
-        <strong>Architecture :</strong> Chaque neurone prend des entrées, applique un poids, et passe le résultat à travers une
-        <strong>fonction d'activation</strong> non linéaire.
-      </p>
-      <p class="lead">
-        <strong>Puissance :</strong> Capables de modéliser des relations d'une complexité extrême (images, langage). C'est la base du deep learning.
-      </p>
+      <img class="cover-image" src="../Figures/FigCS.jpg"  loading="lazy" />
 
-      <h4>Synthèse pour le choix du modèle</h4>
-      <div class="table-block">
-        <p class="table-caption">Quel modèle pour quel besoin ?</p>
-        <div class="table-wrap">
-          <table class="data-table" aria-label="Synthèse choix de modèle supervisé">
-            <thead>
-              <tr>
-                <th scope="col">Situation</th>
-                <th scope="col">Piste d'algorithmes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Données simples et besoin d'explication</td>
-                <td class="cell-highlight">Régression linéaire / régression logistique</td>
-              </tr>
-              <tr>
-                <td>Données tabulaires complexes, nombreuses variables</td>
-                <td class="cell-highlight">Random Forest</td>
-              </tr>
-              <tr>
-                <td>Besoin d'une séparation géométrique nette entre classes</td>
-                <td class="cell-highlight">SVM</td>
-              </tr>
-              <tr>
-                <td>Données massives et non structurées (image, son, texte)</td>
-                <td class="cell-highlight">Réseaux de neurones</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
 
-      <div class="btn-row">
-        <button class="btn btn-soft" type="button" data-mark-read>Marquer comme lu</button>
-      </div>
+      
     </section>
 
     <nav class="book-nav">
