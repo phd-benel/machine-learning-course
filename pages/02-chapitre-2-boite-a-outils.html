@@ -565,10 +565,75 @@
         <li><strong>Backward pass (optimisation) :</strong> on calcule le gradient et on ajuste les poids pour faire baisser l'erreur au tour suivant.</li>
       </ol>
 
-      <h5>Exercice sur papier : apprendre « from scratch »</h5>
-      <p class="lead">
-        Pour maîtriser cette mécanique, rien ne vaut la rigueur d'un calcul manuel. Faisons tourner une itération d'apprentissage à la main.
-      </p>
+      <aside class="quote quote--exercise" aria-label="Exercice : régression linéaire à la main">
+        <h5 class="quote--exercise__title">À faire : régression linéaire « à la main » (from scratch)</h5>
+        <p class="lead">
+          <strong>Objectif :</strong> comprendre la mécanique interne d'un neurone artificiel (régression linéaire) en réalisant manuellement le cycle complet de
+          l'apprentissage : prédiction → calcul de l'erreur → optimisation.
+        </p>
+
+        <span class="exercise-block-title">1. Le contexte et les données</span>
+        <p class="lead">
+          Vous disposez d'un micro-dataset de deux points représentant la relation entre une caractéristique (<span class="math-inline">X</span>) et une cible
+          (<span class="math-inline">Y</span>). Votre mission est de trouver le poids <span class="math-inline">w</span> idéal pour le modèle
+          <span class="math-inline">Ŷ</span> = <span class="math-inline">w</span> · <span class="math-inline">x</span> (nous ignorons le biais
+          <span class="math-inline">b</span> pour simplifier les calculs).
+        </p>
+        <ul>
+          <li><strong>Point A :</strong> <span class="math-inline">x</span><sub>1</sub> = 1, <span class="math-inline">y</span><sub>1</sub> = 2</li>
+          <li><strong>Point B :</strong> <span class="math-inline">x</span><sub>2</sub> = 2, <span class="math-inline">y</span><sub>2</sub> = 4</li>
+        </ul>
+        <p class="lead">
+          (<strong>Note :</strong> on voit bien que la solution parfaite est <span class="math-inline">w</span> = 2 ; voyons comment l'IA y arrive seule.)
+        </p>
+
+        <span class="exercise-block-title">2. Conditions initiales</span>
+        <ul>
+          <li>
+            <strong>Poids initial (<span class="math-inline">w</span><sub>initial</sub>) :</strong> choisissez arbitrairement
+            <span class="math-inline">w</span> = 0,5.
+          </li>
+          <li><strong>Taux d'apprentissage (<span class="math-inline">α</span>) :</strong> utilisez <span class="math-inline">α</span> = 0,1.</li>
+          <li>
+            <strong>Formule du gradient (pente) :</strong>
+            <div class="math-display" role="math" aria-label="Gradient moyen">
+              Grad = (1/<span class="math-inline">N</span>) × Σ <span class="math-inline">x</span> · (<span class="math-inline">Ŷ</span> −
+              <span class="math-inline">Y</span>)
+            </div>
+          </li>
+        </ul>
+
+        <span class="exercise-block-title">3. Travail à réaliser (2 itérations)</span>
+        <p class="lead">
+          Pour chaque itération (<strong>epoch</strong>), vous devez remplir le tableau de bord suivant et dessiner l'état du modèle.
+        </p>
+        <p class="lead"><strong>Étape A : prédiction &amp; erreur (forward pass)</strong></p>
+        <ul>
+          <li>Calculez la prédiction pour chaque point : <span class="math-inline">Ŷ</span><sub>1</sub> et <span class="math-inline">Ŷ</span><sub>2</sub>.</li>
+          <li>Calculez l'erreur de prédiction (le résidu) : (<span class="math-inline">Ŷ</span> − <span class="math-inline">Y</span>) pour chaque point.</li>
+          <li>
+            <strong>Visualisation 1 :</strong> sur un graphique 2D (<span class="math-inline">X</span>, <span class="math-inline">Y</span>), placez les points
+            réels (A et B) et tracez la droite actuelle <span class="math-inline">y</span> = <span class="math-inline">w</span> ·
+            <span class="math-inline">x</span>.
+          </li>
+        </ul>
+        <p class="lead"><strong>Étape B : calcul du gradient &amp; mise à jour (backward pass)</strong></p>
+        <ul>
+          <li>Appliquez la formule du gradient pour trouver la direction de la pente.</li>
+          <li>
+            Mettez à jour le poids avec la formule de descente :
+            <div class="math-display" role="math" aria-label="Mise à jour du poids">
+              <span class="math-inline">w</span><sub>nouveau</sub> = <span class="math-inline">w</span><sub>ancien</sub> − (<span class="math-inline">α</span> ×
+              Grad)
+            </div>
+          </li>
+        </ul>
+        <p class="lead"><strong>Étape C : analyse</strong></p>
+        <p class="lead">
+          <strong>Visualisation 2 :</strong> sur le même graphique (ou un nouveau), tracez la nouvelle droite avec le
+          <span class="math-inline">w</span><sub>nouveau</sub>. Observez-vous un rapprochement vers les points réels ?
+        </p>
+      </aside>
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 

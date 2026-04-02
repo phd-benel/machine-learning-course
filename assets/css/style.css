@@ -190,6 +190,48 @@ h2{margin:.1rem 0 .8rem;font-size:clamp(1.2rem,2.2vw,1.7rem)}
   font-weight:600;
   font-size:1.02rem;
 }
+.quote.quote--exercise{
+  margin:14px 0 18px;
+  background:linear-gradient(145deg,#fffbeb 0%,#fef3c7 45%,#ffedd5 100%);
+  border:1px solid #fbbf24;
+  border-left:5px solid #ea580c;
+  border-radius:12px;
+  padding:16px 18px 18px;
+  color:#78350f;
+  box-shadow:0 2px 14px rgba(234,88,12,.08);
+}
+.quote.quote--exercise .quote--exercise__title{
+  font-family:Merriweather,serif;
+  font-size:1.05rem;
+  margin:0 0 12px;
+  color:#9a3412;
+  line-height:1.35;
+}
+.quote.quote--exercise .lead{
+  color:#92400e;
+}
+.quote.quote--exercise .exercise-block-title{
+  display:block;
+  margin:14px 0 8px;
+  font-weight:700;
+  color:#b45309;
+  font-size:.98rem;
+}
+.quote.quote--exercise .exercise-block-title:first-of-type{
+  margin-top:4px;
+}
+.quote.quote--exercise ul,.quote.quote--exercise ol{
+  margin:8px 0 10px;
+  padding-left:1.35rem;
+  color:#92400e;
+}
+.quote.quote--exercise li{margin-bottom:6px;line-height:1.65;}
+.quote.quote--exercise .math-display{
+  margin:10px 0;
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(251,191,36,.45);
+  border-radius:8px;
+}
 .book-nav{
   display:flex;justify-content:space-between;gap:10px;margin-top:16px
 }
