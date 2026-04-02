@@ -335,6 +335,8 @@
         Face à ce tableau, que fait un esprit humain (et que fera un data scientist) ? Il <strong>visualise</strong>. Si l'on place ces données sur un
         graphique — la surface sur l'axe horizontal, le prix sur l'axe vertical — on observe une nuée de points.
       </p>
+      <img class="cover-image" src="../Figures/Fig28.png"  loading="lazy" />
+
       <p class="lead">
         Instinctivement, notre cerveau repère une corrélation évidente : plus la surface augmente, plus le prix monte. Mieux encore, notre œil trace
         naturellement une ligne imaginaire au milieu de ce nuage de points pour résumer la tendance.
@@ -348,6 +350,8 @@
         Cette droite mathématique qui traverse nos données pour en capturer la logique générale, c'est notre première intelligence artificielle. On
         l'appelle la <strong>régression linéaire</strong>.
       </p>
+      <img class="cover-image" src="../Figures/Fig29.png"  loading="lazy" />
+
       <p class="lead">
         Maintenant que nous avons l'intuition géométrique, comment apprendre à un ordinateur, qui n'a pas d'yeux, à trouver cette droite parfaite de
         manière purement calculatoire ?
@@ -381,6 +385,8 @@
         Au début de l'entraînement, la machine initialise ces paramètres totalement au hasard. La droite tracée est donc aberrante et les prédictions
         catastrophiques. L'IA va devoir s'améliorer étape par étape.
       </p>
+      <img class="cover-image" src="../Figures/fig30.png"  loading="lazy" />
+
 
       <h5>B. Mesurer l'Erreur : La Fonction de Coût (Loss Function)</h5>
       <p class="lead">
@@ -395,6 +401,7 @@
       <div class="math-display" role="math" aria-label="MSE">MSE = (1/N) × Σ<sub>i=1</sub><sup>N</sup> (Ŷ<sub>i</sub> − Y<sub>i</sub>)²</div>
       <p class="lead">Si la loss est gigantesque, le modèle (la droite) est très éloigné des points.</p>
       <p class="lead">Si la loss tend vers 0, le modèle a parfaitement compris la logique de la distribution.</p>
+      <img class="cover-image" src="../Figures/FIg31.png"  loading="lazy" />
 
       <h5>C. L'Optimiseur : La Descente de Gradient (Gradient Descent)</h5>
       <p class="lead">
