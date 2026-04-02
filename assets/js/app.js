@@ -150,4 +150,37 @@
   setTimeout(() => {
     applyLanguage(preferred, false);
   }, 600);
+
+  document.querySelectorAll("[data-audio-player]").forEach((wrap) => {
+    const audio = wrap.querySelector("audio");
+    const playBtn = wrap.querySelector(".audio-btn--play");
+    const stopBtn = wrap.querySelector(".audio-btn--stop");
+    if (!audio || !playBtn || !stopBtn) return;
+
+    function syncUi() {
+      const playing = !audio.paused;
+      wrap.classList.toggle("is-playing", playing);
+      playBtn.setAttribute("aria-pressed", playing ? "true" : "false");
+      playBtn.setAttribute("aria-label", playing ? "Pause" : "Lecture");
+    }
+
+    playBtn.addEventListener("click", () => {
+      if (audio.paused) {
+        void audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    stopBtn.addEventListener("click", () => {
+      audio.pause();
+      audio.currentTime = 0;
+      syncUi();
+    });
+
+    audio.addEventListener("play", syncUi);
+    audio.addEventListener("pause", syncUi);
+    audio.addEventListener("ended", syncUi);
+    syncUi();
+  });
 })();

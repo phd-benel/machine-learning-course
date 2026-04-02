@@ -559,8 +559,41 @@
         <strong>Exemple :</strong> La synthèse vocale (Text-to-Speech) ou la composition musicale. L'IA peut générer une voix humaine avec toutes ses
         nuances émotionnelles en extrapolant à partir d'un échantillon réduit, ou recréer des environnements sonores 3D immersifs pour la simulation.
       </p>
-      <img class="chapter-image contain" src="../Figures/Fig10.png" loading="lazy" />
+      <img class="chapter-image contain" src="../Figures/Fig10.png" alt="Schéma : traitement du signal audio et distribution des fréquences" loading="lazy" />
 
+      <p class="lead">
+        Voici un exemple illustratif où une voix de référence (ici, celle de Barack Obama) est utilisée comme <strong>amorce</strong> : à partir d’un
+        court extrait, un modèle peut estimer les paramètres du timbre et de la prosodie, puis <strong>transposer ce « style vocal »</strong> à un texte
+        lu à l’oral — le contenu est nouveau, mais l’enveloppe sonore imite celle apprise sur l’échantillon (principe de synthèse vocale conditionnée /
+        clonage de style à des fins pédagogiques).
+      </p>
+      <p class="lead"><strong>Figure :</strong> Chaîne conceptuelle — de l’extrait audio à la voix synthétisée pour un texte donné.</p>
+      <img class="chapter-image contain" src="../Figures/Fig12.png" alt="Schéma : modélisation de la voix à partir d’un extrait et génération pour un texte" loading="lazy" />
+
+      <div class="audio-player" data-audio-player>
+        <audio preload="metadata" src="../Figures/audio.wav">
+          <a href="../Figures/audio.wav">Télécharger l’extrait audio</a>
+        </audio>
+        <div class="audio-player__row">
+          <span class="audio-player__title">Écouter l’extrait (démonstration)</span>
+          <div class="audio-player__controls">
+            <button type="button" class="audio-btn audio-btn--play" aria-label="Lecture">
+              <svg class="audio-icon audio-icon--play" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M8 5v14l11-7L8 5z"/>
+              </svg>
+              <svg class="audio-icon audio-icon--pause" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M6 5h4v14H6V5zm8 0h4v14h-4V5z"/>
+              </svg>
+            </button>
+            <button type="button" class="audio-btn audio-btn--stop" aria-label="Arrêt">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M6 6h12v12H6V6z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <p class="audio-player__hint">Lecture / pause sur le bouton principal ; arrêt remet le curseur au début.</p>
+      </div>
 
       <h5>C. Conception de Nouvelles Structures (Molécules et Matériaux)</h5>
       <p class="lead">

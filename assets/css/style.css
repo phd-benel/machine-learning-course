@@ -156,6 +156,86 @@ h2{margin:.1rem 0 .8rem;font-size:clamp(1.2rem,2.2vw,1.7rem)}
   object-fit:contain;
   background:var(--surface-soft);
 }
+.audio-player{
+  margin:16px 0 18px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--primary-soft) 0%,#fff 100%);
+  box-shadow:0 4px 18px rgba(31,41,55,.06);
+}
+.audio-player__row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:14px 16px;
+  border-bottom:1px solid #c9dcff;
+}
+.audio-player__title{
+  font-family:Merriweather,serif;
+  font-weight:700;
+  font-size:.92rem;
+  color:#1e3a8a;
+}
+.audio-player__controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.audio-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  border:1px solid #c9dcff;
+  background:#fff;
+  color:#1e40af;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease,box-shadow .15s ease,border-color .15s ease;
+}
+.audio-btn:hover{
+  background:var(--primary-soft);
+  border-color:#93b4ff;
+}
+.audio-btn:focus-visible{
+  outline:2px solid var(--primary);
+  outline-offset:2px;
+}
+.audio-btn--play{
+  width:auto;
+  min-width:52px;
+  padding:0 14px;
+  gap:8px;
+  font-weight:700;
+  font-size:.82rem;
+}
+.audio-player.is-playing .audio-btn--play{
+  background:var(--primary);
+  border-color:var(--primary);
+  color:#fff;
+  box-shadow:0 6px 18px rgba(37,99,235,.28);
+}
+.audio-player.is-playing .audio-icon--play{display:none;}
+.audio-player:not(.is-playing) .audio-icon--pause{display:none;}
+.audio-btn--stop{
+  color:#64748b;
+}
+.audio-btn--stop:hover{
+  color:#b91c1c;
+  background:#fef2f2;
+  border-color:#fecaca;
+}
+.audio-player__hint{
+  margin:0;
+  padding:10px 16px 12px;
+  font-size:.8rem;
+  color:var(--muted);
+  background:var(--surface-soft);
+}
 details{
   border:1px solid var(--border);background:var(--surface-soft);border-radius:10px;padding:10px 12px;margin:8px 0;
 }
