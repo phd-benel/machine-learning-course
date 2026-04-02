@@ -437,27 +437,100 @@
 
       <h5>C. L'Optimiseur : La Descente de Gradient (Gradient Descent)</h5>
       <p class="lead">
-        Maintenant que le modèle sait qu'il a tort, comment doit-il corriger ses poids <span class="math-inline">w</span> et <span class="math-inline">b</span> ?
-        On utilise un moteur d'optimisation, dont le plus célèbre est la <strong>descente de gradient</strong>.
+        Une fois que notre fonction de coût (MSE) a mesuré l'erreur du modèle, nous nous retrouvons face à un constat : notre droite est mauvaise. Mais dans
+        quelle direction faut-il bouger le poids <span class="math-inline">w</span> pour qu'elle devienne meilleure ? Faut-il augmenter
+        <span class="math-inline">w</span> ou le diminuer ? C'est ici qu'intervient le « cerveau » du système : <strong>l'optimiseur</strong> (souvent la
+        <strong>descente de gradient</strong>).
       </p>
+
+      <p class="lead"><strong>1. Qu'est-ce qu'un gradient ?</strong> (La notion de pente)</p>
       <p class="lead">
-        Imaginez un randonneur les yeux bandés au sommet d'une colline (l'erreur maximale). Son objectif est de descendre au fond de la vallée (l'erreur
-        minimale).
+        En mathématiques, le <strong>gradient</strong> n'est rien d'autre que la dérivée de la fonction de perte par rapport à un paramètre (comme notre poids
+        <span class="math-inline">w</span>). Pour visualiser cela, oubliez les chiffres un instant. Imaginez que vous marchez sur la courbe de perte (le fameux
+        « bol » que nous avons vu précédemment).
       </p>
       <ul>
-        <li>Il tâte le sol avec son pied pour sentir l'inclinaison de la pente (mathématiquement : le calcul de la dérivée partielle, le <strong>gradient</strong>).</li>
-        <li>Il fait un pas dans la direction qui descend le plus abruptement.</li>
         <li>
-          La taille de son pas est régie par un paramètre crucial : le <strong>taux d'apprentissage</strong> (learning rate, <span class="math-inline">α</span>).
-          S'il est trop grand, il risque de sauter par-dessus la vallée. S'il est trop petit, il mettra une éternité à descendre.
+          <strong>La variation :</strong> le gradient mesure comment la « perte » change si vous modifiez très légèrement <span class="math-inline">w</span>.
+        </li>
+        <li>
+          <strong>L'indicateur de direction :</strong> par définition, le gradient pointe toujours vers la direction de la plus forte montée. Si le gradient est
+          positif, cela signifie que pour augmenter l'erreur, il faut augmenter <span class="math-inline">w</span>.
         </li>
       </ul>
-      <p class="lead">À chaque étape, le modèle met à jour son poids selon cette formule de correction :</p>
+
+      <p class="lead"><strong>2. Décortiquer la formule de mise à jour</strong></p>
+      <p class="lead">La formule que l'ordinateur répète des millions de fois est la suivante :</p>
       <div class="math-display" role="math" aria-label="Mise à jour des poids">w<sub>nouveau</sub> = w<sub>ancien</sub> − α × Gradient</div>
+      <p class="lead"><strong>Chaque élément de cette soustraction a un rôle vital :</strong></p>
+
+      <p class="lead"><strong>Le signe « moins » (−) :</strong> pourquoi soustraire ?</p>
+      <p class="lead">
+        C'est le point le plus crucial. Comme nous l'avons dit, le gradient nous indique comment <em>monter</em> (augmenter l'erreur). Or, notre but est de
+        minimiser l'erreur. Pour descendre, nous devons donc aller dans la direction <em>opposée</em> au gradient.
+      </p>
+      <ul>
+        <li>
+          Si la pente monte vers la droite (gradient &gt; 0) : on soustrait, donc on déplace <span class="math-inline">w</span> vers la gauche.
+        </li>
+        <li>
+          Si la pente descend vers la droite (gradient &lt; 0) : soustraire un nombre négatif revient à additionner (− × − = +), donc on déplace
+          <span class="math-inline">w</span> vers la droite.
+        </li>
+      </ul>
+      <p class="lead">Le signe « moins » est la boussole qui nous force à toujours descendre vers la vallée.</p>
+
+      <p class="lead">
+        <strong>Le taux d'apprentissage (<span class="math-inline">α</span>) :</strong> la taille de la foulée — le gradient donne la direction, pas la distance.
+        C'est <span class="math-inline">α</span> (le <em>learning rate</em>) qui fixe l'amplitude du pas.
+      </p>
+      <ul>
+        <li>
+          Si <span class="math-inline">α</span> est trop petit (p. ex. 0,0001) : le « randonneur » fait des pas de fourmi. L'apprentissage sera très précis mais
+          prendra beaucoup d'itérations.
+        </li>
+        <li>
+          Si <span class="math-inline">α</span> est trop grand (p. ex. 10,0) : des enjambées de géant risquent de faire sauter la vallée, d'atterrir sur le versant
+          opposé et de s'éloigner du minimum (instabilité ou <strong>divergence</strong>).
+        </li>
+      </ul>
+
+      <p class="lead"><strong>3. Guide pas à pas : le cycle de vie d'une itération</strong></p>
+      <p class="lead">Voici comment l'algorithme « réfléchit » concrètement à chaque étape (ou <em>step</em>) :</p>
+      <ol>
+        <li>
+          <strong>Tâter le terrain (calcul du gradient) :</strong> l'ordinateur calcule la dérivée de l'erreur. Il se demande : « Si je bouge
+          <span class="math-inline">w</span> de 0,001, est-ce que l'erreur monte ou descend ? »
+        </li>
+        <li>
+          <strong>Décider de l'effort (multiplication par <span class="math-inline">α</span>) :</strong> on pondère cette pente par le taux d'apprentissage pour
+          décider de la force de la correction.
+        </li>
+        <li>
+          <strong>Appliquer la correction (mise à jour) :</strong> on soustrait ce résultat au poids actuel pour obtenir le nouveau poids, un peu plus proche de
+          l'optimum.
+        </li>
+        <li>
+          <strong>Répéter jusqu'à la convergence :</strong> on recommence. Au fur et à mesure que l'on s'approche du fond de la vallée, la pente devient de plus
+          en plus faible : le gradient diminue, et les pas ralentissent naturellement.
+        </li>
+        <li>
+          <strong>L'arrêt :</strong> quand la pente est quasiment nulle (le sol est plat), on dit que le modèle a <strong>convergé</strong>. L'apprentissage est
+          terminé.
+        </li>
+      </ol>
+
+      <p class="lead"><strong>4. Pourquoi est-ce « intelligent » ?</strong></p>
+      <p class="lead">
+        Ce qui rend ce processus puissant, c'est qu'il est autonome. Vous n'avez pas besoin de dire à la machine « augmente le poids ». Vous lui donnez une
+        fonction d'erreur et une règle de descente, et la machine « glisse » mathématiquement vers la solution. C'est ce même mécanisme, bien que plus complexe
+        (via la <strong>rétropropagation</strong>), qui permet aujourd'hui aux modèles de type GPT ou aux systèmes de vision par ordinateur d'ajuster des
+        milliards de paramètres simultanément pour apprendre à parler ou à reconnaître des objets.
+      </p>
 
       <h5>D. La Boucle d'Apprentissage (Training Loop)</h5>
       <p class="lead">
-        Le processus d'« entraînement » d'une IA n'est au final que la répétition mécanique (les <strong>epochs</strong>) de ces trois étapes fondamentales
+        Le processus d'« entraînement » d'une IA supervisée n'est au final que la répétition mécanique (les <strong>epochs</strong>) de ces trois étapes fondamentales
         :
       </p>
       <ol>
