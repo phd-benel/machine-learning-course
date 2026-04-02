@@ -34,21 +34,153 @@
         topologie du problème (supervisé, non-supervisé, décision séquentielle).
       </p>
 
-      <h3>Apprentissage supervisé</h3>
+      <h3>Introduction : L'Anatomie de l'Apprentissage</h3>
       <p class="lead">
-        Régression et classification : modèles linéaires (régression linéaire/logistique), méthodes à marge, ensembles, et montée en
-        complexité vers les réseaux de neurones.
+        Si le premier chapitre nous a montré comment l'IA est passée du symbole à la donnée, ce deuxième chapitre s'attache à comprendre comment la
+        machine apprend concrètement. Dans l'univers du Machine Learning, il n'existe pas de "méthode unique". Le choix d'un algorithme ne dépend pas de
+        sa puissance brute, mais de la nature des données disponibles et de la finalité du problème à résoudre.
+      </p>
+      <p class="lead">
+        Pour structurer notre boîte à outils, nous pouvons classer l'apprentissage selon <strong>trois philosophies fondamentales</strong>, chacune
+        imitant une facette différente de l'acquisition de connaissances chez l'humain.
       </p>
 
-      <h3>Apprentissage non-supervisé</h3>
+      <h4>1. L'Apprentissage Supervisé : Le Maître et l'Élève</h4>
       <p class="lead">
-        Partitionnement (K-Means, DBSCAN), réduction de dimension (PCA) et extraction de représentations pour visualiser, compresser ou
-        structurer des données sans labels.
+        C'est la forme d'apprentissage la plus répandue dans l'industrie. Ici, la machine apprend à partir d'un jeu de données étiqueté
+        (<span class="math-inline">labeled data</span>). Imaginez un élève devant un manuel où chaque exercice est accompagné de sa solution.
+      </p>
+      <p class="lead">
+        <strong>Le mécanisme :</strong> L'algorithme reçoit des entrées (<span class="math-inline">X</span>) et les sorties correspondantes
+        (<span class="math-inline">Y</span>). Son but est de découvrir la fonction mathématique <span class="math-inline">f</span> telle que
+        <span class="math-inline">f</span>(<span class="math-inline">X</span>) = <span class="math-inline">Y</span>.
+      </p>
+      <p class="lead">
+        <strong>La finalité :</strong> Une fois entraîné, le modèle est capable de prédire la sortie pour de nouvelles données qu'il n'a jamais vues.
+        C'est ici que l'on retrouve la <strong>Régression</strong> (prédire un prix, une température) et la <strong>Classification</strong> (détecter
+        un spam, identifier une pathologie).
       </p>
 
-      <h3>Apprentissage par renforcement (RL)</h3>
+      <h4>2. L'Apprentissage Non-Supervisé : L'Explorateur Autonome</h4>
       <p class="lead">
-        Introduction à la prise de décision séquentielle : états, actions, récompenses, politiques. Illustration par Q-Learning.
+        Dans ce scénario, nous donnons à la machine des données brutes (<span class="math-inline">X</span>) sans aucune étiquette, ni solution. C'est
+        l'apprentissage par la découverte pure. L'élève est laissé seul face à une pile de documents et doit y trouver une structure logique.
+      </p>
+      <p class="lead">
+        <strong>Le mécanisme :</strong> L'algorithme cherche des motifs cachés, des similitudes ou des structures géométriques dans la distribution des
+        données. Il ne cherche pas à "deviner une réponse", mais à organiser l'information.
+      </p>
+      <p class="lead">
+        <strong>La finalité :</strong> C'est le domaine du <strong>Partitionnement</strong> (<span class="math-inline">Clustering</span>), où l'IA
+        regroupe des clients par comportement, ou de la <strong>Réduction de dimension</strong>, où elle compresse une information complexe pour la rendre
+        visualisable.
+      </p>
+
+      <h4>3. L'Apprentissage par Renforcement : L'École de l'Expérience</h4>
+      <p class="lead">
+        Cette troisième voie est radicalement différente. Il n'y a plus de dataset fixe, mais un <strong>Agent</strong> plongé dans un
+        <strong>Environnement</strong>. C'est l'apprentissage par "essais et erreurs", exactement comme un enfant apprend à marcher ou à faire du vélo.
+      </p>
+      <p class="lead">
+        <strong>Le mécanisme :</strong> L'agent prend des actions, observe les changements d'état de son environnement et reçoit des récompenses
+        (positives ou négatives). Son objectif est de maximiser la somme des récompenses au fil du temps en développant une stratégie optimale (la
+        politique).
+      </p>
+      <p class="lead">
+        <strong>La finalité :</strong> C'est le moteur des systèmes de décision séquentielle : du pilotage de drones aux stratégies de jeu (AlphaGo), en
+        passant par l'optimisation en temps réel des réseaux électriques.
+      </p>
+
+      <h4>Synthèse de la Taxonomie</h4>
+      <p class="lead">
+        Pour bien sélectionner votre outil, posez-vous toujours cette question simple sur la topologie de votre problème :
+      </p>
+      <div class="table-block">
+        <p class="table-caption">Décision selon la nature des données et l'objectif</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Synthèse taxonomie apprentissage">
+            <thead>
+              <tr>
+                <th scope="col">Si ma donnée contient…</th>
+                <th scope="col">Et que mon objectif est de…</th>
+                <th scope="col">J'utilise…</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Des exemples avec solutions (<span class="math-inline">X</span>, <span class="math-inline">Y</span>)</td>
+                <td>Prédire une valeur ou une catégorie</td>
+                <td class="cell-highlight">Apprentissage Supervisé</td>
+              </tr>
+              <tr>
+                <td>Des données brutes (<span class="math-inline">X</span> seul)</td>
+                <td>Découvrir des groupes ou des structures</td>
+                <td class="cell-highlight">Apprentissage Non-Supervisé</td>
+              </tr>
+              <tr>
+                <td>Un environnement dynamique</td>
+                <td>Apprendre une stratégie de décision</td>
+                <td class="cell-highlight">Apprentissage par Renforcement</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h4>L'Éventail des Modèles : Du Machine Learning au Deep Learning</h4>
+      <p class="lead">
+        Au sein de chaque famille (Supervisé, Non-Supervisé, Renforcement), il existe une graduation technique. On distingue généralement deux grandes
+        approches selon la structure mathématique de l'outil :
+      </p>
+      <p class="lead">
+        <strong>Le Machine Learning "Classique" (Small Data / Tabular) :</strong> Ce sont des modèles souvent fondés sur la statistique et la géométrie.
+        Ils sont extrêmement efficaces sur des données structurées (tableaux Excel, bases de données SQL).
+      </p>
+      <p class="lead">
+        <strong>Exemples :</strong> Régression Linéaire, Arbres de Décision, Random Forest, SVM (Machines à Vecteurs de Support).
+      </p>
+      <p class="lead">
+        <strong>Le Deep Learning (Big Data / Unstructured) :</strong> Fondé sur des réseaux de neurones profonds, il excelle là où les règles sont trop
+        complexes pour être écrites manuellement. Il est le roi des données non structurées (images, sons, texte).
+      </p>
+      <p class="lead">
+        <strong>Exemples :</strong> Réseaux de neurones convolutifs (CNN) pour l'image, Transformers pour le langage (LLM).
+      </p>
+
+      <h4>Le Choix de l'Outil : L'Art du Compromis</h4>
+      <p class="lead">
+        Choisir un algorithme n'est pas une question de "mode", mais de stratégie. En tant qu'architecte de solutions IA, votre choix se fera selon
+        plusieurs critères fondamentaux :
+      </p>
+      <ul>
+        <li>
+          <strong>La Complexité des Données :</strong> Si vos données sont un simple tableau de 1000 lignes, un Random Forest sera souvent plus performant
+          et plus rapide qu'un réseau de neurones complexe.
+        </li>
+        <li>
+          <strong>La Transparence (Interprétabilité) :</strong> Dans des secteurs comme la santé ou la finance, vous devez pouvoir expliquer pourquoi l'IA
+          a pris une décision. Un modèle linéaire est "transparent" (boîte blanche), tandis qu'un modèle de Deep Learning est souvent une "boîte noire"
+          difficile à justifier.
+        </li>
+        <li>
+          <strong>Les Ressources (Compute &amp; Time) :</strong> Certains modèles s'entraînent en quelques secondes sur un ordinateur portable, d'autres
+          nécessitent des clusters de GPU pendant des semaines.
+        </li>
+        <li>
+          <strong>La Quantité de Données :</strong> Le Deep Learning a soif de données ; sans des millions d'exemples, il risque le "surapprentissage"
+          (<span class="math-inline">overfitting</span>), là où un petit modèle robuste s'en sortira mieux.
+        </li>
+      </ul>
+
+      <h4>En Route vers la Maîtrise de l'Outil</h4>
+      <p class="lead">
+        Dans ce chapitre, nous allons donc explorer ces différents algorithmes un par un. L'objectif n'est pas seulement de comprendre leurs
+        mathématiques, mais d'apprendre à identifier les avantages et les inconvénients de chacun.
+      </p>
+      <p class="lead">
+        Apprendre le Machine Learning, c'est apprendre à ne pas utiliser un "marteau-piqueur" pour enfoncer un "clou". À la fin de ce parcours, vous
+        saurez exactement quel outil (ou modèle) sélectionner en fonction de la topologie de votre problème, de vos contraintes de production et des
+        exigences de vos utilisateurs finaux.
       </p>
 
       <p class="quote">
