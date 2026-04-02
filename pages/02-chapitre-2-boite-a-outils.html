@@ -248,9 +248,8 @@
         </li>
       </ul>
 
-      <h4>En Route vers la Maîtrise de l'Outil</h4>
       <p class="lead">
-        Dans ce chapitre, nous allons donc explorer ces différents algorithmes un par un. L'objectif n'est pas seulement de comprendre leurs
+        Dans ce chapitre, nous allons donc explorer certains de ces algorithmes. L'objectif n'est pas seulement de comprendre leurs
         mathématiques, mais d'apprendre à identifier les avantages et les inconvénients de chacun.
       </p>
       <p class="lead">
@@ -259,19 +258,121 @@
         exigences de vos utilisateurs finaux.
       </p>
 
-      <p class="quote">
-        À retenir : la “bonne” architecture dépend d’abord de la structure du signal (labels disponibles, temporalité, objectif) avant de
-        dépendre de la performance brute.
+      <h3>L'Apprentissage Supervisé</h3>
+
+      <h4>1. Introduction : Le Schéma Universel du Supervisé</h4>
+      <p class="lead">
+        Malgré la diversité des algorithmes, de la simple droite aux réseaux de neurones complexes, l'apprentissage supervisé repose toujours sur le
+        même protocole rigoureux. C'est une danse en trois temps entre la donnée, le modèle et l'erreur.
+      </p>
+      <p class="lead">
+        <strong>Les ingrédients (entrées et sorties) :</strong> On fournit au système des <em>features</em> (<span class="math-inline">X</span>, les
+        caractéristiques comme la surface d'une maison) et des <em>labels</em> (<span class="math-inline">Y</span>, la cible comme le prix). Le but est de
+        créer un <strong>modèle mathématique</strong> capable de lier les deux.
+      </p>
+      <p class="lead">
+        <strong>L'ADN du modèle (les paramètres <span class="math-inline">w</span> et <span class="math-inline">b</span>) :</strong> Chaque modèle possède
+        des « poids » (<span class="math-inline">weights</span>) et un « biais » (<span class="math-inline">bias</span>). Ce sont les variables que l'IA
+        va ajuster. Au départ, ils sont aléatoires ; à la fin, ils représentent la connaissance extraite des données.
+      </p>
+      <p class="lead">
+        <strong>L'étape d'entraînement (la boucle) :</strong> L'IA fait une prédiction, mesure son erreur via une <strong>fonction de coût</strong> (loss),
+        et utilise un <strong>optimiseur</strong> (descente de gradient) pour corriger ses paramètres.
+      </p>
+      <p class="lead">
+        <strong>La bifurcation majeure :</strong> Si la sortie <span class="math-inline">Y</span> est un nombre (prix, température), c'est une
+        <strong>régression</strong>. Si <span class="math-inline">Y</span> est une catégorie (chat/chien, fraude/sain), c'est une
+        <strong>classification</strong>.
       </p>
 
-      <details>
-        <summary>Exercice rapide (auto-évaluation)</summary>
-        <ol>
-          <li>Quel cadre choisir si tu as des labels et un objectif de prédiction chiffrée ?</li>
-          <li>Quel cadre choisir si tu veux segmenter une population sans labels ?</li>
-          <li>Quel cadre choisir si un agent doit apprendre par interaction avec un environnement ?</li>
-        </ol>
-      </details>
+      <h4>2. La Régression Linéaire : La Droite Prédictive</h4>
+      <p class="lead">
+        C'est l'outil le plus simple et le plus transparent. On part du postulat que la relation entre les données peut être résumée par une ligne
+        droite.
+      </p>
+      <p class="lead"><strong>Usage :</strong> Prédire des tendances continues.</p>
+      <p class="lead">
+        <strong>Force :</strong> Interprétabilité totale (on sait exactement quel poids <span class="math-inline">w</span> influence le résultat).
+      </p>
+
+      <h4>3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
+      <p class="lead">
+        Contrairement à ce que son nom indique, elle sert à la <strong>classification binaire</strong>. Elle reprend la logique de la régression mais
+        « écrase » le résultat entre 0 et 1 grâce à une fonction mathématique (la sigmoïde).
+      </p>
+      <p class="lead">
+        <strong>Logique :</strong> Elle ne prédit pas une valeur, mais une <strong>probabilité</strong> d'appartenir à une classe.
+      </p>
+      <p class="lead">
+        <strong>Usage :</strong> Score de crédit (approuvé/refusé), diagnostic médical simple.
+      </p>
+
+      <h4>4. Support Vector Machines (SVM) : L'Art de la Frontière</h4>
+      <p class="lead">
+        Le SVM est un algorithme géométrique puissant. Son but est de trouver l'<strong>hyperplan</strong> (la frontière) qui sépare deux classes avec la
+        plus grande marge possible.
+      </p>
+      <p class="lead">
+        <strong>Le « kernel trick » :</strong> Sa force réside dans sa capacité à projeter des données complexes dans un espace de dimension supérieure
+        pour réussir à les séparer, même si elles semblent mélangées au départ.
+      </p>
+
+      <h4>5. Arbres de Décision et Random Forest : La Force du Collectif</h4>
+      <p class="lead">
+        L'arbre de décision imite le raisonnement humain en posant une série de questions binaires (ex. : « La surface est-elle &gt; 50 m² ? »).
+      </p>
+      <p class="lead">
+        <strong>Le problème :</strong> Un seul arbre est souvent trop spécifique et fait du surapprentissage (<span class="math-inline">overfitting</span>).
+      </p>
+      <p class="lead">
+        <strong>La solution (Random Forest) :</strong> On crée une forêt de centaines d'arbres différents qui votent tous pour la décision finale. C'est
+        l'un des algorithmes les plus robustes et les plus utilisés aujourd'hui pour les données tabulaires (Excel/SQL).
+      </p>
+
+      <h4>6. Les Réseaux de Neurones : L'Approche Bio-Inspirée</h4>
+      <p class="lead">
+        Ici, on ne cherche plus une simple droite ou une règle de décision. On empile des couches de « neurones » artificiels.
+      </p>
+      <p class="lead">
+        <strong>Architecture :</strong> Chaque neurone prend des entrées, applique un poids, et passe le résultat à travers une
+        <strong>fonction d'activation</strong> non linéaire.
+      </p>
+      <p class="lead">
+        <strong>Puissance :</strong> Capables de modéliser des relations d'une complexité extrême (images, langage). C'est la base du deep learning.
+      </p>
+
+      <h4>Synthèse pour le choix du modèle</h4>
+      <div class="table-block">
+        <p class="table-caption">Quel modèle pour quel besoin ?</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Synthèse choix de modèle supervisé">
+            <thead>
+              <tr>
+                <th scope="col">Situation</th>
+                <th scope="col">Piste d'algorithmes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Données simples et besoin d'explication</td>
+                <td class="cell-highlight">Régression linéaire / régression logistique</td>
+              </tr>
+              <tr>
+                <td>Données tabulaires complexes, nombreuses variables</td>
+                <td class="cell-highlight">Random Forest</td>
+              </tr>
+              <tr>
+                <td>Besoin d'une séparation géométrique nette entre classes</td>
+                <td class="cell-highlight">SVM</td>
+              </tr>
+              <tr>
+                <td>Données massives et non structurées (image, son, texte)</td>
+                <td class="cell-highlight">Réseaux de neurones</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <div class="btn-row">
         <button class="btn btn-soft" type="button" data-mark-read>Marquer comme lu</button>
