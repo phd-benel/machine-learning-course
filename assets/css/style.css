@@ -436,7 +436,9 @@ details.expand-panel summary:hover{
 .svm-conclusion,
 .tree-conclusion,
 .nn-conclusion,
-.unsupervised-conclusion{
+.unsupervised-conclusion,
+.rl-conclusion,
+.chapter-conclusion{
   margin:22px 0 10px;
   padding:16px 18px 18px;
   border:1px solid var(--border);
@@ -450,7 +452,9 @@ details.expand-panel summary:hover{
 .svm-conclusion h5,
 .tree-conclusion h5,
 .nn-conclusion h5,
-.unsupervised-conclusion h5{
+.unsupervised-conclusion h5,
+.rl-conclusion h5,
+.chapter-conclusion h4{
   margin:16px 0 8px;
   font-size:.95rem;
   font-family:Merriweather,serif;
@@ -461,7 +465,9 @@ details.expand-panel summary:hover{
 .svm-conclusion h5.svm-conclusion__title,
 .tree-conclusion h5.tree-conclusion__title,
 .nn-conclusion h5.nn-conclusion__title,
-.unsupervised-conclusion h5.unsupervised-conclusion__title{
+.unsupervised-conclusion h5.unsupervised-conclusion__title,
+.rl-conclusion h5.rl-conclusion__title,
+.chapter-conclusion h4.chapter-conclusion__title{
   margin:0 0 12px;
   font-size:1.02rem;
   color:#0f172a;
@@ -471,13 +477,17 @@ details.expand-panel summary:hover{
 .svm-conclusion .lead,
 .tree-conclusion .lead,
 .nn-conclusion .lead,
-.unsupervised-conclusion .lead{color:var(--muted);}
+.unsupervised-conclusion .lead,
+.rl-conclusion .lead,
+.chapter-conclusion .lead{color:var(--muted);}
 .lr-conclusion ul,
 .logistic-conclusion ul,
 .svm-conclusion ul,
 .tree-conclusion ul,
 .nn-conclusion ul,
-.unsupervised-conclusion ul{
+.unsupervised-conclusion ul,
+.rl-conclusion ul,
+.chapter-conclusion ul{
   margin:8px 0 12px;
   padding-left:1.25rem;
   color:var(--muted);
@@ -488,7 +498,9 @@ details.expand-panel summary:hover{
 .svm-conclusion li,
 .tree-conclusion li,
 .nn-conclusion li,
-.unsupervised-conclusion li{margin-bottom:8px;}
+.unsupervised-conclusion li,
+.rl-conclusion li,
+.chapter-conclusion li{margin-bottom:8px;}
 .content-soon__body{
   padding:0 16px 16px;
   border-top:1px dashed var(--border);

@@ -2233,18 +2233,345 @@
         </div>
       </details>
 
+
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <details class="content-soon">
-        <summary>À venir — apprentissage par renforcement</summary>
-        <div class="content-soon__body">
-          <p class="lead content-soon__lead">
-            Un développement dédié à l’<strong>apprentissage par renforcement</strong> (agent, environnement, politique, récompense) pourra compléter ce cours ou en
-            ouvrir une suite thématique.
-          </p>
+      <h4>8. Apprentissage par renforcement : agir, observer, apprendre</h4>
+      <p class="lead">
+        Dans le <strong>supervisé</strong>, on apprenait une fonction à partir d’exemples indépendants ; dans le <strong>non supervisé</strong>, on explorait la forme
+        de <span class="math-inline">X</span> sans cible. L’<strong>apprentissage par renforcement</strong> (RL) introduit un <strong>agent</strong> qui interagit
+        avec un <strong>environnement</strong> au fil du temps : à chaque pas, il choisit une <strong>action</strong>, reçoit une <strong>récompense</strong> (souvent
+        retardée) et observe un nouvel <strong>état</strong>. Il n’y a pas de « fichier CSV complet » des bonnes réponses : la donnée se construit par
+        <strong>essais et erreurs</strong>, comme un joueur qui progresse.
+      </p>
+      <p class="lead">
+        Les <strong>jeux vidéo</strong> ont longtemps servi de terrain d’expérimentation : d’<strong>Atari</strong> (Mnih et al., 2015, agent DQN) aux stratégies en
+        temps réel, en passant par des RPG au <strong>tour par tour</strong> où chaque décision (attaque, soin, changement de créature) modifie l’état du combat de
+        façon <strong>séquentielle</strong>. Pensez par analogie à un combat de type « Pokémon » : vous n’avez pas une étiquette « la bonne action pour cet écran »
+        fournie d’office — vous apprenez par répétition ce qui fonctionne contre tel adversaire, avec des récompenses (PV perdus, statut infligé) qui ne résument la
+        qualité d’une stratégie qu’<strong>après plusieurs tours</strong>. Ce retard entre action et succès est au cœur des difficultés du RL.
+      </p>
+      <p class="lead">
+        Ce n’est qu’un <strong>exemple culturel</strong> : en industrie, le même schéma apparaît en robotique (collisions rares mais coûteuses), logistique ou
+        pilotage énergétique. La figure suivante fixe la <strong>boucle</strong> minimale à avoir en tête.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : interaction agent ↔ environnement (actions, récompenses, nouvel état)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig67.png"
+        alt="Schema avec Agent et Environnement et fleches action et recompense"
+        loading="lazy"
+      />
+
+      <h5>A. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
+      <p class="lead">
+        Avant d’entrer dans une méthode précise, il est utile de situer <strong>où</strong> les algorithmes peuvent buter — sans exhaustivité, mais pour cadrer vos
+        attentes lorsque vous lirez la littérature (exploration, généralisation, stabilité…).
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : quatre défis typiques</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig68.png"
+        alt="Quatre panneaux texte sur exploration, recompense retardee, observation, stochasticite"
+        loading="lazy"
+      />
+      <ul>
+        <li>
+          <strong>Exploration / exploitation :</strong> faut-il retenter une action peu essayée ou répéter ce qui marche déjà ? Un compromis mal réglé bloque
+          l’apprentissage.
+        </li>
+        <li>
+          <strong>Récompense retardée :</strong> la « bonne » action peut être plusieurs pas avant un gain visible (crédit assigné à l’ancienne action).
+        </li>
+        <li>
+          <strong>Grande dimension / observation partielle :</strong> le tableau des valeurs ne tient plus en mémoire — d’où les réseaux de neurones pour
+          approximer des fonctions.
+        </li>
+        <li>
+          <strong>Stochasticité :</strong> le monde peut être aléatoire ; on raisonne souvent en <strong>espérance</strong> de retour.
+        </li>
+      </ul>
+
+      <h5>B. Vocabulaire et formalisme minimal (MDP)</h5>
+      <p class="lead">
+        On modélise souvent le problème comme un <strong>processus de décision markovien</strong> (MDP) : l’état suivant et la récompense dépendent de l’état courant
+        et de l’action (<strong>propriété de Markov</strong> — le futur conditionnel au présent ne dépend pas du passé plus loin). Une <strong>politique</strong>
+        <span class="math-inline">π</span>(<span class="math-inline">a</span>|<span class="math-inline">s</span>) indique comment choisir les actions (souvent de façon
+        stochastique en pratique). L’objectif est de maximiser une somme (discounted) des récompenses :
+        <span class="math-inline">G</span><sub>t</sub> = <span class="math-inline">R</span><sub>t+1</sub> + <span class="math-inline">γ</span>
+        <span class="math-inline">R</span><sub>t+2</sub> + <span class="math-inline">γ</span>²<span class="math-inline">R</span><sub>t+3</sub> + … avec un facteur
+        <span class="math-inline">γ</span> ∈ [0, 1] qui pèse l’avenir.
+      </p>
+      <p class="lead">
+        Les familles d’algorithmes sont nombreuses : <strong>recherche de politique</strong> (policy gradients), <strong>acteur–critique</strong>, méthodes basées sur
+        un <strong>modèle</strong> de transitions, ou encore approches <strong>sans modèle</strong> (<em>model-free</em>) qui estiment directement des valeurs d’actions ou
+        d’états à partir d’échantillons. Dans la suite, nous ne développons qu’une brique historique et pédagogique : le <strong>Q-learning</strong> tabulaire.
+      </p>
+
+      <h5>C. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
+      <p class="lead">
+        On note <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) la <strong>valeur d’action</strong> : espérance du
+        retour cumulé actualisé si l’on commence par prendre l’action <span class="math-inline">a</span> dans l’état <span class="math-inline">s</span>, puis se comporte
+        de façon <strong>optimale</strong> ensuite. Lorsque l’espace d’états et d’actions est <strong>petit et discret</strong>, on peut stocker
+        <span class="math-inline">Q</span> dans un <strong>tableau</strong> et le mettre à jour au fil des interactions — c’est le Q-learning dans sa forme d’origine
+        (Watkins, 1989).
+      </p>
+      <p class="lead">
+        À chaque transition observée (<span class="math-inline">s</span>, <span class="math-inline">a</span>, <span class="math-inline">r</span>,
+        <span class="math-inline">s</span>′), on corrige <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) pour se
+        rapprocher de la <strong>cible</strong> <span class="math-inline">r</span> + <span class="math-inline">γ</span> max<sub><span class="math-inline">a</span>′</sub>
+        <span class="math-inline">Q</span>(<span class="math-inline">s</span>′, <span class="math-inline">a</span>′) (si <span class="math-inline">s</span>′ n’est pas
+        terminal). C’est une règle de <strong>différence temporelle</strong> (TD) ; la mise à jour « tire » la valeur courante vers cette cible avec un pas
+        <span class="math-inline">α</span> :
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : règle de mise à jour du Q-learning</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig71.png"
+        alt="Equation de mise a jour Q-learning avec alpha et gamma"
+        loading="lazy"
+      />
+      <p class="lead">
+        <strong>Lecture intuitive :</strong> si après avoir fait <span class="math-inline">a</span> dans <span class="math-inline">s</span> vous recevez une récompense
+        <span class="math-inline">r</span> et atterrissez dans un état <span class="math-inline">s</span>′ où « le mieux qu’on puisse encore espérer » vaut max
+        <span class="math-inline">Q</span>(<span class="math-inline">s</span>′, ·), alors la valeur de (<span class="math-inline">s</span>,
+        <span class="math-inline">a</span>) devrait refléter <span class="math-inline">r</span> + <span class="math-inline">γ</span> fois cette meilleure suite. L’erreur
+        (<strong>TD error</strong>) entre cette cible et l’ancienne estimation guide la correction.
+      </p>
+      <p class="lead"><strong>Algorithme (esprit, version tabulaire) :</strong></p>
+      <ol>
+        <li>Initialiser <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) (souvent à 0).</li>
+        <li>
+          À chaque pas : observer <span class="math-inline">s</span>, choisir <span class="math-inline">a</span> (souvent <span class="math-inline">ε</span>-greedy :
+          aléatoire avec probabilité <span class="math-inline">ε</span>, sinon action qui maximise <span class="math-inline">Q</span>(<span class="math-inline">s</span>, ·)),
+          exécuter l’action, observer <span class="math-inline">r</span> et <span class="math-inline">s</span>′.
+        </li>
+        <li>
+          Appliquer la mise à jour ci-dessus ; si <span class="math-inline">s</span>′ est terminal, utiliser uniquement
+          <span class="math-inline">r</span> comme cible pour le dernier pas (pas de bootstrap futur).
+        </li>
+        <li>Répéter jusqu’à convergence approximative ou budget d’épisodes épuisé.</li>
+      </ol>
+      <p class="lead">
+        Le Q-learning est dit <strong>off-policy</strong> au sens où la <strong>cible</strong> utilise max<sub><span class="math-inline">a</span>′</sub>
+        <span class="math-inline">Q</span>(<span class="math-inline">s</span>′, <span class="math-inline">a</span>′) (politique greedy pour l’évaluation), même si l’exploration
+        suit encore une politique mouvante (par ex. <span class="math-inline">ε</span>-greedy).
+      </p>
+
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : petite grille « monde » (départ S, but G avec récompense positive)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig69.png"
+        alt="Grille 5x5 avec case depart S et case objectif G"
+        loading="lazy"
+      />
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : illustration — après entraînement simulé, max<sub>a</sub> Q(<span class="math-inline">s</span>, <span class="math-inline">a</span>) par case (couleurs)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig70.png"
+        alt="Carte de chaleur des valeurs V par case apres Q-learning"
+        loading="lazy"
+      />
+      <p class="lead">
+        Sur cette grille jouet, les valeurs élevées se concentrent logiquement près de l’objectif : le Q-learning tabulaire « remonte » la valeur des états menant au but.
+        Sur un problème réel à grande dimension, le <strong>tableau</strong> explose : on remplace alors <span class="math-inline">Q</span> par une fonction approximée —
+        typiquement un <strong>réseau de neurones</strong> (DQN et dérivés), ce qui relie cette section au § 6.
+      </p>
+
+      <section class="rl-conclusion" aria-labelledby="rl-conclusion-title">
+        <h5 id="rl-conclusion-title" class="rl-conclusion__title">En synthèse : le Q-learning comme première brique</h5>
+        <ul>
+          <li>
+            <strong>RL :</strong> interaction séquentielle, récompenses souvent retardées, exploration nécessaire — carte des difficultés (figure 68).
+          </li>
+          <li>
+            <strong>Q-learning :</strong> estimation tabulaire de <span class="math-inline">Q</span>(<span class="math-inline">s</span>,
+            <span class="math-inline">a</span>) par corrections TD vers la cible de Bellman optimale ; simple à coder sur de petits espaces.
+          </li>
+          <li>
+            <strong>Au-delà :</strong> fonction d’approximation, continuité, bruit, multi-agents… autant de chapitres que l’on trouve dans l’ouvrage de référence de Sutton
+            &amp; Barto.
+          </li>
+        </ul>
+      </section>
+
+      <details class="expand-panel">
+        <summary>Références et lectures (RL &amp; Q-learning)</summary>
+        <div class="expand-panel__body">
+          <ul>
+            <li>
+              <strong>Ouvrage de référence :</strong> Sutton &amp; Barto, <em>Reinforcement Learning: An Introduction</em> (2<sup>e</sup> éd.) — disponible en ligne.
+            </li>
+            <li>
+              <strong>Q-learning :</strong> Watkins &amp; Dayan (1992), « Q-learning », <em>Machine Learning</em>.
+            </li>
+            <li>
+              <strong>Jeux et deep RL :</strong> Mnih et al. (2015), « Human-level control through deep reinforcement learning » (<em>Nature</em>) — DQN sur Atari.
+            </li>
+            <li>
+              <strong>Pratique :</strong>
+              <a href="https://gymnasium.farama.org/" target="_blank" rel="noopener noreferrer">Gymnasium</a> (environnements standards pour expérimenter).
+            </li>
+          </ul>
         </div>
       </details>
 
+      <div class="section-divider" role="separator" aria-hidden="true"></div>
+
+      <section class="chapter-conclusion" aria-labelledby="ch2-conclusion-title">
+        <h4 id="ch2-conclusion-title" class="chapter-conclusion__title">Conclusion du chapitre 2 : une boîte à outils structurée</h4>
+        <p class="lead">
+          Ce chapitre a parcouru les grandes <strong>familles</strong> d’apprentissage et les <strong>méthodes</strong> qu’on y associe le plus souvent : du modèle
+          linéaire aux réseaux de neurones, des frontières géométriques (SVM) aux arbres et forêts, puis l’exploration non supervisée (K-means, DBSCAN, PCA) et enfin
+          l’interaction séquentielle du renforcement (Q-learning). L’objectif n’était pas de tout maîtriser du premier coup, mais de disposer d’une
+          <strong>carte</strong> : reconnaître le type de problème, choisir un premier outil raisonnable, et savoir où chercher le détail (perte, hypothèses,
+          hyperparamètres).
+        </p>
+        <p class="lead">
+          Les tableaux ci-dessous résument <strong>selon quelques critères</strong> ce qui distingue les paradigmes, puis les principales approches abordées dans ces pages.
+        </p>
+
+        <div class="table-block">
+          <p class="table-caption">Critère 1 — les trois paradigmes d’apprentissage</p>
+          <div class="table-wrap">
+            <table class="data-table" aria-label="Comparaison des trois paradigmes">
+              <thead>
+                <tr>
+                  <th scope="col">Critère</th>
+                  <th scope="col">Supervisé</th>
+                  <th scope="col">Non supervisé</th>
+                  <th scope="col">Renforcement</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Donnée centrale</td>
+                  <td>Exemples <strong>étiquetés</strong> (<span class="math-inline">X</span> avec <span class="math-inline">y</span>)</td>
+                  <td>Souvent seulement <span class="math-inline">X</span> (pas de cible fournie)</td>
+                  <td>Flux <strong>séquentiel</strong> : états, actions, récompenses (pas de « fichier de vérité » complet d’entrée)</td>
+                </tr>
+                <tr>
+                  <td>But typique</td>
+                  <td>Prédire une sortie (régression ou classification)</td>
+                  <td>Trouver structure : <strong>groupes</strong>, <strong>axes</strong>, représentation</td>
+                  <td>Apprendre une <strong>politique</strong> qui maximise un retour cumulé</td>
+                </tr>
+                <tr>
+                  <td>Critère d’apprentissage</td>
+                  <td>Erreur de prédiction (MSE, entropie, hinge…)</td>
+                  <td>Inertie, densité, variance expliquée…</td>
+                  <td>Retour actualisé, valeurs ou avantages (Bellman, TD)</td>
+                </tr>
+                <tr>
+                  <td>Exemples dans ce chapitre</td>
+                  <td>Régression linéaire / logistique, SVM, arbres &amp; RF, MLP…</td>
+                  <td>K-means, DBSCAN, PCA</td>
+                  <td>Q-learning (introduction)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-block">
+          <p class="table-caption">Critère 2 — panorama des méthodes du chapitre (repères)</p>
+          <div class="table-wrap">
+            <table class="data-table" aria-label="Panorama des methodes du chapitre 2">
+              <thead>
+                <tr>
+                  <th scope="col">Méthode / famille</th>
+                  <th scope="col">Paradigme</th>
+                  <th scope="col">Idée directrice</th>
+                  <th scope="col">Interprétabilité (ordre de grandeur)</th>
+                  <th scope="col">À anticiper</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Régression linéaire</td>
+                  <td>Supervisé</td>
+                  <td>Surface de prédiction <strong>affine</strong> ; MSE</td>
+                  <td class="cell-highlight">Élevée (coefficients)</td>
+                  <td>Linéarité, sensibilité aux outliers</td>
+                </tr>
+                <tr>
+                  <td>Régression logistique</td>
+                  <td>Supervisé</td>
+                  <td>Scores + sigmoïde ; entropie croisée</td>
+                  <td class="cell-highlight">Élevée</td>
+                  <td>Frontière linéaire dans l’espace des features</td>
+                </tr>
+                <tr>
+                  <td>SVM</td>
+                  <td>Supervisé</td>
+                  <td><strong>Marge</strong>, hinge ; noyaux pour le non linéaire</td>
+                  <td>Moyenne (surtout en linéaire)</td>
+                  <td>Choix noyau, <span class="math-inline">C</span>, <span class="math-inline">γ</span></td>
+                </tr>
+                <tr>
+                  <td>Arbres / Random Forest</td>
+                  <td>Supervisé</td>
+                  <td>Seuils, règles ; ensemble pour la RF</td>
+                  <td>Arbre : forte ; RF : importances</td>
+                  <td>Profondeur, sur-apprentissage (arbre seul)</td>
+                </tr>
+                <tr>
+                  <td>Réseaux (MLP…)</td>
+                  <td>Supervisé</td>
+                  <td>Composition de non-linéarités ; descente de gradient</td>
+                  <td>Souvent faible (boîte noire)</td>
+                  <td>Données, régularisation, réglages</td>
+                </tr>
+                <tr>
+                  <td>K-means</td>
+                  <td>Non supervisé</td>
+                  <td><span class="math-inline">k</span> centroïdes, inertie intra-classe</td>
+                  <td>Clusters à interpréter</td>
+                  <td>Choix de <span class="math-inline">k</span>, forme des amas</td>
+                </tr>
+                <tr>
+                  <td>DBSCAN</td>
+                  <td>Non supervisé</td>
+                  <td><strong>Densité</strong>, bruit explicite</td>
+                  <td>Clusters + points rejetés</td>
+                  <td><span class="math-inline">ε</span>, <span class="math-inline">min_samples</span></td>
+                </tr>
+                <tr>
+                  <td>PCA</td>
+                  <td>Non supervisé</td>
+                  <td>Axes de <strong>variance max</strong> (linéaire)</td>
+                  <td>Composantes = mélanges des variables</td>
+                  <td>Nombre de composantes, linéarité</td>
+                </tr>
+                <tr>
+                  <td>Q-learning</td>
+                  <td>Renforcement</td>
+                  <td>Table (ou fonction) <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) ; TD</td>
+                  <td>Tabulaire : lisible ; grand espace : approx.</td>
+                  <td>Exploration, espace d’états</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="lead">
+          En pratique, le « meilleur » algorithme est rarement universel : il dépend de la <strong>quantité et qualité</strong> des données, du <strong>bruit</strong>, du
+          besoin d’<strong>explicabilité</strong>, du <strong>coût</strong> de calcul et des contraintes métier. Ce chapitre vous donne des repères pour
+          <strong>poser le bon diagnostic</strong> avant d’affiner l’ingénierie des features, la validation et la mise en production — thèmes que le chapitre suivant
+          peut prolonger.
+        </p>
+        <ul>
+          <li>
+            <strong>À retenir :</strong> identifier d’abord le <strong>paradigme</strong> (supervisé / non supervisé / RL), puis une <strong>famille de modèles</strong>
+            cohérente avec la géométrie ou la structure attendue des données.
+          </li>
+          <li>
+            <strong>Piège fréquent :</strong> appliquer un outil puissant sans vérifier ses <strong>hypothèses implicites</strong> (linéarité, indépendance des
+            exemples, stationnarité en RL…).
+          </li>
+        </ul>
+      </section>
 
       
     <nav class="book-nav">
