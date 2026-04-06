@@ -1119,7 +1119,33 @@
         de séparation reste pertinente.
       </p>
 
-      <h5>A. Marge maximale : un couloir entre deux classes</h5>
+      <h5>A. Plusieurs « formes » pour un même principe</h5>
+      <p class="lead">
+        Un SVM n'est pas <strong>une seule équation</strong> figée : selon que les données sont séparables sans erreur, bruyantes, ou non linéairement séparables,
+        on utilise des <strong>variantes</strong> qui gardent la même idée directrice — contrôler ou maximiser la <strong>marge</strong> — mais avec des
+        hypothèses et des formules différentes :
+      </p>
+      <ul>
+        <li>
+          <strong>SVM linéaire à marge dure :</strong> les classes peuvent être séparées par un hyperplan <strong>sans aucun point dans la zone interdite</strong> ;
+          on cherche le couloir le plus large possible (figure 43).
+        </li>
+        <li>
+          <strong>SVM linéaire à marge souple :</strong> le bruit ou le chevauchement impose des <strong>erreurs locales</strong> ; un paramètre
+          <span class="math-inline">C</span> arbitre le compromis marge / fidélité aux étiquettes (figure 44).
+        </li>
+        <li>
+          <strong>SVM à noyau (souvent RBF) :</strong> la frontière utile n'est pas un hyperplan dans l'espace d'entrée ; on travaille dans un espace de plongement
+          <strong>implicite</strong> via une fonction noyau (figure 45).
+        </li>
+      </ul>
+      <p class="lead">
+        Les sections <strong>B à E</strong> déroulent d'abord cette progression <strong>géométrique</strong> (intuition et illustrations). La section
+        <strong>F</strong>, placée avant la synthèse, regroupe sous un même toit <strong>comment</strong> l'ordinateur calcule la solution dans chaque cas : objectifs
+        mathématiques, <strong>fonction de perte</strong> (hinge), <strong>forme duale</strong>, noyau, et <strong>optimiseurs</strong> (SMO, bibliothèques).
+      </p>
+
+      <h5>B. Marge dure : un couloir entre deux classes</h5>
       <p class="lead">
         En dimension 2, un modèle linéaire trace une <strong>droite de séparation</strong> ; en dimension plus élevée, c'est un <strong>hyperplan</strong>. Le SVM
         (version à marge « dure ») positionne cet hyperplan de façon que les points de chaque classe restent de part et d'autre, et que la
@@ -1139,13 +1165,74 @@
         loading="lazy"
       />
 
-      <h5>B. Comment ça s'entraîne ? Objectif, « perte » et optimiseur</h5>
+      <h5>C. Marge souple et paramètre <span class="math-inline">C</span></h5>
       <p class="lead">
-        Un SVM n'est pas tracé à la main : l'ordinateur <strong>minimise une fonction objectif</strong> (souvent écrite sous plusieurs formes équivalentes) pour
-        trouver <span class="math-inline">w</span> et <span class="math-inline">b</span>. Dans les formules ci-dessous, on utilise les étiquettes
-        <span class="math-inline">y</span><sub>i</sub> ∈ {−1, +1} (convention classique pour les SVM) et le score
+        Dans la vraie vie, les classes se <strong>chevauchent</strong> ou le bruit fait traîner quelques points dans la zone interdite. On passe alors à la
+        <strong>marge souple</strong> : on introduit des marges de tolérance (<strong>slack</strong> ξ<sub>i</sub>) et un coefficient
+        <span class="math-inline">C</span> qui arbitre le compromis suivant :
+      </p>
+      <ul>
+        <li>
+          <strong><span class="math-inline">C</span> grand :</strong> on insiste pour classer correctement presque tous les points au prix d'une marge plus étroite
+          — risque de sensibilité au bruit.
+        </li>
+        <li>
+          <strong><span class="math-inline">C</span> petit :</strong> on accepte davantage d'erreurs locales pour garder une <strong>marge plus large</strong> —
+          frontière parfois plus stable en généralisation.
+        </li>
+      </ul>
+      <p class="lead">
+        La figure suivante illustre un jeu <strong>plus bruité</strong> : le séparateur linéaire tolère des points mal placés tout en conservant une séparation
+        globale lisible.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : marge souple — données plus mélangées (simulation)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig44.png"
+        alt="SVM linéaire à marge souple avec chevauchement des classes"
+        loading="lazy"
+      />
+
+      <h5>D. Noyaux : quand la frontière doit se courber</h5>
+      <p class="lead">
+        Si la frontière « naturelle » entre les classes n'est <strong>pas</strong> un hyperplan dans l'espace des entrées (séparateur linéaire impossible), une
+        idée puissante consiste à plonger implicitement les données dans un espace de <strong>plus grande dimension</strong> où un hyperplan suffit — grâce à une
+        fonction <strong>noyau</strong> (<span class="math-inline">kernel</span>) qui évite souvent de calculer explicitement cette projection. Le noyau
+        <strong>RBF</strong> (gaussien) est très utilisé : il permet des frontières lisses et non linéaires.
+      </p>
+      <p class="lead">
+        Ci-dessous, deux classes en « anneaux » : aucune droite ne les sépare dans le plan ; un SVM avec noyau RBF peut tracer une
+        <strong>courbe de décision</strong> qui les discerne.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : SVM avec noyau RBF — frontière non linéaire (données simulées)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig45.png"
+        alt="Deux classes en anneaux séparées par une frontière courbe obtenue avec un noyau RBF"
+        loading="lazy"
+      />
+
+      <h5>E. Où utilise-t-on les SVM ?</h5>
+      <p class="lead">
+        Historiquement très présentes en <strong>classification de textes</strong>, <strong>bio-informatique</strong> (séquences), <strong>vision</strong> avec
+        des descripteurs de main d'œuvre, les SVM restent pertinentes lorsque la dimension est modérée et que l'on cherche un modèle à
+        <strong>fondements mathématiques clairs</strong>. Avec des millions de variables brutes (pixels bruts), les réseaux profonds dominent souvent ; les SVM
+        restent une <strong>référence forte</strong> sur des features construites ou des jeux de taille moyenne.
+      </p>
+
+      <h5>F. Comment ça s'entraîne ? Objectif, « perte » et optimiseur</h5>
+      <p class="lead">
+        Un SVM n'est pas tracé à la main : l'ordinateur <strong>résout un problème d'optimisation</strong> dont la forme dépend de la variante (sections B à D). On
+        utilise les étiquettes <span class="math-inline">y</span><sub>i</sub> ∈ {−1, +1} et le score
         <span class="math-inline">f</span>(<span class="math-inline">x</span>) = <span class="math-inline">w</span>ᵀ<span class="math-inline">x</span> +
-        <span class="math-inline">b</span>.
+        <span class="math-inline">b</span> (linéaire dans l'espace de travail ; avec noyau, <span class="math-inline">f</span> s'exprime via la forme duale et
+        <span class="math-inline">K</span>).
+      </p>
+      <p class="lead">
+        <strong>Rappel du fil :</strong> la <strong>marge dure</strong> (§ B) correspond au problème primal le plus simple ; la <strong>marge souple</strong> (§ C)
+        ajoute des ξ<sub>i</sub> et le poids <span class="math-inline">C</span> ; les <strong>noyaux</strong> (§ D) s'obtiennent en passant au dual et en
+        remplaçant les produits scalaires par <span class="math-inline">K</span>. Ce qui suit détaille, pour chaque étape, l'<strong>objectif</strong>, la
+        <strong>perte hinge</strong> lorsqu'elle est équivalente, et la manière dont les <strong>solveurs</strong> (SMO, LIBSVM, etc.) trouvent les paramètres.
       </p>
 
       <p class="lead"><strong>1. Formulation « marge dure » (séparabilité linéaire stricte)</strong></p>
@@ -1265,6 +1352,14 @@
         programmation quadratique adaptés.
       </p>
       <p class="lead">
+        <strong>Lien avec les variantes B à D :</strong> la <strong>marge dure</strong> se résout comme un programme quadratique sous contraintes linéaires (primal ou
+        dual équivalent). La <strong>marge souple</strong> ajoute les multiplicateurs liés aux ξ<sub>i</sub> ; l’<strong>objectif</strong> reste quadratique en
+        <span class="math-inline">w</span> avec terme linéaire en les violations, et la <strong>hinge</strong> en est la lecture « perte + régularisation ». Pour un
+        <strong>noyau</strong>, on entraîne sur le <strong>dual</strong> en remplaçant les produits scalaires par
+        <span class="math-inline">K</span> : les mêmes solveurs (SMO, etc.) s’appliquent aux coefficients α<sub>i</sub>, d’où l’efficacité du « kernel trick »
+        sans construire la projection explicite.
+      </p>
+      <p class="lead">
         <strong>En résumé :</strong> le SVM a bien un <strong>objectif mathématique</strong> (marge + pénalités) et un <strong>entraînement</strong> automatique par
         résolution numérique ; la logique « définir un critère et le minimiser » rejoint le reste du chapitre, avec des formules et des optimiseurs différents de la
         régression logistique ou des grands réseaux.
@@ -1297,61 +1392,6 @@
           </ul>
         </div>
       </details>
-
-      <h5>C. Marge souple et paramètre <span class="math-inline">C</span></h5>
-      <p class="lead">
-        Dans la vraie vie, les classes se <strong>chevauchent</strong> ou le bruit fait traîner quelques points dans la zone interdite. On a déjà évoqué la
-        <strong>marge souple</strong> et la <strong>hinge loss</strong> ci-dessus ; concrètement, on introduit des marges de tolérance (<strong>slack</strong>) et
-        un coefficient <span class="math-inline">C</span> qui arbitre le compromis suivant :
-      </p>
-      <ul>
-        <li>
-          <strong><span class="math-inline">C</span> grand :</strong> on insiste pour classer correctement presque tous les points au prix d'une marge plus étroite
-          — risque de sensibilité au bruit.
-        </li>
-        <li>
-          <strong><span class="math-inline">C</span> petit :</strong> on accepte davantage d'erreurs locales pour garder une <strong>marge plus large</strong> —
-          frontière parfois plus stable en généralisation.
-        </li>
-      </ul>
-      <p class="lead">
-        La figure suivante illustre un jeu <strong>plus bruité</strong> : le séparateur linéaire tolère des points mal placés tout en conservant une séparation
-        globale lisible.
-      </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : marge souple — données plus mélangées (simulation)</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig44.png"
-        alt="SVM linéaire à marge souple avec chevauchement des classes"
-        loading="lazy"
-      />
-
-      <h5>D. Noyaux : quand la frontière doit se courber</h5>
-      <p class="lead">
-        Si la frontière « naturelle » entre les classes n'est <strong>pas</strong> un hyperplan dans l'espace des entrées (séparateur linéaire impossible), une
-        idée puissante consiste à plonger implicitement les données dans un espace de <strong>plus grande dimension</strong> où un hyperplan suffit — grâce à une
-        fonction <strong>noyau</strong> (<span class="math-inline">kernel</span>) qui évite souvent de calculer explicitement cette projection. Le noyau
-        <strong>RBF</strong> (gaussien) est très utilisé : il permet des frontières lisses et non linéaires.
-      </p>
-      <p class="lead">
-        Ci-dessous, deux classes en « anneaux » : aucune droite ne les sépare dans le plan ; un SVM avec noyau RBF peut tracer une
-        <strong>courbe de décision</strong> qui les discerne.
-      </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : SVM avec noyau RBF — frontière non linéaire (données simulées)</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig45.png"
-        alt="Deux classes en anneaux séparées par une frontière courbe obtenue avec un noyau RBF"
-        loading="lazy"
-      />
-
-      <h5>E. Où utilise-t-on les SVM ?</h5>
-      <p class="lead">
-        Historiquement très présentes en <strong>classification de textes</strong>, <strong>bio-informatique</strong> (séquences), <strong>vision</strong> avec
-        des descripteurs de main d'œuvre, les SVM restent pertinentes lorsque la dimension est modérée et que l'on cherche un modèle à
-        <strong>fondements mathématiques clairs</strong>. Avec des millions de variables brutes (pixels bruts), les réseaux profonds dominent souvent ; les SVM
-        restent une <strong>référence forte</strong> sur des features construites ou des jeux de taille moyenne.
-      </p>
 
       <section class="svm-conclusion" aria-labelledby="svm-conclusion-title">
         <h5 id="svm-conclusion-title" class="svm-conclusion__title">En synthèse : la SVM dans votre boîte à outils</h5>
