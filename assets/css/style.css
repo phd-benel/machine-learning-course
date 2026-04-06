@@ -117,6 +117,10 @@ h2{margin:.1rem 0 .8rem;font-size:clamp(1.2rem,2.2vw,1.7rem)}
   display:inline-block;
   margin:10px 0 8px;
 }
+.card h3.ch2-partie{
+  font-weight:700;
+  letter-spacing:.02em;
+}
 .lead{
   color:var(--muted);
   line-height:1.8;

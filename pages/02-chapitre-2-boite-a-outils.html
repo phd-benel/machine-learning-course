@@ -34,38 +34,38 @@
             <li>
               <a href="#ch2-intro">Introduction : l’anatomie de l’apprentissage</a>
               <ul class="chapter-toc__sub">
-                <li><a href="#ch2-anatomie-supervise">Supervisé (aperçu)</a></li>
-                <li><a href="#ch2-anatomie-non-supervise">Non supervisé (aperçu)</a></li>
-                <li><a href="#ch2-anatomie-rl">Renforcement (aperçu)</a></li>
-                <li><a href="#ch2-eventail">Éventail ML / Deep Learning</a></li>
-                <li><a href="#ch2-choix-outil">Choix de l’outil</a></li>
+                <li><a href="#ch2-anatomie-supervise">1. Supervisé (aperçu)</a></li>
+                <li><a href="#ch2-anatomie-non-supervise">2. Non supervisé (aperçu)</a></li>
+                <li><a href="#ch2-anatomie-rl">3. Renforcement (aperçu)</a></li>
+                <li><a href="#ch2-eventail">4. Éventail ML / Deep Learning</a></li>
+                <li><a href="#ch2-choix-outil">5. Choix de l’outil</a></li>
               </ul>
             </li>
             <li>
-              <a href="#ch2-supervise">L’apprentissage supervisé</a>
+              <a href="#ch2-supervise">Partie I — Apprentissage supervisé</a>
               <ul class="chapter-toc__sub">
-                <li><a href="#ch2-sup-schema">Schéma universel</a></li>
-                <li><a href="#ch2-regression-lineaire">Régression linéaire</a></li>
-                <li><a href="#ch2-regression-logistique">Régression logistique</a></li>
-                <li><a href="#ch2-svm">SVM</a></li>
-                <li><a href="#ch2-arbres-foret">Arbres &amp; Random Forest</a></li>
-                <li><a href="#ch2-reseaux-neurones">Réseaux de neurones</a></li>
+                <li><a href="#ch2-sup-schema">1. Schéma universel</a></li>
+                <li><a href="#ch2-regression-lineaire">2. Régression linéaire</a></li>
+                <li><a href="#ch2-regression-logistique">3. Régression logistique</a></li>
+                <li><a href="#ch2-svm">4. SVM</a></li>
+                <li><a href="#ch2-arbres-foret">5. Arbres &amp; Random Forest</a></li>
+                <li><a href="#ch2-reseaux-neurones">6. Réseaux de neurones</a></li>
               </ul>
             </li>
             <li>
-              <a href="#ch2-non-supervise">Apprentissage non supervisé</a>
+              <a href="#ch2-non-supervise">Partie II — Apprentissage non supervisé</a>
               <ul class="chapter-toc__sub">
-                <li><a href="#ch2-kmeans">K-means</a></li>
-                <li><a href="#ch2-dbscan">DBSCAN</a></li>
-                <li><a href="#ch2-pca">PCA</a></li>
+                <li><a href="#ch2-kmeans">1. K-means</a></li>
+                <li><a href="#ch2-dbscan">2. DBSCAN</a></li>
+                <li><a href="#ch2-pca">3. PCA</a></li>
               </ul>
             </li>
             <li>
-              <a href="#ch2-rl">Apprentissage par renforcement</a>
+              <a href="#ch2-rl">Partie III — Apprentissage par renforcement</a>
               <ul class="chapter-toc__sub">
-                <li><a href="#ch2-rl-cartographie">Enjeux du RL</a></li>
-                <li><a href="#ch2-rl-mdp">MDP &amp; vocabulaire</a></li>
-                <li><a href="#ch2-rl-qlearning">Q-learning</a></li>
+                <li><a href="#ch2-rl-cartographie">1. Enjeux du RL</a></li>
+                <li><a href="#ch2-rl-mdp">2. MDP &amp; vocabulaire</a></li>
+                <li><a href="#ch2-rl-qlearning">3. Q-learning</a></li>
               </ul>
             </li>
           </ol>
@@ -186,7 +186,7 @@
         approches selon la structure mathématique de l'outil :
       </p>
 
-      <h4 id="ch2-eventail">L'Éventail des Modèles : du Machine Learning au Deep Learning</h4>
+      <h4 id="ch2-eventail">4. L'Éventail des Modèles : du Machine Learning au Deep Learning</h4>
 
       <div class="tool-compare" aria-label="Comparaison Machine Learning classique et Deep Learning">
         <div class="tool-panel tool-panel--classic">
@@ -272,7 +272,7 @@
 
       <img class="cover-image" src="../Figures/Fig25.png"  loading="lazy" />
 
-      <h4 id="ch2-choix-outil">Le Choix de l'Outil : L'Art du Compromis</h4>
+      <h4 id="ch2-choix-outil">5. Le Choix de l'Outil : L'Art du Compromis</h4>
       <p class="lead">
         Choisir un algorithme n'est pas une question de "mode", mais de stratégie. En tant qu'architecte de solutions IA, votre choix se fera selon
         plusieurs critères fondamentaux :
@@ -307,7 +307,7 @@
         exigences de vos utilisateurs finaux.
       </p>
 
-      <h3 id="ch2-supervise">L'Apprentissage Supervisé</h3>
+      <h3 id="ch2-supervise" class="ch2-partie">Partie I — Apprentissage supervisé</h3>
 
       <h4 id="ch2-sup-schema">1. Introduction : Le Schéma Universel du Supervisé</h4>
       <p class="lead">
@@ -407,7 +407,7 @@
         manière purement calculatoire ?
       </p>
 
-      <h5>A. La Terminologie Fondamentale</h5>
+      <h5>2.1 La Terminologie Fondamentale</h5>
       <p class="lead">
         Pour que la machine puisse apprendre, nous devons traduire notre droite visuelle en une équation mathématique simple :
       </p>
@@ -438,7 +438,7 @@
       <img class="cover-image" src="../Figures/fig30.png"  loading="lazy" />
 
 
-      <h5>B. Mesurer l'Erreur : La Fonction de Coût (Loss Function)</h5>
+      <h5>2.2 Mesurer l'Erreur : La Fonction de Coût (Loss Function)</h5>
       <p class="lead">
         Pour qu'un algorithme s'améliore, il doit d'abord pouvoir chiffrer sa propre erreur. C'est le rôle de la <strong>loss function</strong>. Pour une
         régression, on utilise le plus souvent l'<strong>erreur quadratique moyenne</strong> (MSE — Mean Squared Error).
@@ -453,7 +453,7 @@
       <p class="lead">Si la loss tend vers 0, le modèle a parfaitement compris la logique de la distribution.</p>
       <img class="cover-image" src="../Figures/FIg31.png" loading="lazy" />
 
-      <h5>Pourquoi le « Carré » ? La Géométrie de l'Erreur</h5>
+      <h5>2.3 Pourquoi le « Carré » ? La Géométrie de l'Erreur</h5>
       <p class="lead">
         Vous vous demanderez peut-être pourquoi nous élevons l'erreur au carré au lieu de simplement prendre la valeur absolue
         (|<span class="math-inline">Y</span> − <span class="math-inline">Ŷ</span>|). La réponse réside dans la forme géométrique que cela crée, comme on peut
@@ -484,7 +484,7 @@
         loading="lazy"
       />
 
-      <h5>C. L'Optimiseur : La Descente de Gradient (Gradient Descent)</h5>
+      <h5>2.4 L'Optimiseur : La Descente de Gradient (Gradient Descent)</h5>
       <p class="lead">
         Une fois que notre fonction de coût (MSE) a mesuré l'erreur du modèle, nous nous retrouvons face à un constat : notre droite est mauvaise. Mais dans
         quelle direction faut-il bouger le poids <span class="math-inline">w</span> pour qu'elle devienne meilleure ? Faut-il augmenter
@@ -603,7 +603,7 @@
         loading="lazy"
       />
 
-      <h5>D. La Boucle d'Apprentissage (Training Loop)</h5>
+      <h5>2.5 La Boucle d'Apprentissage (Training Loop)</h5>
       <p class="lead">
         Le processus d'« entraînement » d'une IA supervisée n'est au final que la répétition mécanique (les <strong>epochs</strong>) de ces trois étapes fondamentales
         :
@@ -738,7 +738,7 @@
             appartement dépend de bien d'autres facteurs : le nombre de chambres, l'étage, l'ancienneté, la distance du centre-ville, etc.
           </p>
 
-          <h5>De la droite à l'hyperplan</h5>
+          <h5>2.6 De la droite à l'hyperplan</h5>
           <p class="lead">
             Dès que nous ajoutons une deuxième caractéristique (p. ex. le nombre de chambres), nous ne dessinons plus une droite sur une feuille de papier, mais
             un <strong>plan</strong> dans un espace en 3D. Si nous ajoutons 10 caractéristiques, nous créons un <strong>hyperplan</strong> dans un espace à
@@ -752,7 +752,7 @@
             <span class="math-inline">b</span>
           </div>
 
-          <h5>La magie de la vectorisation : parler la langue des GPU</h5>
+          <h5>2.7 La magie de la vectorisation : parler la langue des GPU</h5>
           <p class="lead">
             Si vous deviez calculer cela avec des boucles <code>for</code> en programmation (en calculant chaque
             <span class="math-inline">w</span> · <span class="math-inline">X</span> l'un après l'autre), votre IA serait extrêmement lente. Pour résoudre ce
@@ -777,7 +777,7 @@
             sur des millions de données.
           </p>
 
-          <h5>Le problème reste le même : seul le calcul s'alourdit</h5>
+          <h5>2.8 Le problème reste le même : seul le calcul s'alourdit</h5>
           <p class="lead">
             Il est crucial de comprendre que même avec 1&nbsp;000 entrées, la <strong>logique</strong> de résolution ne change absolument pas :
           </p>
@@ -894,7 +894,7 @@
         et la <strong>fonction de coût</strong> adaptée aux probabilités.
       </p>
 
-      <h5>A. Une autre cible : la classe au lieu du nombre</h5>
+      <h5>3.1 Une autre cible : la classe au lieu du nombre</h5>
       <p class="lead">
         Imaginez un filtre anti-spam. Pour chaque message, vous disposez de variables <span class="math-inline">X</span> : présence du mot « urgent », nombre de
         liens, longueur du texte… La vérité que vous souhaitez prédire n'est pas un montant en euros : c'est une décision <em>oui / non</em>. On encode
@@ -908,7 +908,7 @@
         la classe 1.
       </p>
 
-      <h5>B. Le même squelette linéaire, une sortie resserrée : score et sigmoïde</h5>
+      <h5>3.2 Le même squelette linéaire, une sortie resserrée : score et sigmoïde</h5>
       <p class="lead">
         Comme pour la droite prédictive, on commence par un <strong>score affine</strong> — la combinaison linéaire que vous savez déjà écrire :
       </p>
@@ -938,7 +938,7 @@
       </p>
       <img class="cover-image" src="../Figures/Fig37.png" loading="lazy" />
 
-      <h5>C. Pourquoi changer de fonction de coût ? (L'entropie croisée)</h5>
+      <h5>3.3 Pourquoi changer de fonction de coût ? (L'entropie croisée)</h5>
       <p class="lead">
         En passant de la prédiction de prix à la classification, l'objectif change : on ne cherche plus à minimiser une distance en euros, mais à
         <strong>maximiser la confiance du modèle dans la bonne réponse</strong>. La MSE (<span class="math-inline">Mean Squared Error</span>), si efficace pour
@@ -1102,7 +1102,7 @@
             classes concurrentes).
           </p>
 
-          <h5>1. De la frontière unique au partage du territoire</h5>
+          <h5>3.4 De la frontière unique au partage du territoire</h5>
           <p class="lead">
             En classification binaire, l'IA trace une <strong>seule frontière</strong> pour séparer deux mondes (comme sur la figure précédente). En multiclasse,
             imaginez qu'elle doive <strong>découper la carte</strong> en plusieurs zones. Au lieu d'un seul score scalaire, elle calcule un <strong>score par classe</strong>
@@ -1115,7 +1115,7 @@
             <li>un score « Bureau ».</li>
           </ul>
 
-          <h5>2. La softmax : l'arbitre du « gâteau » de probabilités</h5>
+          <h5>3.5 La softmax : l'arbitre du « gâteau » de probabilités</h5>
           <p class="lead">
             Ces scores peuvent être quelconques (positifs, négatifs, très grands). Pour obtenir une décision lisible, il faut les convertir en
             <strong>probabilités</strong> : nombres positifs qui s'additionnent exactement à <span class="math-inline">1</span> (soit 100&nbsp;%).
@@ -1136,7 +1136,7 @@
         />
         
 
-          <h5>3. Une géométrie de territoires</h5>
+          <h5>3.6 Une géométrie de territoires</h5>
           <p class="lead">
             Sur un graphique comme la figure précédente, vous voyiez une droite séparer deux ensembles. Avec plusieurs classes et une couche linéaire suivie d'une softmax,
             on visualise souvent <strong>plusieurs régions</strong> : autant de « districts » que de classes, séparés par des frontières qui se rencontrent — comme une
@@ -1168,7 +1168,7 @@
         de séparation reste pertinente.
       </p>
 
-      <h5>A. Plusieurs « formes » pour un même principe</h5>
+      <h5>4.1 Plusieurs « formes » pour un même principe</h5>
       <p class="lead">
         Un SVM n'est pas <strong>une seule équation</strong> figée : selon que les données sont séparables sans erreur, bruyantes, ou non linéairement séparables,
         on utilise des <strong>variantes</strong> qui gardent la même idée directrice — contrôler ou maximiser la <strong>marge</strong> — mais avec des
@@ -1189,12 +1189,12 @@
         </li>
       </ul>
       <p class="lead">
-        Les sections <strong>B à E</strong> déroulent d'abord cette progression <strong>géométrique</strong> (intuition et illustrations). La section
-        <strong>F</strong>, placée avant la synthèse, regroupe sous un même toit <strong>comment</strong> l'ordinateur calcule la solution dans chaque cas : objectifs
+        Les sections <strong>4.2 à 4.5</strong> déroulent d'abord cette progression <strong>géométrique</strong> (intuition et illustrations). La section
+        <strong>4.6</strong>, placée avant la synthèse, regroupe sous un même toit <strong>comment</strong> l'ordinateur calcule la solution dans chaque cas : objectifs
         mathématiques, <strong>fonction de perte</strong> (hinge), <strong>forme duale</strong>, noyau, et <strong>optimiseurs</strong> (SMO, bibliothèques).
       </p>
 
-      <h5>B. Marge dure : un couloir entre deux classes</h5>
+      <h5>4.2 Marge dure : un couloir entre deux classes</h5>
       <p class="lead">
         En dimension 2, un modèle linéaire trace une <strong>droite de séparation</strong> ; en dimension plus élevée, c'est un <strong>hyperplan</strong>. Le SVM
         (version à marge « dure ») positionne cet hyperplan de façon que les points de chaque classe restent de part et d'autre, et que la
@@ -1214,7 +1214,7 @@
         loading="lazy"
       />
 
-      <h5>C. Marge souple et paramètre <span class="math-inline">C</span></h5>
+      <h5>4.3 Marge souple et paramètre <span class="math-inline">C</span></h5>
       <p class="lead">
         Dans la vraie vie, les classes se <strong>chevauchent</strong> ou le bruit fait traîner quelques points dans la zone interdite. On passe alors à la
         <strong>marge souple</strong> : on introduit des marges de tolérance (<strong>slack</strong> ξ<sub>i</sub>) et un coefficient
@@ -1242,7 +1242,7 @@
         loading="lazy"
       />
 
-      <h5>D. Noyaux : quand la frontière doit se courber</h5>
+      <h5>4.4 Noyaux : quand la frontière doit se courber</h5>
       <p class="lead">
         Si la frontière « naturelle » entre les classes n'est <strong>pas</strong> un hyperplan dans l'espace des entrées (séparateur linéaire impossible), une
         idée puissante consiste à plonger implicitement les données dans un espace de <strong>plus grande dimension</strong> où un hyperplan suffit — grâce à une
@@ -1261,7 +1261,7 @@
         loading="lazy"
       />
 
-      <h5>E. À quoi sert une SVM ? Classification supervisée</h5>
+      <h5>4.5 À quoi sert une SVM ? Classification supervisée</h5>
       <p class="lead">
         Une SVM sert surtout à faire de la <strong>classification</strong> : apprendre une règle qui, pour un nouveau point dans l’espace des caractéristiques,
         prédit à <strong>quelle classe</strong> il appartient. Le cadre est <strong>supervisé</strong> : pour chaque exemple d’entraînement, on connaît déjà la
@@ -1313,17 +1313,17 @@
         </div>
       </details>
 
-      <h5>F. Comment ça s'entraîne ? Objectif, « perte » et optimiseur</h5>
+      <h5>4.6 Comment ça s'entraîne ? Objectif, « perte » et optimiseur</h5>
       <p class="lead">
-        Un SVM n'est pas tracé à la main : l'ordinateur <strong>résout un problème d'optimisation</strong> dont la forme dépend de la variante (sections B à D). On
+        Un SVM n'est pas tracé à la main : l'ordinateur <strong>résout un problème d'optimisation</strong> dont la forme dépend de la variante (sections 4.2 à 4.4). On
         utilise les étiquettes <span class="math-inline">y</span><sub>i</sub> ∈ {−1, +1} et le score
         <span class="math-inline">f</span>(<span class="math-inline">x</span>) = <span class="math-inline">w</span>ᵀ<span class="math-inline">x</span> +
         <span class="math-inline">b</span> (linéaire dans l'espace de travail ; avec noyau, <span class="math-inline">f</span> s'exprime via la forme duale et
         <span class="math-inline">K</span>).
       </p>
       <p class="lead">
-        <strong>Rappel du fil :</strong> la <strong>marge dure</strong> (§ B) correspond au problème primal le plus simple ; la <strong>marge souple</strong> (§ C)
-        ajoute des ξ<sub>i</sub> et le poids <span class="math-inline">C</span> ; les <strong>noyaux</strong> (§ D) s'obtiennent en passant au dual et en
+        <strong>Rappel du fil :</strong> la <strong>marge dure</strong> (§ 4.2) correspond au problème primal le plus simple ; la <strong>marge souple</strong> (§ 4.3)
+        ajoute des ξ<sub>i</sub> et le poids <span class="math-inline">C</span> ; les <strong>noyaux</strong> (§ 4.4) s'obtiennent en passant au dual et en
         remplaçant les produits scalaires par <span class="math-inline">K</span>. Ce qui suit détaille, pour chaque étape, l'<strong>objectif</strong>, la
         <strong>perte hinge</strong> lorsqu'elle est équivalente, et la manière dont les <strong>solveurs</strong> (SMO, LIBSVM, etc.) trouvent les paramètres.
       </p>
@@ -1521,7 +1521,7 @@
         différents et vote la décision finale — d’où l’image du <strong>collectif</strong> qui lisse les excès d’un seul modèle.
       </p>
 
-      <h5>A. Arbre de décision : des règles emboîtées</h5>
+      <h5>5.1 Arbre de décision : des règles emboîtées</h5>
       <p class="lead">
         À chaque <strong>nœud interne</strong>, on choisit une variable et un seuil qui <strong>sépare</strong> le mieux les exemples (selon un critère
         d’<strong>impureté</strong> : indice de Gini ou entropie en classification). Les feuilles donnent la classe prédite (souvent la classe majoritaire dans
@@ -1541,14 +1541,14 @@
         loading="lazy"
       />
 
-      <h5>B. Un arbre trop profond : variance et sur-apprentissage</h5>
+      <h5>5.2 Un arbre trop profond : variance et sur-apprentissage</h5>
       <p class="lead">
         Si l’on laisse l’arbre se <strong>subdiviser</strong> sans limite, il peut coller à chaque point d’entraînement : la frontière devient très découpée et le
         modèle <strong>généralise mal</strong> (forte <strong>variance</strong>). C’est l’analogue inverse de la SVM qui, avec un bon réglage, cherche une marge
         stable : ici, la stabilité passe par limiter la profondeur, le nombre minimal d’exemples par feuille, ou en agrégeant plusieurs arbres.
       </p>
 
-      <h5>C. Random Forest : plusieurs arbres, un vote</h5>
+      <h5>5.3 Random Forest : plusieurs arbres, un vote</h5>
       <p class="lead">
         Une <strong>forêt aléatoire</strong> entraîne un grand nombre d’arbres sur des <strong>échantillons bootstrap</strong> (tirages avec remise) du jeu
         d’apprentissage ; à chaque coupe, on ne considère souvent qu’un <strong>sous-ensemble aléatoire de variables</strong> (<em>feature bagging</em>). Les
@@ -1564,7 +1564,7 @@
         loading="lazy"
       />
 
-      <h5>D. Importance des variables : ce que la forêt met en avant</h5>
+      <h5>5.4 Importance des variables : ce que la forêt met en avant</h5>
       <p class="lead">
         Un avantage pratique des forêts est le classement des <strong>importances de variables</strong> (contribution moyenne à la réduction d’impureté sur tous
         les arbres). Ce n’est pas une causalité statistique stricte, mais un <strong>indicateur utile</strong> pour savoir quelles entrées le modèle exploite le
@@ -1684,7 +1684,7 @@
         en apprentissage profond.
       </p>
 
-      <h5>A. Inspiration biologique : signal, seuil, réponse</h5>
+      <h5>6.1 Inspiration biologique : signal, seuil, réponse</h5>
       <p class="lead">
         Dans une caricature utile du neurone biologique, des signaux arrivent par les dendrites, se <strong>cumulent</strong> au soma, et si le dépasse un certain
         niveau, le neurone « tire » un influx le long de l’axone. L’analogie informatique retient trois ingrédients : des <strong>entrées pondérées</strong>, une
@@ -1693,7 +1693,7 @@
         paramètres sur GPU.
       </p>
 
-      <h5>B. Le neurone artificiel : d’abord une régression logistique déguisée</h5>
+      <h5>6.2 Le neurone artificiel : d’abord une régression logistique déguisée</h5>
       <p class="lead">
         Reprenez la section 3 : une régression logistique calcule un score <span class="math-inline">z</span> = <span class="math-inline">w</span>ᵀ<span class="math-inline">x</span> + <span class="math-inline">b</span>, puis applique la <strong>sigmoïde</strong> pour obtenir une probabilité. Un
         <strong>neurone de sortie</strong> en classification binaire avec fonction sigmoïde et entropie croisée, c’est <strong>exactement</strong> cette même brique
@@ -1713,7 +1713,7 @@
         <strong>composition</strong> de ces briques.
       </p>
 
-      <h5>C. Empiler des couches : vers le perceptron multicouche</h5>
+      <h5>6.3 Empiler des couches : vers le perceptron multicouche</h5>
       <p class="lead">
         Un <strong>perceptron</strong> historique correspond à une seule couche de décision linéaire (séparable). Le <strong>perceptron multicouche</strong> (MLP)
         intercale une ou plusieurs <strong>couches cachées</strong> : les entrées sont transformées, puis retransformées, jusqu’à la sortie. La figure suivante
@@ -1734,7 +1734,7 @@
         identités linéaires sans activation.
       </p>
 
-      <h5>D. Pourquoi la non-linéarité est indispensable</h5>
+      <h5>6.4 Pourquoi la non-linéarité est indispensable</h5>
       <p class="lead">
         Si l’on enchaîne des transformations <strong>purement linéaires</strong> sans activation non triviale entre les couches, l’ensemble reste équivalent à
         <strong>une seule</strong> transformation linéaire : on n’a rien gagné en richesse. Introduire ReLU, sigmoïde ou tanh <strong>casse</strong> cette équivalence
@@ -1765,7 +1765,7 @@
         loading="lazy"
       />
 
-      <h5>E. Fonctions d’activation : ce que chaque choix favorise</h5>
+      <h5>6.5 Fonctions d’activation : ce que chaque choix favorise</h5>
       <p class="lead">
         La <strong>sigmoïde</strong> comprime <span class="math-inline">z</span> dans ]0, 1[ : pratique pour interpréter une sortie comme probabilité, mais ses dérivées
         proches de zéro pour |<span class="math-inline">z</span>| grand peuvent ralentir l’apprentissage en profondeur (<em>vanishing gradients</em>). La
@@ -1780,7 +1780,7 @@
         loading="lazy"
       />
 
-      <h5>F. Entraînement : prédire, mesurer l’erreur, corriger</h5>
+      <h5>6.6 Entraînement : prédire, mesurer l’erreur, corriger</h5>
       <p class="lead">
         Comme pour la régression linéaire, le cycle fondamental reste : <strong>forward pass</strong> (calculer la sortie), <strong>loss</strong> (écart aux
         étiquettes), <strong>backward pass</strong> (gradients), <strong>mise à jour</strong> des poids — souvent par <strong>descente de gradient stochastique</strong>
@@ -1796,7 +1796,7 @@
         loading="lazy"
       />
 
-      <h5>G. Rétropropagation : la règle de la chaîne, étage par étage</h5>
+      <h5>6.7 Rétropropagation : la règle de la chaîne, étage par étage</h5>
       <p class="lead">
         La <strong>rétropropagation</strong> n’est pas une « magie » : c’est l’application systématique du <strong>calcul différentiel en chaîne</strong> pour
         obtenir ∂L/∂<span class="math-inline">w</span> pour chaque poids. La loss L dépend des sorties, qui dépendent des activations précédentes, etc., jusqu’aux
@@ -1811,7 +1811,7 @@
         loading="lazy"
       />
 
-      <h5>H. Au-delà du MLP : quelques repères par domaine</h5>
+      <h5>6.8 Au-delà du MLP : quelques repères par domaine</h5>
       <p class="lead">
         <strong>Vision :</strong> les <strong>convolutions</strong> (CNN) exploitent la structure spatiale des images : filtres locaux, empilement, sous-échantillonnage.
         <strong>Langage et séquences :</strong> les <strong>LSTM</strong> / <strong>GRU</strong> gèrent la mémoire temporelle ; les
@@ -1948,7 +1948,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h3 id="ch2-non-supervise">7. Apprentissage non supervisé : explorer la jungle sans étiquettes</h3>
+      <h3 id="ch2-non-supervise" class="ch2-partie">Partie II — Apprentissage non supervisé : explorer la jungle sans étiquettes</h3>
       <p class="lead">
         Jusqu’ici, le fil du chapitre ressemblait à une <strong>leçon avec corrigé</strong> : régression, classification, SVM, arbres, réseaux — partout des exemples
         <span class="math-inline">(x</span><sub>i</sub>, <span class="math-inline">y</span><sub>i</sub>) où la cible <span class="math-inline">y</span> était
@@ -2012,7 +2012,7 @@
         </li>
       </ul>
 
-      <h5 id="ch2-kmeans">A. K-means : regrouper autour de centres qui bougent</h5>
+      <h5 id="ch2-kmeans">1. K-means : regrouper autour de centres qui bougent</h5>
       <p class="lead">
         On se donne un entier <span class="math-inline">k</span> (nombre de groupes) et on cherche <span class="math-inline">k</span> <strong>centroïdes</strong> dans
         l’espace des caractéristiques. Chaque point est assigné au centroïde le plus proche (distance euclidienne usuelle) : on forme des <strong>clusters</strong>.
@@ -2059,7 +2059,7 @@
         loading="lazy"
       />
 
-      <h5>B. Choisir <span class="math-inline">k</span> : le piège du nombre de groupes</h5>
+      <h5>1.1 Choisir <span class="math-inline">k</span> : le piège du nombre de groupes</h5>
       <p class="lead">
         K-means <strong>ne déduit pas</strong> <span class="math-inline">k</span> : vous devez le choisir ou le comparer sur plusieurs valeurs. Un mauvais
         <span class="math-inline">k</span> peut fusionner des amas distincts ou au contraire découper un groupe naturel. La figure ci-dessous contraste
@@ -2086,7 +2086,7 @@
         loading="lazy"
       />
 
-      <h5>C. Limites et usages honnêtes de K-means</h5>
+      <h5>1.2 Limites et usages honnêtes de K-means</h5>
       <p class="lead">
         <strong>Forme des clusters :</strong> la distance au centroïde favorise des groupes de taille et variance comparables ; des amas très allongés ou
         emboîtés peuvent être mal décrits. <strong>Sensibilité aux outliers :</strong> un point extrême peut tirer un centroïde. <strong>Échelle des variables :</strong>
@@ -2128,7 +2128,7 @@
         </div>
       </details>
 
-      <h5 id="ch2-dbscan">D. DBSCAN : des régions denses sans fixer <span class="math-inline">k</span></h5>
+      <h5 id="ch2-dbscan">2. DBSCAN : des régions denses sans fixer <span class="math-inline">k</span></h5>
       <p class="lead">
         Là où K-means impose à l’avance un nombre de groupes et privilégie des amas « compacts » autour de centres, <strong>DBSCAN</strong> (<em>Density-Based
         Spatial Clustering of Applications with Noise</em>) part d’une autre intuition : un <strong>cluster</strong>, c’est une zone où les points s’accumulent
@@ -2170,7 +2170,7 @@
         loading="lazy"
       />
 
-      <h5>E. DBSCAN : ce qu’il faut avoir en tête</h5>
+      <h5>2.1 DBSCAN : ce qu’il faut avoir en tête</h5>
       <p class="lead">
         <strong>Échelle :</strong> comme pour K-means, si les variables ne sont pas comparables, normalisez (souvent <strong>StandardScaler</strong>) avant de mesurer
         les distances. <strong>Sensibilité à <span class="math-inline">ε</span> :</strong> un <span class="math-inline">ε</span> trop petit fragmente tout en bruit ;
@@ -2178,7 +2178,7 @@
         vient encore de votre analyse.
       </p>
 
-      <h5 id="ch2-pca">F. PCA : réduire la dimension sans étiquettes</h5>
+      <h5 id="ch2-pca">3. PCA : réduire la dimension sans étiquettes</h5>
       <p class="lead">
         Le <strong>partitionnement</strong> (K-means, DBSCAN) cherche des <strong>groupes</strong> de points. L’<strong>Analyse en Composantes Principales</strong>
         (PCA) cherche les <strong>directions</strong> où les données varient le plus — autrement dit un nouveau repère orthogonaux (les composantes principales), ordonné
@@ -2285,7 +2285,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h3 id="ch2-rl">8. Apprentissage par renforcement : agir, observer, apprendre</h3>
+      <h3 id="ch2-rl" class="ch2-partie">Partie III — Apprentissage par renforcement : agir, observer, apprendre</h3>
       <p class="lead">
         Dans le <strong>supervisé</strong>, on apprenait une fonction à partir d’exemples indépendants ; dans le <strong>non supervisé</strong>, on explorait la forme
         de <span class="math-inline">X</span> sans cible. L’<strong>apprentissage par renforcement</strong> (RL) introduit un <strong>agent</strong> qui interagit
@@ -2312,7 +2312,7 @@
         loading="lazy"
       />
 
-      <h5 id="ch2-rl-cartographie">A. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
+      <h5 id="ch2-rl-cartographie">1. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
       <p class="lead">
         Avant d’entrer dans une méthode précise, il est utile de situer <strong>où</strong> les algorithmes peuvent buter — sans exhaustivité, mais pour cadrer vos
         attentes lorsque vous lirez la littérature (exploration, généralisation, stabilité…).
@@ -2341,7 +2341,7 @@
         </li>
       </ul>
 
-      <h5 id="ch2-rl-mdp">B. Vocabulaire et formalisme minimal (MDP)</h5>
+      <h5 id="ch2-rl-mdp">2. Vocabulaire et formalisme minimal (MDP)</h5>
       <p class="lead">
         On modélise souvent le problème comme un <strong>processus de décision markovien</strong> (MDP) : l’état suivant et la récompense dépendent de l’état courant
         et de l’action (<strong>propriété de Markov</strong> — le futur conditionnel au présent ne dépend pas du passé plus loin). Une <strong>politique</strong>
@@ -2357,7 +2357,7 @@
         d’états à partir d’échantillons. Dans la suite, nous ne développons qu’une brique historique et pédagogique : le <strong>Q-learning</strong> tabulaire.
       </p>
 
-      <h5 id="ch2-rl-qlearning">C. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
+      <h5 id="ch2-rl-qlearning">3. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
       <p class="lead">
         On note <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) la <strong>valeur d’action</strong> : espérance du
         retour cumulé actualisé si l’on commence par prendre l’action <span class="math-inline">a</span> dans l’état <span class="math-inline">s</span>, puis se comporte
