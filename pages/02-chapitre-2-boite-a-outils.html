@@ -1619,14 +1619,292 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
+      <h4>6. Les Réseaux de Neurones : l’approche bio-inspirée</h4>
+      <p class="lead">
+        Nous avons vu la <strong>régression logistique</strong> comme une porte vers la classification, puis les <strong>SVM</strong> et les
+        <strong>arbres</strong> comme d’autres façons de tracer une frontière. Les <strong>réseaux de neurones</strong> prolongent une idée plus ancienne encore :
+        imiter, très grossièrement, la manière dont des cellules nerveuses <strong>combinent</strong> des signaux pour produire une réponse. Ce n’est pas une
+        simulation du cerveau — c’est un <strong>calcul organisé en couches</strong>, que l’on optimise par la donnée. Ce qui rend cette famille puissante, c’est la
+        <strong>composition</strong> : chaque couche transforme l’information ; empilées, elles peuvent représenter des relations que ni une droite ni un seul arbre
+        ne capturent facilement.
+      </p>
+      <p class="lead">
+        Ce parcours est volontairement <strong>narratif et progressif</strong> : d’abord le neurone « comme une formule », puis la nécessité de la
+        <strong>non-linéarité</strong>, ensuite l’<strong>entraînement</strong> (perte, descente, rétropropagation), enfin des <strong>exemples</strong> de domaines.
+        Accrochez-vous : la section est longue — comme un mini-chapitre dans le chapitre — parce que ces idées valent le détour pour tout le reste de votre parcours
+        en apprentissage profond.
+      </p>
+
+      <h5>A. Inspiration biologique : signal, seuil, réponse</h5>
+      <p class="lead">
+        Dans une caricature utile du neurone biologique, des signaux arrivent par les dendrites, se <strong>cumulent</strong> au soma, et si le dépasse un certain
+        niveau, le neurone « tire » un influx le long de l’axone. L’analogie informatique retient trois ingrédients : des <strong>entrées pondérées</strong>, une
+        agrégation (souvent une somme), une <strong>non-linéarité</strong> ou un seuil qui décide si la sortie est active ou non. Le réseau de neurones artificiel ne
+        modélise pas la chimie ni les spikes milliseconde par milliseconde : il s’agit d’un <strong>schéma de calcul</strong> efficace pour ajuster des millions de
+        paramètres sur GPU.
+      </p>
+
+      <h5>B. Le neurone artificiel : d’abord une régression logistique déguisée</h5>
+      <p class="lead">
+        Reprenez la section 3 : une régression logistique calcule un score <span class="math-inline">z</span> = <span class="math-inline">w</span>ᵀ<span class="math-inline">x</span> + <span class="math-inline">b</span>, puis applique la <strong>sigmoïde</strong> pour obtenir une probabilité. Un
+        <strong>neurone de sortie</strong> en classification binaire avec fonction sigmoïde et entropie croisée, c’est <strong>exactement</strong> cette même brique
+        mathématique : combinaison linéaire + activation. La figure ci-dessous résume le flux « entrées → combinaison linéaire → activation → probabilité ».
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : un neurone de classification binaire (sigmoïde) = même structure que la régression logistique</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig56.png"
+        alt="Schema en quatre blocs : entrees, combinaison lineaire, activation sigmoide, sortie probabilite"
+        loading="lazy"
+      />
+      <p class="lead">
+        Dès que l’on empile des couches, chaque neurone caché refait le couple « somme pondérée + activation », mais son rôle n’est plus de donner directement une
+        probabilité finale : il fabrique des <strong>caractéristiques intermédiaires</strong> que la couche suivante combine. La leçon à retenir pour plus tard :
+        <strong>un neurone « classique » ressemble à une petite régression (logistique si la sortie est bornée entre 0 et 1)</strong> ; le réseau entier est une
+        <strong>composition</strong> de ces briques.
+      </p>
+
+      <h5>C. Empiler des couches : vers le perceptron multicouche</h5>
+      <p class="lead">
+        Un <strong>perceptron</strong> historique correspond à une seule couche de décision linéaire (séparable). Le <strong>perceptron multicouche</strong> (MLP)
+        intercale une ou plusieurs <strong>couches cachées</strong> : les entrées sont transformées, puis retransformées, jusqu’à la sortie. La figure suivante
+        illustre une architecture minimale : deux entrées, trois neurones cachés, une sortie — suffisante pour fixer les idées ; en pratique les réseaux comptent
+        des centaines ou millions de paramètres.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : exemple de MLP (2 → 3 → 1)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig52.png"
+        alt="Reseau avec deux entrees, trois neurones caches et une sortie"
+        loading="lazy"
+      />
+      <p class="lead">
+        <strong>Notation utile.</strong> Si <span class="math-inline">a</span><sup>(ℓ)</sup> désigne le vecteur d’activations de la couche ℓ, on écrit schématiquement
+        <span class="math-inline">a</span><sup>(ℓ)</sup> = <span class="math-inline">f</span><sub>ℓ</sub>(<span class="math-inline">W</span><sup>(ℓ)</sup><span class="math-inline">a</span><sup>(ℓ−1)</sup> + <span class="math-inline">b</span><sup>(ℓ)</sup>). L’empilement de fonctions non linéaires
+        <span class="math-inline">f</span><sub>ℓ</sub> est ce qui donne au réseau sa <strong>expressivité</strong> — à condition de ne pas se limiter à des
+        identités linéaires sans activation.
+      </p>
+
+      <h5>D. Pourquoi la non-linéarité est indispensable</h5>
+      <p class="lead">
+        Si l’on enchaîne des transformations <strong>purement linéaires</strong> sans activation non triviale entre les couches, l’ensemble reste équivalent à
+        <strong>une seule</strong> transformation linéaire : on n’a rien gagné en richesse. Introduire ReLU, sigmoïde ou tanh <strong>casse</strong> cette équivalence
+        et permet d’approcher des frontières courbes, des régions enclavées, des motifs qui se répètent.
+      </p>
+      <p class="lead">
+        Le cas d’école est le <strong>XOR</strong> : quatre points du plan, deux classes en diagonale. Aucune droite ne sépare les deux classes ; un classifieur
+        linéaire (régression logistique sans enrichissement de features) échoue. Un petit MLP avec une couche cachée peut, lui, redessiner des régions non convexes.
+        La figure 58 montre une solution typique après entraînement.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : problème XOR — frontière possible avec un MLP</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig58.png"
+        alt="Quatre points XOR avec regions colorees separees par une frontiere courbe"
+        loading="lazy"
+      />
+      <p class="lead">
+        La figure 54 compare, sur des <strong>cercles imbriqués</strong> simulés, une <strong>régression logistique</strong> (séparation linéaire) et un
+        <strong>MLP</strong> avec une couche cachée : même données, capacités différentes. C’est le même genre de constat que pour la SVM à noyau ou les arbres, sous
+        une autre forme algorithmique.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : régression logistique (gauche) vs MLP (droite) sur données non linéairement séparables</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig54.png"
+        alt="Deux graphiques comparant frontieres lineaire et courbe sur cercles imbriques"
+        loading="lazy"
+      />
+
+      <h5>E. Fonctions d’activation : ce que chaque choix favorise</h5>
+      <p class="lead">
+        La <strong>sigmoïde</strong> comprime <span class="math-inline">z</span> dans ]0, 1[ : pratique pour interpréter une sortie comme probabilité, mais ses dérivées
+        proches de zéro pour |<span class="math-inline">z</span>| grand peuvent ralentir l’apprentissage en profondeur (<em>vanishing gradients</em>). La
+        <strong>tanh</strong> centre autour de 0. La <strong>ReLU</strong> max(0, <span class="math-inline">z</span>) est simple, souvent efficace, et entraîne des neurones
+        « éteints » si <span class="math-inline">z</span> &lt; 0 de façon prolongée — d’où des variantes (Leaky ReLU, GELU, etc.) dans la littérature récente.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : sigmoïde, ReLU et tanh sur le même intervalle</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig51.png"
+        alt="Graphes des fonctions sigmoide ReLU et tanh"
+        loading="lazy"
+      />
+
+      <h5>F. Entraînement : prédire, mesurer l’erreur, corriger</h5>
+      <p class="lead">
+        Comme pour la régression linéaire, le cycle fondamental reste : <strong>forward pass</strong> (calculer la sortie), <strong>loss</strong> (écart aux
+        étiquettes), <strong>backward pass</strong> (gradients), <strong>mise à jour</strong> des poids — souvent par <strong>descente de gradient stochastique</strong>
+        ou variantes (Adam, RMSprop…). La loss peut être MSE en régression, entropie croisée en classification, etc. Sur de grands jeux, on traite des
+        <strong>mini-batches</strong> : compromis entre bruit utile et coût de calcul. La figure 55 montre l’allure typique d’une courbe de loss qui décroît puis
+        se stabilise — pas toujours monotone à l’échelle du mini-batch, mais la tendance compte.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : exemple de courbe de loss au fil des itérations</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig55.png"
+        alt="Courbe montrant la diminution de la loss en fonction des iterations"
+        loading="lazy"
+      />
+
+      <h5>G. Rétropropagation : la règle de la chaîne, étage par étage</h5>
+      <p class="lead">
+        La <strong>rétropropagation</strong> n’est pas une « magie » : c’est l’application systématique du <strong>calcul différentiel en chaîne</strong> pour
+        obtenir ∂L/∂<span class="math-inline">w</span> pour chaque poids. La loss L dépend des sorties, qui dépendent des activations précédentes, etc., jusqu’aux
+        entrées. On propage les <strong>gradient</strong>s depuis la sortie vers l’entrée (figure 57), ce qui permet d’attribuer une part de responsabilité à chaque
+        poids — idée proche du « crédit assignment » en psychologie du conditionnement.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : intuition — la loss se « décline » couche par couche</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig57.png"
+        alt="Chaines de cercles relies par fleches illustrant la retropropagation"
+        loading="lazy"
+      />
+
+      <h5>H. Au-delà du MLP : quelques repères par domaine</h5>
+      <p class="lead">
+        <strong>Vision :</strong> les <strong>convolutions</strong> (CNN) exploitent la structure spatiale des images : filtres locaux, empilement, sous-échantillonnage.
+        <strong>Langage et séquences :</strong> les <strong>LSTM</strong> / <strong>GRU</strong> gèrent la mémoire temporelle ; les
+        <strong>transformers</strong> modélisent des dépendances à longue distance par mécanismes d’attention. <strong>Données tabulaires :</strong> un MLP ou des
+        architectures en gradient boosting restent souvent compétitifs ; le bon modèle dépend du budget de données, du bruit et de l’interopérabilité requise.
+      </p>
+      <p class="lead">
+        La figure 53 illustre un MLP « générique » sur des données en <strong>deux lunes</strong> : la frontière se courbe pour épouser la géométrie des classes —
+        même principe que vous avez vu avec la SVM à noyau, avec un autre moteur d’optimisation et une autre famille d’hypothèses.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : MLP sur données « deux lunes » (simulation)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig53.png"
+        alt="Frontieres non lineaires entre deux classes en forme de croissants"
+        loading="lazy"
+      />
+
+      <section class="nn-conclusion" aria-labelledby="nn-conclusion-title">
+        <h5 id="nn-conclusion-title" class="nn-conclusion__title">Fil conducteur : du neurone logistique au réseau profond</h5>
+        <p class="lead">
+          <strong>Répétons l’essentiel.</strong> Un neurone avec entrées <span class="math-inline">x</span>, poids <span class="math-inline">w</span>, biais <span class="math-inline">b</span>, somme <span class="math-inline">z</span> = <span class="math-inline">w</span>ᵀ<span class="math-inline">x</span> + <span class="math-inline">b</span> et activation sigmoïde sur la <strong>dernière couche</strong> binaire, c’est la même structure mathématique que la <strong>régression logistique</strong> du § 3. La profondeur ajoute des couches qui
+          <strong>reparamètrent</strong> l’espace des entrées : ce n’est plus une seule séparation linéaire dans l’espace d’origine, mais une séparation (souvent plus
+          simple) dans un espace de <strong>représentations</strong> apprises.
+        </p>
+        <ul>
+          <li>
+            <strong>Forces :</strong> expressivité élevée, cadre unifié pour la régression et la classification, exploitation des GPU, transfert d’apprentissage
+            possible à partir de grands modèles pré-entraînés.
+          </li>
+          <li>
+            <strong>Limites :</strong> besoin de données et de régularisation (dropout, weight decay, early stopping) ; sensibilité aux hyperparamètres ; modèles
+            profonds souvent <strong>boîte noire</strong> sans outils d’interprétation additionnels.
+          </li>
+        </ul>
+      </section>
+
+      <aside class="quote quote--exercise" aria-label="Exercice : mini-reseau et retropropagation au stylo">
+        <h5 class="quote--exercise__title">À faire : mini réseau « à la main » (forward + une étape de backprop)</h5>
+        <p class="lead">
+          Comme pour la <strong>régression linéaire</strong> plus haut dans ce chapitre, prenez papier et stylo. L’objectif est de reproduire
+          <strong>une itération complète</strong> : passe avant, erreur quadratique, gradients, mise à jour des poids — pour un réseau
+          <strong>très petit</strong> afin que les nombres restent raisonnables. On utilise des activations <strong>identiques</strong> (linéaires) sur les couches
+          cachées pour alléger les calculs ; en production, on ajouterait ReLU ou sigmoïde sur les couches cachées.
+        </p>
+
+        <span class="exercise-block-title">1. Architecture et notation</span>
+        <ul>
+          <li>
+            <strong>Entrée :</strong> vecteur <span class="math-inline">x</span> = (<span class="math-inline">x</span><sub>1</sub>, <span class="math-inline">x</span><sub>2</sub>)ᵀ.
+          </li>
+          <li>
+            <strong>Couche cachée (2 neurones) :</strong>
+            <span class="math-inline">h</span><sub>1</sub> = <span class="math-inline">w</span><sub>11</sub><span class="math-inline">x</span><sub>1</sub> + <span class="math-inline">w</span><sub>12</sub><span class="math-inline">x</span><sub>2</sub> + <span class="math-inline">b</span><sub>1</sub>,
+            <span class="math-inline">h</span><sub>2</sub> = <span class="math-inline">w</span><sub>21</sub><span class="math-inline">x</span><sub>1</sub> + <span class="math-inline">w</span><sub>22</sub><span class="math-inline">x</span><sub>2</sub> + <span class="math-inline">b</span><sub>2</sub>.
+          </li>
+          <li>
+            <strong>Sortie (régression, une seule valeur) :</strong>
+            <span class="math-inline">ŷ</span> = <span class="math-inline">v</span><sub>1</sub><span class="math-inline">h</span><sub>1</sub> + <span class="math-inline">v</span><sub>2</sub><span class="math-inline">h</span><sub>2</sub> + <span class="math-inline">c</span>.
+          </li>
+          <li>
+            <strong>Perte (MSE sur un seul exemple) :</strong> L = ½ (<span class="math-inline">ŷ</span> − <span class="math-inline">t</span>)², où <span class="math-inline">t</span> est la cible observée.
+          </li>
+        </ul>
+
+        <span class="exercise-block-title">2. Données et poids initiaux (à utiliser tels quels)</span>
+        <ul>
+          <li>Exemple unique : <span class="math-inline">x</span><sub>1</sub> = 1, <span class="math-inline">x</span><sub>2</sub> = 2, cible <span class="math-inline">t</span> = 1.</li>
+          <li>
+            Poids cachés : <span class="math-inline">w</span><sub>11</sub> = 0,2 , <span class="math-inline">w</span><sub>12</sub> = 0,1 , <span class="math-inline">b</span><sub>1</sub> = 0 ;
+            <span class="math-inline">w</span><sub>21</sub> = 0,3 , <span class="math-inline">w</span><sub>22</sub> = −0,1 , <span class="math-inline">b</span><sub>2</sub> = 0,1.
+          </li>
+          <li>Poids de sortie : <span class="math-inline">v</span><sub>1</sub> = <span class="math-inline">v</span><sub>2</sub> = 0,5 , <span class="math-inline">c</span> = 0,2.</li>
+          <li><strong>Taux d’apprentissage :</strong> <span class="math-inline">η</span> = 0,1 (même ordre de grandeur que l’exercice de régression linéaire).</li>
+        </ul>
+
+        <span class="exercise-block-title">3. Ce que vous devez calculer</span>
+        <p class="lead"><strong>Étape A — Forward pass</strong></p>
+        <ol>
+          <li>Calculez <span class="math-inline">h</span><sub>1</sub> et <span class="math-inline">h</span><sub>2</sub>.</li>
+          <li>Calculez <span class="math-inline">ŷ</span>.</li>
+          <li>Calculez la loss L.</li>
+        </ol>
+        <p class="lead"><strong>Étape B — Gradients (règle de la chaîne)</strong></p>
+        <p class="lead">
+          Rappel : ∂L/∂<span class="math-inline">ŷ</span> = <span class="math-inline">ŷ</span> − <span class="math-inline">t</span>. En dérivant la sortie par rapport aux poids de la dernière couche, puis en remontant vers la couche cachée, obtenez :
+        </p>
+        <ul>
+          <li>∂L/∂<span class="math-inline">v</span><sub>1</sub>, ∂L/∂<span class="math-inline">v</span><sub>2</sub>, ∂L/∂<span class="math-inline">c</span>.</li>
+          <li>∂L/∂<span class="math-inline">h</span><sub>1</sub> et ∂L/∂<span class="math-inline">h</span><sub>2</sub> (via <span class="math-inline">v</span><sub>1</sub>, <span class="math-inline">v</span><sub>2</sub>).</li>
+          <li>Puis ∂L/∂<span class="math-inline">w</span><sub>11</sub>, …, ∂L/∂<span class="math-inline">b</span><sub>2</sub>.</li>
+        </ul>
+        <p class="lead"><strong>Étape C — Mise à jour (descente de gradient)</strong></p>
+        <p class="lead">
+          Pour chaque paramètre <span class="math-inline">θ</span> : <span class="math-inline">θ</span><sub>nouveau</sub> = <span class="math-inline">θ</span><sub>ancien</sub> − <span class="math-inline">η</span> · ∂L/∂<span class="math-inline">θ</span>.
+          Appliquez la formule à <span class="math-inline">v</span><sub>1</sub>, <span class="math-inline">v</span><sub>2</sub>, <span class="math-inline">c</span>, puis aux <span class="math-inline">w</span> et <span class="math-inline">b</span> de la couche cachée.
+        </p>
+        <p class="lead">
+          <strong>Contrôle :</strong> après mise à jour, refaites un forward pass avec les <strong>nouveaux</strong> poids : la loss devrait avoir
+          <strong>diminué</strong> (au moins sur cet exemple).
+        </p>
+      </aside>
+
+      <details class="expand-panel">
+        <summary>Corrigé succinct (auto-vérification)</summary>
+        <div class="expand-panel__body">
+          <p class="lead">
+            Avec les valeurs de l’énoncé : <span class="math-inline">h</span><sub>1</sub> = 0,4 , <span class="math-inline">h</span><sub>2</sub> = 0,2 ,
+            <span class="math-inline">ŷ</span> = 0,5 , L = 0,125. Gradient sur la sortie : ∂L/∂<span class="math-inline">ŷ</span> = −0,5. D’où
+            ∂L/∂<span class="math-inline">v</span><sub>1</sub> = −0,2 , ∂L/∂<span class="math-inline">v</span><sub>2</sub> = −0,1 , ∂L/∂<span class="math-inline">c</span> = −0,5.
+            Puis ∂L/∂<span class="math-inline">h</span><sub>1</sub> = −0,25 , ∂L/∂<span class="math-inline">h</span><sub>2</sub> = −0,25, et les dérivées par rapport aux <span class="math-inline">w</span> et <span class="math-inline">b</span> s’obtiennent en multipliant par les entrées appropriées. Vérifiez vos mises à jour en recalculant <span class="math-inline">ŷ</span> et L.
+          </p>
+        </div>
+      </details>
+
+      <details class="expand-panel">
+        <summary>Références et lectures pour aller plus loin (réseaux de neurones)</summary>
+        <div class="expand-panel__body">
+          <ul>
+            <li>
+              <strong>Histoire :</strong> Rumelhart, Hinton, Williams (1986) — article fondateur sur la rétropropagation dans des réseaux connexionnistes.
+            </li>
+            <li>
+              <strong>Ouvrage de référence :</strong> Goodfellow, Bengio, Courville, <em>Deep Learning</em> (MIT Press) — disponible en ligne.
+            </li>
+            <li>
+              <strong>Pratique :</strong>
+              <a href="https://scikit-learn.org/stable/modules/neural_networks_supervised.html" target="_blank" rel="noopener noreferrer">scikit-learn — MLPClassifier / MLPRegressor</a>,
+              <a href="https://pytorch.org/tutorials/" target="_blank" rel="noopener noreferrer">PyTorch tutorials</a>.
+            </li>
+          </ul>
+        </div>
+      </details>
+
+      <div class="section-divider" role="separator" aria-hidden="true"></div>
+
       <details class="content-soon">
-        <summary>Contenu à venir — section 6 (réseaux de neurones) et prolongements du chapitre</summary>
+        <summary>À venir dans une prochaine extension de ce chapitre</summary>
         <div class="content-soon__body">
           <p class="lead content-soon__lead">
-            Les développements ci-dessous seront <strong>complétés prochainement</strong> dans cette version du cours.
+            Les développements ci-dessous pourront compléter ultérieurement cette version du cours.
           </p>
-          <h5 class="content-soon__subtitle">6. Les Réseaux de Neurones : l’approche bio-inspirée</h5>
-          <p class="lead"><strong>À suivre dans ce chapitre :</strong></p>
           <ul class="content-soon__list">
             <li><strong>Apprentissage non supervisé</strong> — clustering, réduction de dimension, etc.</li>
             <li><strong>Apprentissage par renforcement (RL)</strong> — agent, environnement, politique, etc.</li>
