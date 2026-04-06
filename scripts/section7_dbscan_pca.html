@@ -1,0 +1,154 @@
+
+      <h5>D. DBSCAN : des régions denses sans fixer <span class="math-inline">k</span></h5>
+      <p class="lead">
+        Là où K-means impose à l’avance un nombre de groupes et privilégie des amas « compacts » autour de centres, <strong>DBSCAN</strong> (<em>Density-Based
+        Spatial Clustering of Applications with Noise</em>) part d’une autre intuition : un <strong>cluster</strong>, c’est une zone où les points s’accumulent
+        suffisamment — comme une clairière dense dans la jungle. Deux paramètres pilotent l’algorithme :
+      </p>
+      <ul>
+        <li>
+          <strong><span class="math-inline">ε</span> (epsilon) :</strong> rayon du voisinage autour d’un point ; deux points sont « voisins » si leur distance
+          (souvent euclidienne) est ≤ <span class="math-inline">ε</span>.
+        </li>
+        <li>
+          <strong><span class="math-inline">min_samples</span> (ou MinPts) :</strong> nombre minimal de points (le point lui-même compris) pour qu’un point soit
+          considéré comme <strong>point cœur</strong> (<em>core point</em>) — ancre d’un amas dense.
+        </li>
+      </ul>
+      <p class="lead">
+        À partir des points cœur, on « étend » les clusters en chaînant les voisins atteignables ; les points qui ne sont ni cœur ni assez proches d’un cœur peuvent
+        être classés en <strong>bruit</strong> (étiquette <strong>−1</strong> en scikit-learn). Conséquence : on n’a pas besoin de connaître
+        <span class="math-inline">k</span> ; le nombre de clusters <strong>émerge</strong> — au prix d’un réglage souvent délicat de
+        <span class="math-inline">ε</span> et <span class="math-inline">min_samples</span>.
+      </p>
+      <p class="lead">
+        DBSCAN détecte bien des formes <strong>allongées</strong> ou <strong>non convexes</strong> (deux lunes, anneaux imbriqués…) là où K-means coupe parfois à la
+        « truelle » selon ses centroïdes. En revanche, des densités très différentes d’un groupe à l’autre peuvent poser problème ; des variantes (HDBSCAN, OPTICS)
+        existent pour aller plus loin.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : DBSCAN sur données en « deux lunes » (points de bruit éventuels en gris)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig63.png"
+        alt="Clustering DBSCAN avec deux couleurs pour les amas et des x gris pour le bruit"
+        loading="lazy"
+      />
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : même simulation — K-means avec <span class="math-inline">k</span> = 2 vs DBSCAN</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig64.png"
+        alt="Comparaison K-means et DBSCAN sur les memes deux lunes"
+        loading="lazy"
+      />
+
+      <h5>E. DBSCAN : ce qu’il faut avoir en tête</h5>
+      <p class="lead">
+        <strong>Échelle :</strong> comme pour K-means, si les variables ne sont pas comparables, normalisez (souvent <strong>StandardScaler</strong>) avant de mesurer
+        les distances. <strong>Sensibilité à <span class="math-inline">ε</span> :</strong> un <span class="math-inline">ε</span> trop petit fragmente tout en bruit ;
+        trop grand fusionne des groupes distincts. <strong>Interprétation :</strong> les étiquettes de cluster restent des outils d’exploration — le « sens » métier
+        vient encore de votre analyse.
+      </p>
+
+      <h5>F. PCA : réduire la dimension sans étiquettes</h5>
+      <p class="lead">
+        Le <strong>partitionnement</strong> (K-means, DBSCAN) cherche des <strong>groupes</strong> de points. L’<strong>Analyse en Composantes Principales</strong>
+        (PCA) cherche les <strong>directions</strong> où les données varient le plus — autrement dit un nouveau repère orthogonaux (les composantes principales), ordonné
+        par part de variance expliquée. Mathématiquement, sur données centrées, on diagonalise la matrice de covariance (ou on fait une SVD sur la matrice des données)
+        : la première composante <strong>PC1</strong> maximise la variance projetée ; <strong>PC2</strong> est orthogonale à PC1 et maximise la variance résiduelle, etc.
+      </p>
+      <p class="lead">
+        Usages typiques : <strong>visualiser</strong> en 2D ou 3D un nuage de grande dimension ; <strong>compresser</strong> en ne gardant que les premières
+        composantes ; détecter une <strong>colinéarité</strong> forte entre variables ; préparer des données avant un autre modèle (attention : la PCA est
+        <strong>linéaire</strong> — les relations non linéaires peuvent échapper à ce résumé).
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : nuage 2D et directions des deux premières composantes principales</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig65.png"
+        alt="Nuage de points avec fleches PC1 et PC2 issues de la PCA"
+        loading="lazy"
+      />
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : éboulis des variances (jeu Iris, 4 variables)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig66.png"
+        alt="Diagramme en barres des variances expliquees par composante et courbe cumulee"
+        loading="lazy"
+      />
+      <p class="lead">
+        Le graphique « <strong>éboulis</strong> » (<em>scree plot</em>) montre souvent que les premières composantes concentrent une grande part de la variance : on
+        peut alors projeter ou reconstruire avec peu de dimensions — en acceptant une <strong>erreur de reconstruction</strong> contrôlée (variance non expliquée).
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Trois outils, trois questions</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="K-means DBSCAN PCA">
+            <thead>
+              <tr>
+                <th scope="col">Outil</th>
+                <th scope="col">Question posée aux données</th>
+                <th scope="col">Livrable typique</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>K-means</strong></td>
+                <td>Où placer <span class="math-inline">k</span> centres pour minimiser la dispersion interne ?</td>
+                <td>Partition en <span class="math-inline">k</span> groupes (forme « ronde »)</td>
+              </tr>
+              <tr>
+                <td><strong>DBSCAN</strong></td>
+                <td>Où la densité dépasse-t-elle un seuil pendant au moins <span class="math-inline">min_samples</span> voisins ?</td>
+                <td>Clusters de forme variable + bruit explicite</td>
+              </tr>
+              <tr>
+                <td><strong>PCA</strong></td>
+                <td>Quels axes orthogonaux maximisent la variance ?</td>
+                <td>Nouvelles variables décorrélées, ordonnées par importance</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <section class="unsupervised-conclusion" aria-labelledby="unsupervised-final-title">
+        <h5 id="unsupervised-final-title" class="unsupervised-conclusion__title">Bilan : explorer sans étiquettes, mais avec méthode</h5>
+        <p class="lead">
+          Comme Mowgli qui apprend où sont les zones sûres sans carte annotée, vous combinez ici des <strong>hypothèses géométriques</strong> (sphères pour K-means,
+          densité pour DBSCAN, sous-espace linéaire pour la PCA) et des <strong>réglages</strong> à valider par visualisation, métriques internes et sens métier.
+          <strong>Rappel :</strong> un neurone de classification n’apparaît pas ici — la PCA et le clustering ne minimisent pas une erreur sur un
+          <span class="math-inline">y</span> ; ils sculptent la structure de <span class="math-inline">X</span> seul.
+        </p>
+        <ul>
+          <li>
+            <strong>K-means :</strong> rapide, simple, exige <span class="math-inline">k</span> et des formes de clusters compatibles avec des centroïdes.
+          </li>
+          <li>
+            <strong>DBSCAN :</strong> pas de <span class="math-inline">k</span> fixe, bonnes formes irrégulières, paramètres <span class="math-inline">ε</span> /
+            <span class="math-inline">min_samples</span> à calibrer.
+          </li>
+          <li>
+            <strong>PCA :</strong> réduction et visualisation par axes de variance ; linéaire ; interpréter les composantes comme des mélanges des variables d’origine.
+          </li>
+        </ul>
+      </section>
+
+      <details class="expand-panel">
+        <summary>Références utiles — DBSCAN &amp; PCA</summary>
+        <div class="expand-panel__body">
+          <ul>
+            <li>
+              <strong>DBSCAN :</strong> Ester, Kriegel, Sander, Xu (1996), « A density-based algorithm for discovering clusters in large spatial databases with noise ».
+            </li>
+            <li>
+              <strong>PCA :</strong> références classiques en analyse des données (Pearson, Hotelling) ; voir tout manuel de statistique multivariée.
+            </li>
+            <li>
+              <strong>Pratique :</strong>
+              <a href="https://scikit-learn.org/stable/modules/clustering.html#dbscan" target="_blank" rel="noopener noreferrer">scikit-learn — DBSCAN</a>,
+              <a href="https://scikit-learn.org/stable/modules/decomposition.html#pca" target="_blank" rel="noopener noreferrer">scikit-learn — PCA</a>.
+            </li>
+          </ul>
+        </div>
+      </details>
