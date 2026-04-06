@@ -28,6 +28,19 @@
 
     <div class="chapter-layout">
       <aside class="chapter-toc" aria-label="Sommaire du chapitre 2">
+        <button
+          type="button"
+          class="chapter-toc__toggle"
+          id="chapter-toc-toggle"
+          aria-expanded="false"
+          aria-controls="chapter-toc-panel"
+        >
+          <span class="chapter-toc__toggle-text">Sommaire du chapitre</span>
+          <svg class="chapter-toc__chevron" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+          </svg>
+        </button>
+        <div class="chapter-toc__panel" id="chapter-toc-panel">
         <nav class="chapter-toc__nav">
           <p class="chapter-toc__title">Dans ce chapitre</p>
           <ol class="chapter-toc__list chapter-toc__list--main">
@@ -73,6 +86,7 @@
             <a href="#ch2-conclusion-title" class="chapter-toc__fin">Conclusion du chapitre</a>
           </p>
         </nav>
+        </div>
       </aside>
       <div class="chapter-main">
     <section class="card">

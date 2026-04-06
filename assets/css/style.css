@@ -745,6 +745,51 @@ footer{
   z-index:50;
   align-self:start;
 }
+/* Défilement du sommaire : panneau (desktop), pas le bouton toggle */
+.chapter-toc__panel{
+  max-height:calc(100vh - 72px - 20px);
+  max-height:calc(100dvh - 72px - 20px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+.chapter-toc__toggle{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  margin:0;
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:.92rem;
+  font-weight:600;
+  color:#0f172a;
+  text-align:left;
+  cursor:pointer;
+  border:1px solid var(--accent-border);
+  border-radius:12px;
+  background:linear-gradient(180deg,var(--accent-soft) 0%,#fff 70%);
+  box-shadow:0 2px 10px rgba(31,41,55,.08);
+  transition:background .15s ease, box-shadow .15s ease;
+}
+.chapter-toc__toggle:hover{
+  box-shadow:0 4px 14px rgba(31,41,55,.1);
+}
+.chapter-toc__toggle:focus-visible{
+  outline:2px solid var(--primary);
+  outline-offset:2px;
+}
+.chapter-toc__chevron{
+  flex-shrink:0;
+  transition:transform .2s ease;
+  color:#1e40af;
+}
+.chapter-toc--open .chapter-toc__chevron{
+  transform:rotate(180deg);
+}
 .chapter-toc__nav{
   border:1px solid var(--border);
   border-radius:12px;
@@ -823,6 +868,14 @@ footer{
 .chapter-main [id]{
   scroll-margin-top:5.5rem;
 }
+@media (min-width:1100px){
+  .chapter-toc__toggle{
+    display:none !important;
+  }
+  .chapter-toc__panel{
+    display:block !important;
+  }
+}
 @media (max-width:1099px){
   .chapter-layout{
     display:block;
@@ -830,10 +883,30 @@ footer{
   .chapter-toc{
     position:sticky;
     top:56px;
-    margin-bottom:20px;
-    max-height:min(40vh, 300px);
+    margin-bottom:16px;
+    max-height:none;
+    overflow:visible;
+  }
+  .chapter-toc__toggle{
+    display:flex;
+  }
+  .chapter-toc__panel{
+    max-height:none;
+    scrollbar-gutter:auto;
+  }
+  /* Sommaire replié par défaut : une ligne « Sommaire » + chevron */
+  .chapter-toc:not(.chapter-toc--open) .chapter-toc__panel{
+    display:none;
+  }
+  .chapter-toc.chapter-toc--open .chapter-toc__panel{
+    display:block;
+    margin-top:10px;
+    max-height:min(72dvh, 560px);
     overflow-y:auto;
+    overflow-x:hidden;
     -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    border-radius:12px;
   }
 }
 

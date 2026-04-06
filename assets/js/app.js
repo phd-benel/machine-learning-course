@@ -183,4 +183,51 @@
     audio.addEventListener("ended", syncUi);
     syncUi();
   });
+
+  /** Sommaire chapitre (TOC) : repliable en vue mobile / tablette */
+  (function initChapterTocToggle() {
+    const aside = document.querySelector(".chapter-toc");
+    const btn = document.getElementById("chapter-toc-toggle");
+    const panel = document.getElementById("chapter-toc-panel");
+    if (!aside || !btn || !panel) return;
+
+    const mq = window.matchMedia("(max-width: 1099px)");
+
+    function syncState() {
+      if (mq.matches) {
+        const open = aside.classList.contains("chapter-toc--open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      } else {
+        aside.classList.add("chapter-toc--open");
+        btn.setAttribute("aria-expanded", "true");
+      }
+    }
+
+    btn.addEventListener("click", function () {
+      if (!mq.matches) return;
+      aside.classList.toggle("chapter-toc--open");
+      btn.setAttribute("aria-expanded", aside.classList.contains("chapter-toc--open") ? "true" : "false");
+    });
+
+    panel.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener("click", function () {
+        if (mq.matches) {
+          aside.classList.remove("chapter-toc--open");
+          btn.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    mq.addEventListener("change", function (e) {
+      if (e.matches) {
+        aside.classList.remove("chapter-toc--open");
+        btn.setAttribute("aria-expanded", "false");
+      } else {
+        aside.classList.add("chapter-toc--open");
+        btn.setAttribute("aria-expanded", "true");
+      }
+    });
+
+    syncState();
+  })();
 })();
