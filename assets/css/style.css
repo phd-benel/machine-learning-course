@@ -460,7 +460,8 @@ details.expand-panel summary:hover{
 .logistic-conclusion h5.logistic-conclusion__title,
 .svm-conclusion h5.svm-conclusion__title,
 .tree-conclusion h5.tree-conclusion__title,
-.nn-conclusion h5.nn-conclusion__title{
+.nn-conclusion h5.nn-conclusion__title,
+.unsupervised-conclusion h5.unsupervised-conclusion__title{
   margin:0 0 12px;
   font-size:1.02rem;
   color:#0f172a;
@@ -469,12 +470,14 @@ details.expand-panel summary:hover{
 .logistic-conclusion .lead,
 .svm-conclusion .lead,
 .tree-conclusion .lead,
-.nn-conclusion .lead{color:var(--muted);}
+.nn-conclusion .lead,
+.unsupervised-conclusion .lead{color:var(--muted);}
 .lr-conclusion ul,
 .logistic-conclusion ul,
 .svm-conclusion ul,
 .tree-conclusion ul,
-.nn-conclusion ul{
+.nn-conclusion ul,
+.unsupervised-conclusion ul{
   margin:8px 0 12px;
   padding-left:1.25rem;
   color:var(--muted);
@@ -484,7 +487,8 @@ details.expand-panel summary:hover{
 .logistic-conclusion li,
 .svm-conclusion li,
 .tree-conclusion li,
-.nn-conclusion li{margin-bottom:8px;}
+.nn-conclusion li,
+.unsupervised-conclusion li{margin-bottom:8px;}
 .content-soon__body{
   padding:0 16px 16px;
   border-top:1px dashed var(--border);

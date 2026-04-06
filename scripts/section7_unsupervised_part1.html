@@ -1,0 +1,202 @@
+      <div class="section-divider" role="separator" aria-hidden="true"></div>
+
+      <h4>7. Apprentissage non supervisé : explorer la jungle sans étiquettes</h4>
+      <p class="lead">
+        Jusqu’ici, le fil du chapitre ressemblait à une <strong>leçon avec corrigé</strong> : régression, classification, SVM, arbres, réseaux — partout des exemples
+        <span class="math-inline">(x</span><sub>i</sub>, <span class="math-inline">y</span><sub>i</sub>) où la cible <span class="math-inline">y</span> était
+        connue. L’<strong>apprentissage non supervisé</strong>, lui, c’est une autre histoire : imaginez
+        <strong>Mowgli dans la jungle</strong> — pas de manuel, pas de professeur qui nomme chaque animal ; il observe, se déplace, regroupe ce qui ressemble,
+        découvre des régularités. Les données sont souvent un nuage de points <strong>sans étiquette</strong> : le but n’est pas de prédire une colonne cible, mais
+        d’<strong>explorer</strong> la structure (groupes, densités, directions principales de variation).
+      </p>
+      <p class="lead">
+        Ce n’est pas du « hasard » : on définit toujours un <strong>objectif mathématique</strong> ou une <strong>hypothèse de forme</strong> (sphères pour K-means,
+        densité pour DBSCAN, sous-espace pour PCA). Mais personne ne vous dit à l’avance combien il y a de classes ni ce qu’elles signifient — c’est
+        <strong>vous</strong> qui interprétez les groupes ou les axes une fois le calcul fait.
+      </p>
+
+      <div class="table-block">
+        <p class="table-caption">Supervisé vs non supervisé (rappel de perspective)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Supervise versus non supervise">
+            <thead>
+              <tr>
+                <th scope="col">Question</th>
+                <th scope="col">Supervisé</th>
+                <th scope="col">Non supervisé</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Donnée typique</td>
+                <td>Entrées + <strong>étiquette</strong> (classe, nombre à prédire)</td>
+                <td>Seulement les <strong>entrées</strong> (souvent un tableau ou des vecteurs)</td>
+              </tr>
+              <tr>
+                <td>Objectif</td>
+                <td>Minimiser une erreur de prédiction</td>
+                <td>Révéler structure : <strong>clusters</strong>, <strong>variabilité</strong>, <strong>représentation</strong> plus compacte</td>
+              </tr>
+              <tr>
+                <td>Métaphore</td>
+                <td>Élève avec le corrigé du manuel</td>
+                <td class="cell-highlight">Explorateur (Mowgli) sans noms — il cartographie le terrain</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead">
+        Dans la suite de ce support, nous développons trois outils incontournables — chacun avec sa logique propre :
+      </p>
+      <ul>
+        <li>
+          <strong>K-means</strong> (cette section) : partitionner en <strong>k</strong> groupes en minimisant la dispersion autour de centres — idéal pour des nuages
+          « ronds » et compacts lorsque <span class="math-inline">k</span> est raisonnablement choisi.
+        </li>
+        <li>
+          <strong>DBSCAN</strong> (section suivante) : suivre la <strong>densité</strong> pour trouver des amas de forme arbitraire et repérer le bruit.
+        </li>
+        <li>
+          <strong>PCA</strong> (après DBSCAN) : trouver les <strong>axes</strong> où les données varient le plus — compression et visualisation.
+        </li>
+      </ul>
+
+      <h5>A. K-means : regrouper autour de centres qui bougent</h5>
+      <p class="lead">
+        On se donne un entier <span class="math-inline">k</span> (nombre de groupes) et on cherche <span class="math-inline">k</span> <strong>centroïdes</strong> dans
+        l’espace des caractéristiques. Chaque point est assigné au centroïde le plus proche (distance euclidienne usuelle) : on forme des <strong>clusters</strong>.
+        L’idée est de minimiser l’<strong>inertie intra-classe</strong> (somme des carrés des distances point–centroïde de son groupe), aussi notée WCSS
+        (<em>Within-Cluster Sum of Squares</em>) :
+      </p>
+      <div class="math-display math-display--left" role="math" aria-label="Inertie K-means">
+        Minimiser sur les affectations et les centres <span class="math-inline">μ</span><sub>j</sub> :
+        Σ<sub>j=1..k</sub> Σ<sub><span class="math-inline">x</span> ∈ cluster j</sub> ‖<span class="math-inline">x</span> − <span class="math-inline">μ</span><sub>j</sub>‖²
+      </div>
+      <p class="lead">
+        <strong>Algorithme de Lloyd</strong> (version standard) : on initialise les <span class="math-inline">k</span> centres (souvent <span class="math-inline">k</span> points tirés au hasard parmi les données, ou méthode <span class="math-inline">k</span>-means++) ; puis on alterne :
+      </p>
+      <ol>
+        <li>
+          <strong>Assignation :</strong> chaque point rejoint le cluster du centroïde le plus proche.
+        </li>
+        <li>
+          <strong>Mise à jour :</strong> chaque centroïde devient le <strong>barycentre</strong> (moyenne arithmétique) des points de son cluster.
+        </li>
+        <li>
+          Répéter jusqu’à ce que les affectations ne changent plus (ou que l’inertie se stabilise).
+        </li>
+      </ol>
+      <p class="lead">
+        L’inertie décroît à chaque étape : le procédé converge, mais vers un <strong>optimum local</strong> — d’où l’intérêt de relancer plusieurs fois avec des
+        initialisations différentes (paramètre <code>n_init</code> dans scikit-learn). Si les vrais groupes sont bien séparés et « ronds », K-means retrouve souvent
+        une partition lisible.
+      </p>
+
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : partition en <span class="math-inline">k</span> = 3 groupes — points colorés par cluster, étoiles = centroïdes</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig59.png"
+        alt="Nuage de points en trois couleurs avec trois etoiles jaunes pour les centroides"
+        loading="lazy"
+      />
+
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : à initialisation défavorable, les centroïdes se rapprochent des vrais nuages en quelques itérations</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig60.png"
+        alt="Quatre panneaux montrant l evolution des centroides au fil des iterations"
+        loading="lazy"
+      />
+
+      <h5>B. Choisir <span class="math-inline">k</span> : le piège du nombre de groupes</h5>
+      <p class="lead">
+        K-means <strong>ne déduit pas</strong> <span class="math-inline">k</span> : vous devez le choisir ou le comparer sur plusieurs valeurs. Un mauvais
+        <span class="math-inline">k</span> peut fusionner des amas distincts ou au contraire découper un groupe naturel. La figure ci-dessous contraste
+        <span class="math-inline">k</span> = 2 et <span class="math-inline">k</span> = 3 sur les <strong>mêmes</strong> données simulées à trois nuages.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu de points — <span class="math-inline">k</span> = 2 impose une fusion ; <span class="math-inline">k</span> = 3 sépare mieux</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig61.png"
+        alt="Comparaison de deux clusterings k=2 et k=3 sur les memes donnees"
+        loading="lazy"
+      />
+
+      <p class="lead">
+        Une heuristique classique est la <strong>méthode du coude</strong> : on trace l’inertie (ou WCSS) en fonction de <span class="math-inline">k</span> ; on
+        cherche un « pli » où le gain de diminuer l’inertie en ajoutant un cluster redevient marginal. Ce n’est pas une règle automatique — le coude peut être
+        flou — mais c’est un outil de dialogue entre le modèle et l’analyste.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : courbe type « coude » de l’inertie en fonction de <span class="math-inline">k</span></p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig62.png"
+        alt="Graphique montrant la decroissance de l inertie avec k avec annotation coude"
+        loading="lazy"
+      />
+
+      <h5>C. Limites et usages honnêtes de K-means</h5>
+      <p class="lead">
+        <strong>Forme des clusters :</strong> la distance au centroïde favorise des groupes de taille et variance comparables ; des amas très allongés ou
+        emboîtés peuvent être mal décrits. <strong>Sensibilité aux outliers :</strong> un point extrême peut tirer un centroïde. <strong>Échelle des variables :</strong>
+        si une colonne est en grandes unités, elle domine la distance — souvent on <strong>normalise</strong> (z-score, min-max) avant de lancer K-means.
+      </p>
+      <p class="lead">
+        <strong>Interprétation :</strong> les étiquettes de cluster (0, 1, 2…) n’ont pas de sens intrinsèque : c’est à vous de les relier à un phénomène métier
+        (segments clients, modes de défaillance…). L’exploration non supervisée est souvent une <strong>étape</strong> avant un modèle supervisé ou un rapport
+        exploratoire.
+      </p>
+
+      <section class="unsupervised-conclusion" aria-labelledby="unsupervised-kmeans-title">
+        <h5 id="unsupervised-kmeans-title" class="unsupervised-conclusion__title">Synthèse provisoire : K-means dans votre « jungle » de données</h5>
+        <ul>
+          <li>
+            <strong>Idée :</strong> <span class="math-inline">k</span> centroïdes, assignation au plus proche, recentrage — minimisation de l’inertie intra-classe.
+          </li>
+          <li>
+            <strong>Atouts :</strong> simple, rapide sur de gros volumes, implémentations matures (scikit-learn, Spark…).
+          </li>
+          <li>
+            <strong>À surveiller :</strong> choix de <span class="math-inline">k</span>, optimum local, hypothèse de forme « sphérique », normalisation des variables.
+          </li>
+        </ul>
+        <p class="lead">
+          <strong>Prochaine étape de ce cours :</strong> la section <strong>DBSCAN</strong> montrera comment s’affranchir d’un <span class="math-inline">k</span> fixe
+          en suivant la <strong>densité</strong> ; puis la <strong>PCA</strong> abordera la réduction de dimension sans chercher des groupes, mais les directions de
+          variance maximale.
+        </p>
+      </section>
+
+      <details class="expand-panel">
+        <summary>Références utiles — K-means</summary>
+        <div class="expand-panel__body">
+          <ul>
+            <li>
+              <strong>Classique :</strong> MacQueen (1967) sur les méthodes de partition ; Lloyd (1982) pour la formulation standard.
+            </li>
+            <li>
+              <strong>Pratique :</strong>
+              <a href="https://scikit-learn.org/stable/modules/clustering.html#k-means" target="_blank" rel="noopener noreferrer">scikit-learn — K-means</a>.
+            </li>
+          </ul>
+        </div>
+      </details>
+
+      <div class="section-divider" role="separator" aria-hidden="true"></div>
+
+      <details class="content-soon">
+        <summary>À venir dans ce chapitre — DBSCAN, PCA et renforcement</summary>
+        <div class="content-soon__body">
+          <p class="lead content-soon__lead">
+            Les développements sur <strong>DBSCAN</strong> (clusters par densité) et <strong>PCA</strong> (réduction de dimension) poursuivent cette partie sur
+            l’exploration non supervisée. L’<strong>apprentissage par renforcement</strong> fera l’objet d’une extension dédiée.
+          </p>
+          <ul class="content-soon__list">
+            <li><strong>DBSCAN</strong> — prochaine section.</li>
+            <li><strong>PCA</strong> — section suivante.</li>
+            <li><strong>RL</strong> — agent, environnement, politique (programme annoncé).</li>
+          </ul>
+        </div>
+      </details>
