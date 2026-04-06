@@ -1141,38 +1141,162 @@
 
       <h5>B. Comment ça s'entraîne ? Objectif, « perte » et optimiseur</h5>
       <p class="lead">
-        Comme pour la régression logistique, un SVM n'est pas « dessiné à la main » : l'ordinateur <strong>résout un problème d'optimisation</strong> pour trouver
-        <span class="math-inline">w</span> et <span class="math-inline">b</span>. La différence, c'est le <strong>critère</strong> : ici on ne minimise pas une
-        log-vraisemblance, mais un objectif lié à la <strong>marge</strong> et à la bonne classification.
+        Un SVM n'est pas tracé à la main : l'ordinateur <strong>minimise une fonction objectif</strong> (souvent écrite sous plusieurs formes équivalentes) pour
+        trouver <span class="math-inline">w</span> et <span class="math-inline">b</span>. Dans les formules ci-dessous, on utilise les étiquettes
+        <span class="math-inline">y</span><sub>i</sub> ∈ {−1, +1} (convention classique pour les SVM) et le score
+        <span class="math-inline">f</span>(<span class="math-inline">x</span>) = <span class="math-inline">w</span>ᵀ<span class="math-inline">x</span> +
+        <span class="math-inline">b</span>.
+      </p>
+
+      <p class="lead"><strong>1. Formulation « marge dure » (séparabilité linéaire stricte)</strong></p>
+      <p class="lead">
+        On cherche l'hyperplan qui sépare les classes en maximisant la marge. Cela se reformule en <strong>problème d'optimisation convexe</strong> :
+      </p>
+      <div class="math-display" role="math" aria-label="SVM marge dure primal">
+        Minimiser par rapport à <span class="math-inline">w</span>, <span class="math-inline">b</span> : (1/2) ‖<span class="math-inline">w</span>‖²<br />
+        sous les contraintes : <span class="math-inline">y</span><sub>i</sub> (<span class="math-inline">w</span>ᵀ<span class="math-inline">x</span><sub>i</sub> +
+        <span class="math-inline">b</span>) ≥ 1 pour tout <span class="math-inline">i</span>.
+      </div>
+      <p class="lead">
+        La contrainte impose que chaque point soit du bon côté avec une « marge fonctionnelle » au moins 1 ; minimiser ‖<span class="math-inline">w</span>‖²
+        élargit la marge géométrique entre les classes (voir la figure 43 : les bandes bleues correspondent aux droites où le score vaut −1 et +1).
+      </p>
+
+      <p class="lead"><strong>2. Formulation « marge souple » (bruit, chevauchement)</strong></p>
+      <p class="lead">
+        On introduit des variables de relaxation ξ<sub>i</sub> ≥ 0 (<em>slack</em>) et un coefficient <span class="math-inline">C</span> &gt; 0 :
+      </p>
+      <div class="math-display" role="math" aria-label="SVM marge souple primal">
+        Minimiser : (1/2) ‖<span class="math-inline">w</span>‖² + <span class="math-inline">C</span> Σ<sub>i</sub> ξ<sub>i</sub><br />
+        sous : <span class="math-inline">y</span><sub>i</sub> (<span class="math-inline">w</span>ᵀ<span class="math-inline">x</span><sub>i</sub> +
+        <span class="math-inline">b</span>) ≥ 1 − ξ<sub>i</sub> , &nbsp; ξ<sub>i</sub> ≥ 0.
+      </div>
+      <p class="lead">
+        <span class="math-inline">C</span> pèse le compromis : pénaliser fortement les ξ<sub>i</sub> (gros <span class="math-inline">C</span>) pousse à respecter
+        les contraintes au prix d'une marge plus étroite ; un <span class="math-inline">C</span> plus petit tolère plus d'écarts (voir section C et figure 44).
+      </p>
+
+      <p class="lead"><strong>3. Perte en charnière (<span class="math-inline">hinge loss</span>)</strong></p>
+      <p class="lead">
+        Une formulation équivalente très parlante minimise la somme des pertes « charnière » plus une régularisation sur
+        <span class="math-inline">w</span> :
+      </p>
+      <div class="math-display" role="math" aria-label="Hinge loss">
+        (1/<span class="math-inline">N</span>) Σ<sub>i</sub> max(0, 1 − <span class="math-inline">y</span><sub>i</sub>
+        <span class="math-inline">f</span>(<span class="math-inline">x</span><sub>i</sub>)) + terme de régularisation sur ‖<span class="math-inline">w</span>‖²
+      </div>
+      <p class="lead">
+        Ici <span class="math-inline">y</span><sub>i</sub> <span class="math-inline">f</span>(<span class="math-inline">x</span><sub>i</sub>) est la
+        <strong>marge signée</strong> : si elle dépasse 1, la perte vaut 0 ; sinon elle croît linéairement. La courbe ci-dessous montre la fonction
+        <span class="math-inline">t</span> ↦ max(0, 1 − <span class="math-inline">t</span>) avec
+        <span class="math-inline">t</span> = <span class="math-inline">y</span><sub>i</sub> <span class="math-inline">f</span>(<span class="math-inline">x</span><sub>i</sub>).
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : forme de la perte hinge (données fictives pour le tracé)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig46.png"
+        alt="Graphique de la perte hinge max de 0 et 1 moins t en fonction de la marge signée t"
+        loading="lazy"
+      />
+
+      <p class="lead"><strong>4. Exemple chiffré (deux points, valeurs volontairement simples)</strong></p>
+      <p class="lead">
+        Supposons qu'à l'issue d'une itération, pour deux exemples on ait les scores suivants (même vérité
+        <span class="math-inline">y</span> = +1 pour fixer les idées) :
+      </p>
+      <div class="table-block">
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Exemple hinge loss">
+            <thead>
+              <tr>
+                <th scope="col">Exemple</th>
+                <th scope="col"><span class="math-inline">y</span> · <span class="math-inline">f</span>(<span class="math-inline">x</span>)</th>
+                <th scope="col">max(0, 1 − <span class="math-inline">y</span>·<span class="math-inline">f</span>)</th>
+                <th scope="col">Lecture</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A</td>
+                <td class="cell-num">1,8</td>
+                <td class="cell-num">0</td>
+                <td>Marge confortable : pas de pénalité hinge.</td>
+              </tr>
+              <tr>
+                <td>B</td>
+                <td class="cell-num">0,3</td>
+                <td class="cell-num">0,7</td>
+                <td>Trop près de la frontière : perte positive.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="lead">
+        L'entraînement ajuste <span class="math-inline">w</span> et <span class="math-inline">b</span> pour <strong>réduire</strong> la somme de ces pertes (sous la
+        contrainte de ne pas exploser ‖<span class="math-inline">w</span>‖).
+      </p>
+
+      <p class="lead"><strong>5. Forme duale et noyau (idée)</strong></p>
+      <p class="lead">
+        Le même problème peut s'écrire en fonction de coefficients α<sub>i</sub> associés à <strong>chaque exemple</strong> (formulation duale). La fonction de
+        décision s'écrit alors comme combinaison des exemples « actifs » — ce sont précisément les <strong>vecteurs de support</strong> (α<sub>i</sub> &gt; 0). Pour
+        un noyau <span class="math-inline">K</span>, les produits scalaires
+        <span class="math-inline">x</span><sub>i</sub>ᵀ<span class="math-inline">x</span><sub>j</sub> deviennent
+        <span class="math-inline">K</span>(<span class="math-inline">x</span><sub>i</sub>, <span class="math-inline">x</span><sub>j</sub>) sans calculer explicitement
+        la projection en grande dimension. La figure suivante illustre, sur un petit jeu simulé, que seuls certains indices portent un poids notable — cohérent avec
+        l'idée de supports.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : ordre de grandeur des contributions duales (jeu fictif, SVM linéaire)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig47.png"
+        alt="Barres des contributions duales par exemple avec mise en évidence des vecteurs de support"
+        loading="lazy"
+      />
+
+      <p class="lead"><strong>6. Comment l'ordinateur résout le problème ? SMO et bibliothèques</strong></p>
+      <p class="lead">
+        Le problème est <strong>convexe</strong> : pas de minima locaux piégeant la solution comme en deep learning. Les implémentations classiques n'utilisent pas
+        la même boucle générique que la descente de gradient stochastique sur des millions de poids, mais des <strong>algorithmes de type SMO</strong> (*Sequential
+        Minimal Optimization*) : on met à jour à chaque étape de <strong>petits groupes</strong> de coefficients duaux (souvent deux α à la fois) en respectant les
+        contraintes, jusqu'à convergence. C'est l'approche popularisée par John Platt pour entraîner rapidement les SVM ; les bibliothèques
+        <strong>LIBSVM</strong> / <strong>LIBLINEAR</strong> et le module <code>SVC</code> de scikit-learn s'appuient sur ce type de méthodes ou sur des solveurs de
+        programmation quadratique adaptés.
       </p>
       <p class="lead">
-        <strong>Marge dure (données parfaitement séparables) :</strong> parmi toutes les séparations possibles, on cherche celle qui rend la bande centrale la
-        plus large. Mathématiquement, cela revient à <strong>minimiser</strong> une quantité liée à la taille de <span class="math-inline">w</span> (souvent
-        ½‖<span class="math-inline">w</span>‖²), tout en imposant que chaque point soit du <strong>bon côté</strong> de la frontière avec une marge suffisante. Les
-        <strong>marges</strong> que vous voyez sur la figure ne sont pas choisies au hasard : elles sont le <strong>résultat</strong> de ce problème — la solution
-        donne à la fois l'hyperplan <strong>et</strong> la largeur du couloir.
+        <strong>En résumé :</strong> le SVM a bien un <strong>objectif mathématique</strong> (marge + pénalités) et un <strong>entraînement</strong> automatique par
+        résolution numérique ; la logique « définir un critère et le minimiser » rejoint le reste du chapitre, avec des formules et des optimiseurs différents de la
+        régression logistique ou des grands réseaux.
       </p>
-      <p class="lead">
-        <strong>Marge souple (bruit, chevauchement) :</strong> on autorise quelques points à franchir la limite ou à se tromper, moyennant une
-        <strong>pénalité</strong>. Une formulation courante fait apparaître la <strong>perte en charnière</strong> (<span class="math-inline">hinge loss</span>) :
-        pour chaque exemple, si le score a le bon signe et dépasse un seuil de sécurité, la perte est nulle ; sinon, elle augmente d'autant plus que la prédiction
-        est mauvaise ou trop timide. Le coefficient <span class="math-inline">C</span> (voir ci-dessous) règle le compromis entre « élargir la marge » et « punir
-        les erreurs » — un peu comme le <span class="math-inline">α</span> de la descente de gradient, mais avec un autre rôle : ici ce n'est pas la taille du pas,
-        c'est le <strong>poids des erreurs</strong> dans l'objectif total.
-      </p>
-      <p class="lead">
-        <strong>Optimiseur :</strong> ce problème est <strong>convexe</strong> (une seule « bonne » solution globale dans les cas standard). Les logiciels
-        (scikit-learn, LIBSVM, etc.) utilisent des <strong>algorithmes spécialisés</strong> — souvent de type SMO (*Sequential Minimal Optimization*) ou solveurs de
-        programmation quadratique — qui ajustent les paramètres par petites étapes jusqu'à <strong>convergence</strong> (solution trouvée). Vous n'avez pas
-        besoin de programmer ces boucles à la main : l'essentiel est de savoir <strong>ce que</strong> minimise le SVM (marge + erreurs) et <strong>comment</strong> se
-        lisent les résultats (frontière, supports).
-      </p>
-      <p class="lead">
-        <strong>En résumé :</strong> le SVM a bien une « fonction de coût » au sens large (objectif + pénalités sur les mauvais placements) et un
-        <strong>entraînement</strong> automatique ; ce n'est pas la même formule que la cross-entropy de la régression logistique, ni forcément la même routine que
-        la descente de gradient stochastique des grands réseaux — mais la logique « définir un critère et le minimiser » est la même famille que dans tout le
-        chapitre.
-      </p>
+
+      <details class="expand-panel">
+        <summary>Références et lectures pour aller plus loin</summary>
+        <div class="expand-panel__body">
+          <ul>
+            <li>
+              <strong>Article fondateur :</strong> Cortes &amp; Vapnik (1995), « Support-vector networks »,
+              <em>Machine Learning</em> — introduction des SVM pour la classification.
+            </li>
+            <li>
+              <strong>Algorithme SMO :</strong> Platt (1998), « Sequential Minimal Optimization : A Fast Algorithm for Training Support Vector Machines », dans
+              <em>Advances in Kernel Methods</em> — détail de l'optimisation par paires de multiplicateurs.
+            </li>
+            <li>
+              <strong>Implémentation LIBSVM :</strong> Chang &amp; Lin (2011), « LIBSVM : A Library for Support Vector Machines »,
+              <em>ACM Transactions on Intelligent Systems and Technology</em>.
+            </li>
+            <li>
+              <strong>Ouvrage de référence :</strong> Schölkopf &amp; Smola, <em>Learning with Kernels</em> (MIT Press) — noyaux et formulation duale.
+            </li>
+            <li>
+              <strong>Documentation pratique :</strong>
+              <a href="https://scikit-learn.org/stable/modules/svm.html" target="_blank" rel="noopener noreferrer">scikit-learn — Support Vector Machines</a> (guide
+              utilisateur et liens vers les articles ci-dessus).
+            </li>
+          </ul>
+        </div>
+      </details>
 
       <h5>C. Marge souple et paramètre <span class="math-inline">C</span></h5>
       <p class="lead">

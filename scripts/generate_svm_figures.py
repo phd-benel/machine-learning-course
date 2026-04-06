@@ -1,6 +1,6 @@
 """
 Génère les figures pédagogiques SVM pour le chapitre 2 (données fictives).
-Sortie : ../Figures/Fig43.png, Fig44.png, Fig45.png
+Sortie : ../Figures/Fig43.png … Fig47.png (voir doc du chapitre 2).
 """
 from pathlib import Path
 
@@ -122,4 +122,47 @@ fig.tight_layout()
 fig.savefig(OUT / "Fig45.png", bbox_inches="tight")
 plt.close(fig)
 
-print("OK —", OUT / "Fig43.png", OUT / "Fig44.png", OUT / "Fig45.png")
+# --- Fig 46 : perte hinge L(t) = max(0, 1 - t) avec t = y_i * f(x_i) ---
+t = np.linspace(-2.5, 3.0, 400)
+hinge = np.maximum(0, 1 - t)
+fig, ax = plt.subplots(figsize=(7.0, 4.8))
+ax.plot(t, hinge, color="#b91c1c", linewidth=2.5, label="max(0, 1 − t)")
+ax.axvline(0, color="#9ca3af", linestyle=":", linewidth=1)
+ax.axhline(0, color="#9ca3af", linestyle=":", linewidth=1)
+ax.fill_between(t, 0, hinge, where=(t < 1), alpha=0.12, color="#ef4444", label="Zone de pénalité (t < 1)")
+ax.set_xlabel("t = y_i · f(x_i)   (y_i ∈ {−1, +1}, score de marge signé)")
+ax.set_ylabel("Perte hinge")
+ax.set_title("Perte en charnière : nulle si la marge signée dépasse 1")
+ax.legend(loc="upper right", fontsize=9)
+ax.set_ylim(-0.1, float(np.max(hinge)) * 1.1)
+ax.grid(True, alpha=0.3)
+fig.tight_layout()
+fig.savefig(OUT / "Fig46.png", bbox_inches="tight")
+plt.close(fig)
+
+# --- Fig 47 : coefficients duaux sur un petit jeu (seuls les SV ont un poids notable) ---
+X_small, y_small = make_blobs(n_samples=24, centers=2, random_state=0, cluster_std=0.85)
+y_svm = np.where(y_small == 0, -1, 1)
+clf_d = SVC(kernel="linear", C=1.0)
+clf_d.fit(X_small, y_svm)
+sv_idx = clf_d.support_
+n = len(X_small)
+weights = np.zeros(n)
+coef_row = np.ravel(clf_d.dual_coef_)
+for j, idx in enumerate(sv_idx):
+    weights[idx] = abs(coef_row[j])
+
+fig, ax = plt.subplots(figsize=(7.2, 4.2))
+colors = ["#059669" if i in sv_idx else "#e5e7eb" for i in range(n)]
+ax.bar(range(n), weights, color=colors, edgecolor="white", linewidth=0.5)
+ax.set_xlabel("Indice de l'exemple (données fictives)")
+ax.set_ylabel("|α_i| lié au dual (ordre de grandeur)")
+ax.set_title("Solution duale : coefficients non nuls surtout sur les vecteurs de support")
+m = float(np.max(weights)) if np.max(weights) > 0 else 1.0
+for i in sv_idx:
+    ax.annotate("SV", xy=(i, weights[i]), xytext=(i, weights[i] + m * 0.08), fontsize=7, ha="center", color="#047857")
+fig.tight_layout()
+fig.savefig(OUT / "Fig47.png", bbox_inches="tight")
+plt.close(fig)
+
+print("OK —", OUT / "Fig43.png", OUT / "Fig44.png", OUT / "Fig45.png", OUT / "Fig46.png", OUT / "Fig47.png")
