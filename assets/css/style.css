@@ -435,7 +435,8 @@ details.expand-panel summary:hover{
 .logistic-conclusion,
 .svm-conclusion,
 .tree-conclusion,
-.nn-conclusion{
+.nn-conclusion,
+.unsupervised-conclusion{
   margin:22px 0 10px;
   padding:16px 18px 18px;
   border:1px solid var(--border);
@@ -448,7 +449,8 @@ details.expand-panel summary:hover{
 .logistic-conclusion h5,
 .svm-conclusion h5,
 .tree-conclusion h5,
-.nn-conclusion h5{
+.nn-conclusion h5,
+.unsupervised-conclusion h5{
   margin:16px 0 8px;
   font-size:.95rem;
   font-family:Merriweather,serif;
