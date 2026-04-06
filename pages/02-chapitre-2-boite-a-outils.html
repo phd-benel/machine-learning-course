@@ -20,12 +20,61 @@
     </div>
   </header>
 
-  <main class="container">
+  <main class="container container--chapter">
     <div class="progress-wrap">
       <div class="progress-text" id="progressText"></div>
       <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
     </div>
 
+    <div class="chapter-layout">
+      <aside class="chapter-toc" aria-label="Sommaire du chapitre 2">
+        <nav class="chapter-toc__nav">
+          <p class="chapter-toc__title">Dans ce chapitre</p>
+          <ol class="chapter-toc__list chapter-toc__list--main">
+            <li>
+              <a href="#ch2-intro">Introduction : l’anatomie de l’apprentissage</a>
+              <ul class="chapter-toc__sub">
+                <li><a href="#ch2-anatomie-supervise">Supervisé (aperçu)</a></li>
+                <li><a href="#ch2-anatomie-non-supervise">Non supervisé (aperçu)</a></li>
+                <li><a href="#ch2-anatomie-rl">Renforcement (aperçu)</a></li>
+                <li><a href="#ch2-eventail">Éventail ML / Deep Learning</a></li>
+                <li><a href="#ch2-choix-outil">Choix de l’outil</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#ch2-supervise">L’apprentissage supervisé</a>
+              <ul class="chapter-toc__sub">
+                <li><a href="#ch2-sup-schema">Schéma universel</a></li>
+                <li><a href="#ch2-regression-lineaire">Régression linéaire</a></li>
+                <li><a href="#ch2-regression-logistique">Régression logistique</a></li>
+                <li><a href="#ch2-svm">SVM</a></li>
+                <li><a href="#ch2-arbres-foret">Arbres &amp; Random Forest</a></li>
+                <li><a href="#ch2-reseaux-neurones">Réseaux de neurones</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#ch2-non-supervise">Apprentissage non supervisé</a>
+              <ul class="chapter-toc__sub">
+                <li><a href="#ch2-kmeans">K-means</a></li>
+                <li><a href="#ch2-dbscan">DBSCAN</a></li>
+                <li><a href="#ch2-pca">PCA</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#ch2-rl">Apprentissage par renforcement</a>
+              <ul class="chapter-toc__sub">
+                <li><a href="#ch2-rl-cartographie">Enjeux du RL</a></li>
+                <li><a href="#ch2-rl-mdp">MDP &amp; vocabulaire</a></li>
+                <li><a href="#ch2-rl-qlearning">Q-learning</a></li>
+              </ul>
+            </li>
+          </ol>
+          <p class="chapter-toc__footer">
+            <a href="#ch2-conclusion-title" class="chapter-toc__fin">Conclusion du chapitre</a>
+          </p>
+        </nav>
+      </aside>
+      <div class="chapter-main">
     <section class="card">
       <h2>Chapitre 2 : La Boîte à Outils du Machine Learning</h2>
 
@@ -34,7 +83,7 @@
         topologie du problème (supervisé, non-supervisé, décision séquentielle).
       </p>
 
-      <h3>Introduction : L'Anatomie de l'Apprentissage</h3>
+      <h3 id="ch2-intro">Introduction : L'Anatomie de l'Apprentissage</h3>
       <p class="lead">
         Si le premier chapitre nous a montré comment l'IA est passée du symbole à la donnée, ce deuxième chapitre s'attache à comprendre comment la
         machine apprend concrètement. Dans l'univers du Machine Learning, il n'existe pas de "méthode unique". Le choix d'un algorithme ne dépend pas de
@@ -46,7 +95,7 @@
       </p>
       <img class="cover-image" src="../Figures/Fig21.png"  />
 
-      <h4>1. L'Apprentissage Supervisé : Le Maître et l'Élève</h4>
+      <h4 id="ch2-anatomie-supervise">1. L'Apprentissage Supervisé : Le Maître et l'Élève</h4>
       <p class="lead">
         C'est la forme d'apprentissage la plus répandue dans l'industrie. Ici, la machine apprend à partir d'un jeu de données étiqueté
         (<span class="math-inline">labeled data</span>). Imaginez un élève devant un manuel où chaque exercice est accompagné de sa solution.
@@ -63,7 +112,7 @@
       </p>
       <img class="cover-image" src="../Figures/Fig22.png"  />
 
-      <h4>2. L'Apprentissage Non-Supervisé : L'Explorateur Autonome</h4>
+      <h4 id="ch2-anatomie-non-supervise">2. L'Apprentissage Non-Supervisé : L'Explorateur Autonome</h4>
       <p class="lead">
         Dans ce scénario, nous donnons à la machine des données brutes (<span class="math-inline">X</span>) sans aucune étiquette, ni solution. C'est
         l'apprentissage par la découverte pure. L'élève est laissé seul face à une pile de documents et doit y trouver une structure logique.
@@ -81,7 +130,7 @@
       <img class="cover-image" src="../Figures/Fig23.png"  />
 
 
-      <h4>3. L'Apprentissage par Renforcement : L'École de l'Expérience</h4>
+      <h4 id="ch2-anatomie-rl">3. L'Apprentissage par Renforcement : L'École de l'Expérience</h4>
       <p class="lead">
         Cette troisième voie est radicalement différente. Il n'y a plus de dataset fixe, mais un <strong>Agent</strong> plongé dans un
         <strong>Environnement</strong>. C'est l'apprentissage par "essais et erreurs", exactement comme un enfant apprend à marcher ou à faire du vélo.
@@ -137,7 +186,7 @@
         approches selon la structure mathématique de l'outil :
       </p>
 
-      <h4>L'Éventail des Modèles : du Machine Learning au Deep Learning</h4>
+      <h4 id="ch2-eventail">L'Éventail des Modèles : du Machine Learning au Deep Learning</h4>
 
       <div class="tool-compare" aria-label="Comparaison Machine Learning classique et Deep Learning">
         <div class="tool-panel tool-panel--classic">
@@ -223,7 +272,7 @@
 
       <img class="cover-image" src="../Figures/Fig25.png"  loading="lazy" />
 
-      <h4>Le Choix de l'Outil : L'Art du Compromis</h4>
+      <h4 id="ch2-choix-outil">Le Choix de l'Outil : L'Art du Compromis</h4>
       <p class="lead">
         Choisir un algorithme n'est pas une question de "mode", mais de stratégie. En tant qu'architecte de solutions IA, votre choix se fera selon
         plusieurs critères fondamentaux :
@@ -258,9 +307,9 @@
         exigences de vos utilisateurs finaux.
       </p>
 
-      <h3>L'Apprentissage Supervisé</h3>
+      <h3 id="ch2-supervise">L'Apprentissage Supervisé</h3>
 
-      <h4>1. Introduction : Le Schéma Universel du Supervisé</h4>
+      <h4 id="ch2-sup-schema">1. Introduction : Le Schéma Universel du Supervisé</h4>
       <p class="lead">
         Malgré la diversité des algorithmes, de la simple droite aux réseaux de neurones complexes, l'apprentissage supervisé repose toujours sur le
         même protocole rigoureux. C'est une danse en trois temps entre la donnée, le modèle et l'erreur.
@@ -293,7 +342,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h4>2. La Régression Linéaire : La Droite Prédictive</h4>
+      <h4 id="ch2-regression-lineaire">2. La Régression Linéaire : La Droite Prédictive</h4>
       <p class="lead">
         Pour comprendre comment une machine apprend, il faut commencer par l'exemple le plus épuré possible. Imaginons que vous receviez un fichier Excel
         contenant l'historique des ventes immobilières d'un quartier. C'est un cas d'école de l'apprentissage supervisé : pour chaque exemple, vous
@@ -830,7 +879,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h4>3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
+      <h4 id="ch2-regression-logistique">3. La Régression Logistique : La Porte d'Entrée de la Classification</h4>
       <p class="lead">
         Jusqu'ici, nous avons appris à tracer une droite qui prédit un <strong>nombre continu</strong> : un prix, une température, une consommation. Or, une
         grande partie des problèmes industriels ne demandent pas « combien ? », mais « lequel ? » : cet e-mail est-il un spam ? Ce patient est-il à risque ?
@@ -1105,7 +1154,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h4>4. Support Vector Machines (SVM) : L'Art de la Frontière</h4>
+      <h4 id="ch2-svm">4. Support Vector Machines (SVM) : L'Art de la Frontière</h4>
       <p class="lead">
         La régression logistique et la régression linéaire cherchent d'abord à ajuster des <strong>paramètres</strong> pour minimiser une erreur moyenne (MSE,
         entropie croisée) et produire une probabilité ou une valeur. Les <strong>machines à vecteurs de support</strong> (SVM) adoptent une autre philosophie,
@@ -1463,7 +1512,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h4>5. Arbres de Décision et Random Forest : La Force du Collectif</h4>
+      <h4 id="ch2-arbres-foret">5. Arbres de Décision et Random Forest : La Force du Collectif</h4>
       <p class="lead">
         Là où la SVM trace une frontière globale (souvent lisse) entre classes, un <strong>arbre de décision</strong> procède par une suite de questions du type
         « si la variable <span class="math-inline">x</span><sub>j</sub> est au-dessus d’un seuil, aller à gauche, sinon à droite ». C’est proche d’un
@@ -1619,7 +1668,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h4>6. Les Réseaux de Neurones : l’approche bio-inspirée</h4>
+      <h4 id="ch2-reseaux-neurones">6. Les Réseaux de Neurones : l’approche bio-inspirée</h4>
       <p class="lead">
         Nous avons vu la <strong>régression logistique</strong> comme une porte vers la classification, puis les <strong>SVM</strong> et les
         <strong>arbres</strong> comme d’autres façons de tracer une frontière. Les <strong>réseaux de neurones</strong> prolongent une idée plus ancienne encore :
@@ -1899,7 +1948,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h4>7. Apprentissage non supervisé : explorer la jungle sans étiquettes</h4>
+      <h4 id="ch2-non-supervise">7. Apprentissage non supervisé : explorer la jungle sans étiquettes</h4>
       <p class="lead">
         Jusqu’ici, le fil du chapitre ressemblait à une <strong>leçon avec corrigé</strong> : régression, classification, SVM, arbres, réseaux — partout des exemples
         <span class="math-inline">(x</span><sub>i</sub>, <span class="math-inline">y</span><sub>i</sub>) où la cible <span class="math-inline">y</span> était
@@ -1963,7 +2012,7 @@
         </li>
       </ul>
 
-      <h5>A. K-means : regrouper autour de centres qui bougent</h5>
+      <h5 id="ch2-kmeans">A. K-means : regrouper autour de centres qui bougent</h5>
       <p class="lead">
         On se donne un entier <span class="math-inline">k</span> (nombre de groupes) et on cherche <span class="math-inline">k</span> <strong>centroïdes</strong> dans
         l’espace des caractéristiques. Chaque point est assigné au centroïde le plus proche (distance euclidienne usuelle) : on forme des <strong>clusters</strong>.
@@ -2079,7 +2128,7 @@
         </div>
       </details>
 
-      <h5>D. DBSCAN : des régions denses sans fixer <span class="math-inline">k</span></h5>
+      <h5 id="ch2-dbscan">D. DBSCAN : des régions denses sans fixer <span class="math-inline">k</span></h5>
       <p class="lead">
         Là où K-means impose à l’avance un nombre de groupes et privilégie des amas « compacts » autour de centres, <strong>DBSCAN</strong> (<em>Density-Based
         Spatial Clustering of Applications with Noise</em>) part d’une autre intuition : un <strong>cluster</strong>, c’est une zone où les points s’accumulent
@@ -2129,7 +2178,7 @@
         vient encore de votre analyse.
       </p>
 
-      <h5>F. PCA : réduire la dimension sans étiquettes</h5>
+      <h5 id="ch2-pca">F. PCA : réduire la dimension sans étiquettes</h5>
       <p class="lead">
         Le <strong>partitionnement</strong> (K-means, DBSCAN) cherche des <strong>groupes</strong> de points. L’<strong>Analyse en Composantes Principales</strong>
         (PCA) cherche les <strong>directions</strong> où les données varient le plus — autrement dit un nouveau repère orthogonaux (les composantes principales), ordonné
@@ -2236,7 +2285,7 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
-      <h4>8. Apprentissage par renforcement : agir, observer, apprendre</h4>
+      <h4 id="ch2-rl">8. Apprentissage par renforcement : agir, observer, apprendre</h4>
       <p class="lead">
         Dans le <strong>supervisé</strong>, on apprenait une fonction à partir d’exemples indépendants ; dans le <strong>non supervisé</strong>, on explorait la forme
         de <span class="math-inline">X</span> sans cible. L’<strong>apprentissage par renforcement</strong> (RL) introduit un <strong>agent</strong> qui interagit
@@ -2263,7 +2312,7 @@
         loading="lazy"
       />
 
-      <h5>A. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
+      <h5 id="ch2-rl-cartographie">A. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
       <p class="lead">
         Avant d’entrer dans une méthode précise, il est utile de situer <strong>où</strong> les algorithmes peuvent buter — sans exhaustivité, mais pour cadrer vos
         attentes lorsque vous lirez la littérature (exploration, généralisation, stabilité…).
@@ -2292,7 +2341,7 @@
         </li>
       </ul>
 
-      <h5>B. Vocabulaire et formalisme minimal (MDP)</h5>
+      <h5 id="ch2-rl-mdp">B. Vocabulaire et formalisme minimal (MDP)</h5>
       <p class="lead">
         On modélise souvent le problème comme un <strong>processus de décision markovien</strong> (MDP) : l’état suivant et la récompense dépendent de l’état courant
         et de l’action (<strong>propriété de Markov</strong> — le futur conditionnel au présent ne dépend pas du passé plus loin). Une <strong>politique</strong>
@@ -2308,7 +2357,7 @@
         d’états à partir d’échantillons. Dans la suite, nous ne développons qu’une brique historique et pédagogique : le <strong>Q-learning</strong> tabulaire.
       </p>
 
-      <h5>C. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
+      <h5 id="ch2-rl-qlearning">C. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
       <p class="lead">
         On note <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) la <strong>valeur d’action</strong> : espérance du
         retour cumulé actualisé si l’on commence par prendre l’action <span class="math-inline">a</span> dans l’état <span class="math-inline">s</span>, puis se comporte
@@ -2572,6 +2621,9 @@
           </li>
         </ul>
       </section>
+    </section>
+      </div>
+    </div>
 
       
     <nav class="book-nav">
