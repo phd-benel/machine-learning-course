@@ -1128,15 +1128,15 @@
       <ul>
         <li>
           <strong>SVM linéaire à marge dure :</strong> les classes peuvent être séparées par un hyperplan <strong>sans aucun point dans la zone interdite</strong> ;
-          on cherche le couloir le plus large possible (figure 43).
+          on cherche le couloir le plus large possible.
         </li>
         <li>
           <strong>SVM linéaire à marge souple :</strong> le bruit ou le chevauchement impose des <strong>erreurs locales</strong> ; un paramètre
-          <span class="math-inline">C</span> arbitre le compromis marge / fidélité aux étiquettes (figure 44).
+          <span class="math-inline">C</span> arbitre le compromis marge / fidélité aux étiquettes.
         </li>
         <li>
           <strong>SVM à noyau (souvent RBF) :</strong> la frontière utile n'est pas un hyperplan dans l'espace d'entrée ; on travaille dans un espace de plongement
-          <strong>implicite</strong> via une fonction noyau (figure 45).
+          <strong>implicite</strong> via une fonction noyau.
         </li>
       </ul>
       <p class="lead">
@@ -1212,13 +1212,57 @@
         loading="lazy"
       />
 
-      <h5>E. Où utilise-t-on les SVM ?</h5>
+      <h5>E. À quoi sert une SVM ? Classification supervisée</h5>
       <p class="lead">
-        Historiquement très présentes en <strong>classification de textes</strong>, <strong>bio-informatique</strong> (séquences), <strong>vision</strong> avec
-        des descripteurs de main d'œuvre, les SVM restent pertinentes lorsque la dimension est modérée et que l'on cherche un modèle à
-        <strong>fondements mathématiques clairs</strong>. Avec des millions de variables brutes (pixels bruts), les réseaux profonds dominent souvent ; les SVM
-        restent une <strong>référence forte</strong> sur des features construites ou des jeux de taille moyenne.
+        Une SVM sert surtout à faire de la <strong>classification</strong> : apprendre une règle qui, pour un nouveau point dans l’espace des caractéristiques,
+        prédit à <strong>quelle classe</strong> il appartient. Le cadre est <strong>supervisé</strong> : pour chaque exemple d’entraînement, on connaît déjà la
+        classe (l’<strong>étiquette</strong>) — le modèle n’invente pas les groupes, il les apprend à partir d’exemples étiquetés puis généralise à de nouveaux
+        points.
       </p>
+
+      <details class="expand-panel">
+        <summary>Extension — du binaire au multi-classes (OvR et OvO)</summary>
+        <div class="expand-panel__body">
+          <p class="lead">
+            Bien que le modèle SVM (<em>Support Vector Machine</em>) soit d’abord conçu pour la <strong>classification binaire</strong> (séparer deux classes), on
+            peut l’étendre au <strong>multi-classes</strong> avec deux stratégies principales.
+          </p>
+
+          <p class="lead"><strong>1. One-vs-Rest (OvR) ou One-vs-All</strong></p>
+          <p class="lead">
+            C’est la méthode la plus courante — c’est aussi celle utilisée par défaut pour les SVM dans <strong>scikit-learn</strong>.
+          </p>
+          <ul>
+            <li><strong>Principe :</strong> on entraîne <strong>un classifieur par classe</strong>.</li>
+            <li>
+              <strong>Fonctionnement :</strong> pour <span class="math-inline">N</span> classes, on crée <span class="math-inline">N</span> modèles binaires.
+              Chaque modèle apprend à distinguer <strong>une classe donnée</strong> de <strong>toutes les autres réunies</strong>.
+            </li>
+            <li>
+              <strong>Décision :</strong> pour prédire, on soumet le point aux <span class="math-inline">N</span> modèles et on choisit la classe dont le modèle
+              affiche le <strong>score de confiance</strong> (ou la marge) la plus élevée.
+            </li>
+          </ul>
+
+          <p class="lead"><strong>2. One-vs-One (OvO)</strong></p>
+          <p class="lead">
+            Cette approche est plus <strong>coûteuse en calcul</strong> (plus de modèles à entraîner), mais elle peut être intéressante sur des petits jeux de
+            données.
+          </p>
+          <ul>
+            <li><strong>Principe :</strong> on entraîne un classifieur pour <strong>chaque paire de classes</strong>.</li>
+            <li>
+              <strong>Fonctionnement :</strong> pour <span class="math-inline">N</span> classes, on construit
+              <span class="math-inline">N</span>(<span class="math-inline">N</span> − 1) / 2 modèles. Par exemple, pour trois classes A, B et C, on obtient trois
+              modèles : (A contre B), (A contre C) et (B contre C).
+            </li>
+            <li>
+              <strong>Décision :</strong> chaque modèle vote pour une des deux classes qu’il oppose ; la classe qui recueille le <strong>plus de votes</strong>
+              l’emporte.
+            </li>
+          </ul>
+        </div>
+      </details>
 
       <h5>F. Comment ça s'entraîne ? Objectif, « perte » et optimiseur</h5>
       <p class="lead">
