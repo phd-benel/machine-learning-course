@@ -433,7 +433,8 @@ details.expand-panel summary:hover{
 .expand-panel__body li{margin-bottom:6px;}
 .lr-conclusion,
 .logistic-conclusion,
-.svm-conclusion{
+.svm-conclusion,
+.tree-conclusion{
   margin:22px 0 10px;
   padding:16px 18px 18px;
   border:1px solid var(--border);
@@ -444,7 +445,8 @@ details.expand-panel summary:hover{
 }
 .lr-conclusion h5,
 .logistic-conclusion h5,
-.svm-conclusion h5{
+.svm-conclusion h5,
+.tree-conclusion h5{
   margin:16px 0 8px;
   font-size:.95rem;
   font-family:Merriweather,serif;
@@ -452,17 +454,20 @@ details.expand-panel summary:hover{
 }
 .lr-conclusion h5.lr-conclusion__title,
 .logistic-conclusion h5.logistic-conclusion__title,
-.svm-conclusion h5.svm-conclusion__title{
+.svm-conclusion h5.svm-conclusion__title,
+.tree-conclusion h5.tree-conclusion__title{
   margin:0 0 12px;
   font-size:1.02rem;
   color:#0f172a;
 }
 .lr-conclusion .lead,
 .logistic-conclusion .lead,
-.svm-conclusion .lead{color:var(--muted);}
+.svm-conclusion .lead,
+.tree-conclusion .lead{color:var(--muted);}
 .lr-conclusion ul,
 .logistic-conclusion ul,
-.svm-conclusion ul{
+.svm-conclusion ul,
+.tree-conclusion ul{
   margin:8px 0 12px;
   padding-left:1.25rem;
   color:var(--muted);
@@ -470,7 +475,8 @@ details.expand-panel summary:hover{
 }
 .lr-conclusion li,
 .logistic-conclusion li,
-.svm-conclusion li{margin-bottom:8px;}
+.svm-conclusion li,
+.tree-conclusion li{margin-bottom:8px;}
 .content-soon__body{
   padding:0 16px 16px;
   border-top:1px dashed var(--border);

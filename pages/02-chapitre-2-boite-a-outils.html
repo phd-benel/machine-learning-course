@@ -1290,7 +1290,7 @@
       </div>
       <p class="lead">
         La contrainte impose que chaque point soit du bon côté avec une « marge fonctionnelle » au moins 1 ; minimiser ‖<span class="math-inline">w</span>‖²
-        élargit la marge géométrique entre les classes (voir la figure 43 : les bandes bleues correspondent aux droites où le score vaut −1 et +1).
+        élargit la marge géométrique entre les classes.
       </p>
 
       <p class="lead"><strong>2. Formulation « marge souple » (bruit, chevauchement)</strong></p>
@@ -1304,7 +1304,7 @@
       </div>
       <p class="lead">
         <span class="math-inline">C</span> pèse le compromis : pénaliser fortement les ξ<sub>i</sub> (gros <span class="math-inline">C</span>) pousse à respecter
-        les contraintes au prix d'une marge plus étroite ; un <span class="math-inline">C</span> plus petit tolère plus d'écarts (voir section C et figure 44).
+        les contraintes au prix d'une marge plus étroite ; un <span class="math-inline">C</span> plus petit tolère plus d'écarts.
       </p>
 
       <p class="lead"><strong>3. Perte en charnière (<span class="math-inline">hinge loss</span>)</strong></p>
@@ -1463,23 +1463,174 @@
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
+      <h4>5. Arbres de Décision et Random Forest : La Force du Collectif</h4>
+      <p class="lead">
+        Là où la SVM trace une frontière globale (souvent lisse) entre classes, un <strong>arbre de décision</strong> procède par une suite de questions du type
+        « si la variable <span class="math-inline">x</span><sub>j</sub> est au-dessus d’un seuil, aller à gauche, sinon à droite ». C’est proche d’un
+        <strong>organigramme</strong> : lisible, mais chaque arbre pris isolément peut être instable et sensible au bruit. La
+        <strong>forêt aléatoire</strong> (<span class="math-inline">Random Forest</span>) combine de nombreux arbres entraînés sur des sous-échantillons
+        différents et vote la décision finale — d’où l’image du <strong>collectif</strong> qui lisse les excès d’un seul modèle.
+      </p>
+
+      <h5>A. Arbre de décision : des règles emboîtées</h5>
+      <p class="lead">
+        À chaque <strong>nœud interne</strong>, on choisit une variable et un seuil qui <strong>sépare</strong> le mieux les exemples (selon un critère
+        d’<strong>impureté</strong> : indice de Gini ou entropie en classification). Les feuilles donnent la classe prédite (souvent la classe majoritaire dans
+        la région). La prédiction pour un nouveau point consiste à le faire <strong>descendre</strong> l’arbre jusqu’à une feuille : on obtient une règle explicable
+        (« si … alors … »), ce qui plaît en milieu réglementé — contrairement à un réseau profond opaque.
+      </p>
+      <p class="lead">
+        En dimension 2, les frontières d’un arbre sont des <strong>droites parallèles aux axes</strong> : l’espace est découpé en rectangles. La figure suivante
+        montre un arbre <strong>peu profond</strong> (<code>max_depth = 3</code>) sur des données simulées en forme de croissants : la frontière est anguleuse mais
+        encore simple.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : régions de décision d’un arbre peu profond (données simulées)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig48.png"
+        alt="Deux classes en croissants avec régions colorées séparées par des frontières parallèles aux axes"
+        loading="lazy"
+      />
+
+      <h5>B. Un arbre trop profond : variance et sur-apprentissage</h5>
+      <p class="lead">
+        Si l’on laisse l’arbre se <strong>subdiviser</strong> sans limite, il peut coller à chaque point d’entraînement : la frontière devient très découpée et le
+        modèle <strong>généralise mal</strong> (forte <strong>variance</strong>). C’est l’analogue inverse de la SVM qui, avec un bon réglage, cherche une marge
+        stable : ici, la stabilité passe par limiter la profondeur, le nombre minimal d’exemples par feuille, ou en agrégeant plusieurs arbres.
+      </p>
+
+      <h5>C. Random Forest : plusieurs arbres, un vote</h5>
+      <p class="lead">
+        Une <strong>forêt aléatoire</strong> entraîne un grand nombre d’arbres sur des <strong>échantillons bootstrap</strong> (tirages avec remise) du jeu
+        d’apprentissage ; à chaque coupe, on ne considère souvent qu’un <strong>sous-ensemble aléatoire de variables</strong> (<em>feature bagging</em>). Les
+        arbres sont décorrélés : leurs erreurs ne se cumulent pas toutes dans le même sens. La prédiction finale est le <strong>vote majoritaire</strong>
+        (classification) ou la moyenne (régression). Par rapport à <strong>un seul</strong> arbre profond, la frontière tend à être plus <strong>régulière</strong>
+        sur des problèmes bruités — au prix d’un modèle moins lisible mot à mot.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig49.png"
+        alt="Comparaison côte à côte des régions de décision d’un arbre profond et d’une forêt aléatoire"
+        loading="lazy"
+      />
+
+      <h5>D. Importance des variables : ce que la forêt met en avant</h5>
+      <p class="lead">
+        Un avantage pratique des forêts est le classement des <strong>importances de variables</strong> (contribution moyenne à la réduction d’impureté sur tous
+        les arbres). Ce n’est pas une causalité statistique stricte, mais un <strong>indicateur utile</strong> pour savoir quelles entrées le modèle exploite le
+        plus — par exemple en diagnostic ou en priorisation de capteurs. La figure suivante illustre les dix variables les plus marquantes sur le jeu
+        <em>Breast cancer</em> de scikit-learn (données tabulaires réelles).
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : dix variables les plus importantes (Random Forest, jeu breast cancer)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig50.png"
+        alt="Diagramme en barres horizontales des importances des variables pour une forêt aléatoire"
+        loading="lazy"
+      />
+
+      <p class="table-caption">Repères rapides : SVM, arbre seul, forêt aléatoire</p>
+      <div class="table-block">
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Comparaison SVM arbre Random Forest">
+            <thead>
+              <tr>
+                <th scope="col">Critère</th>
+                <th scope="col">SVM</th>
+                <th scope="col">Arbre de décision</th>
+                <th scope="col">Random Forest</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Idée directrice</td>
+                <td>Maximiser une <strong>marge</strong> (ou version souple / noyau)</td>
+                <td>Suite de <strong>seuils</strong> sur les variables (régions)</td>
+                <td><strong>Ensemble</strong> d’arbres + vote (bootstrap, sous-échantillon de variables)</td>
+              </tr>
+              <tr>
+                <td>Interprétabilité</td>
+                <td>Limite avec noyau ; marge lisible en linéaire</td>
+                <td class="cell-highlight">Souvent élevée (chemins « si … alors … »)</td>
+                <td>Importances de variables utiles ; arbre individuel moins central</td>
+              </tr>
+              <tr>
+                <td>Typique sur…</td>
+                <td>Données vectorielles, noyau si frontière non linéaire</td>
+                <td>Tabulaire, règles métier, petits jeux</td>
+                <td>Tabulaire, benchmarks « premier modèle fort »</td>
+              </tr>
+              <tr>
+                <td>Principal piège</td>
+                <td>Choix noyau / <span class="math-inline">C</span> / <span class="math-inline">γ</span></td>
+                <td><strong>Sur-apprentissage</strong> si arbre trop profond</td>
+                <td>Taille mémoire / temps si très grand nombre d’arbres</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="lead">
+        La <strong>Random Forest</strong> se situe souvent entre les deux extrêmes : elle conserve la capacité à modéliser des relations <strong>non linéaires</strong>
+        et des variables hétérogènes sans normalisation obligatoire, tout en <strong>réduisant la variance</strong> par rapport à un arbre unique. Sur des
+        <strong>tableaux</strong> de taille moyenne, c’est une référence pour un <strong>premier modèle performant</strong> avant d’explorer le gradient boosting ou les
+        réseaux profonds.
+      </p>
+
+      <section class="tree-conclusion" aria-labelledby="tree-conclusion-title">
+        <h5 id="tree-conclusion-title" class="tree-conclusion__title">En synthèse : arbre et forêt dans la boîte à outils</h5>
+        <ul>
+          <li>
+            <strong>Arbre :</strong> modèle à base de seuils, idéal pour l’<strong>explicabilité</strong> et les prototypes rapides ; surveiller la profondeur pour
+            limiter le sur-apprentissage.
+          </li>
+          <li>
+            <strong>Random Forest :</strong> <strong>ensemble</strong> d’arbres sur données et variables tirées aléatoirement ; <strong>vote</strong> ou moyenne ;
+            souvent robuste et compétitive sans réglage extrême.
+          </li>
+          <li>
+            <strong>Par rapport à la SVM :</strong> moins centrée sur une marge géométrique unique, plus flexible sur des données <strong>mixtes</strong> (catégoriel
+            encodé, nombres) ; les importances de variables offrent un levier d’analyse que la SVM standard ne fournit pas directement.
+          </li>
+        </ul>
+      </section>
+
+      <details class="expand-panel">
+        <summary>Références et pour aller plus loin (arbres &amp; forêts)</summary>
+        <div class="expand-panel__body">
+          <ul>
+            <li>
+              <strong>Fondations :</strong> Breiman, Friedman, Olshen, Stone, <em>Classification and Regression Trees</em> (CART) — référence historique sur les
+              arbres.
+            </li>
+            <li>
+              <strong>Random Forests :</strong> Leo Breiman (2001), « Random Forests », <em>Machine Learning</em> — article fondateur de la méthode.
+            </li>
+            <li>
+              <strong>Pratique :</strong>
+              <a href="https://scikit-learn.org/stable/modules/tree.html" target="_blank" rel="noopener noreferrer">scikit-learn — Decision Trees</a> et
+              <a href="https://scikit-learn.org/stable/modules/ensemble.html#forest" target="_blank" rel="noopener noreferrer">Ensemble methods / Forests</a>.
+            </li>
+          </ul>
+        </div>
+      </details>
+
+      <div class="section-divider" role="separator" aria-hidden="true"></div>
+
       <details class="content-soon">
-        <summary>
-          Contenu à venir — sections 5 et 6 (arbres &amp; forêts, réseaux de neurones) et suite du chapitre (non supervisé, RL)
-        </summary>
+        <summary>Contenu à venir — section 6 (réseaux de neurones) et prolongements du chapitre</summary>
         <div class="content-soon__body">
           <p class="lead content-soon__lead">
-            Les développements détaillés ci-dessous seront <strong>publiés prochainement</strong> dans cette version du cours. Vous pouvez déplier ce bloc
-            pour voir le programme annoncé.
+            Les développements ci-dessous seront <strong>complétés prochainement</strong> dans cette version du cours.
           </p>
-          <h5 class="content-soon__subtitle">5. Arbres de Décision et Random Forest : La Force du Collectif</h5>
-          <h5 class="content-soon__subtitle">6. Les Réseaux de Neurones : L'Approche Bio-Inspirée</h5>
+          <h5 class="content-soon__subtitle">6. Les Réseaux de Neurones : l’approche bio-inspirée</h5>
           <p class="lead"><strong>À suivre dans ce chapitre :</strong></p>
           <ul class="content-soon__list">
             <li><strong>Apprentissage non supervisé</strong> — clustering, réduction de dimension, etc.</li>
             <li><strong>Apprentissage par renforcement (RL)</strong> — agent, environnement, politique, etc.</li>
           </ul>
-          
         </div>
       </details>
 
