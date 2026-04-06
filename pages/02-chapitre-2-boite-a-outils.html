@@ -1139,18 +1139,46 @@
         loading="lazy"
       />
 
-      <h5>B. Formulation courte (ce que minimise le SVM)</h5>
+      <h5>B. Comment ça s'entraîne ? Objectif, « perte » et optimiseur</h5>
       <p class="lead">
-        Sous contraintes de bonne classification, on maximise la marge — ce qui équivaut mathématiquement à minimiser la norme du vecteur de poids
-        <span class="math-inline">w</span> qui définit l'hyperplan <span class="math-inline">w</span>ᵀ<span class="math-inline">x</span> +
-        <span class="math-inline">b</span> = 0. Les détails du problème d'optimisation (souvent écrit en <strong>forme duale</strong> avec multiplicateurs de
-        Lagrange) sont ceux d'un cours de maths appliquées ; pour l'ingénieur, l'essentiel est le <strong>rôle géométrique</strong> des supports et de la marge.
+        Comme pour la régression logistique, un SVM n'est pas « dessiné à la main » : l'ordinateur <strong>résout un problème d'optimisation</strong> pour trouver
+        <span class="math-inline">w</span> et <span class="math-inline">b</span>. La différence, c'est le <strong>critère</strong> : ici on ne minimise pas une
+        log-vraisemblance, mais un objectif lié à la <strong>marge</strong> et à la bonne classification.
+      </p>
+      <p class="lead">
+        <strong>Marge dure (données parfaitement séparables) :</strong> parmi toutes les séparations possibles, on cherche celle qui rend la bande centrale la
+        plus large. Mathématiquement, cela revient à <strong>minimiser</strong> une quantité liée à la taille de <span class="math-inline">w</span> (souvent
+        ½‖<span class="math-inline">w</span>‖²), tout en imposant que chaque point soit du <strong>bon côté</strong> de la frontière avec une marge suffisante. Les
+        <strong>marges</strong> que vous voyez sur la figure ne sont pas choisies au hasard : elles sont le <strong>résultat</strong> de ce problème — la solution
+        donne à la fois l'hyperplan <strong>et</strong> la largeur du couloir.
+      </p>
+      <p class="lead">
+        <strong>Marge souple (bruit, chevauchement) :</strong> on autorise quelques points à franchir la limite ou à se tromper, moyennant une
+        <strong>pénalité</strong>. Une formulation courante fait apparaître la <strong>perte en charnière</strong> (<span class="math-inline">hinge loss</span>) :
+        pour chaque exemple, si le score a le bon signe et dépasse un seuil de sécurité, la perte est nulle ; sinon, elle augmente d'autant plus que la prédiction
+        est mauvaise ou trop timide. Le coefficient <span class="math-inline">C</span> (voir ci-dessous) règle le compromis entre « élargir la marge » et « punir
+        les erreurs » — un peu comme le <span class="math-inline">α</span> de la descente de gradient, mais avec un autre rôle : ici ce n'est pas la taille du pas,
+        c'est le <strong>poids des erreurs</strong> dans l'objectif total.
+      </p>
+      <p class="lead">
+        <strong>Optimiseur :</strong> ce problème est <strong>convexe</strong> (une seule « bonne » solution globale dans les cas standard). Les logiciels
+        (scikit-learn, LIBSVM, etc.) utilisent des <strong>algorithmes spécialisés</strong> — souvent de type SMO (*Sequential Minimal Optimization*) ou solveurs de
+        programmation quadratique — qui ajustent les paramètres par petites étapes jusqu'à <strong>convergence</strong> (solution trouvée). Vous n'avez pas
+        besoin de programmer ces boucles à la main : l'essentiel est de savoir <strong>ce que</strong> minimise le SVM (marge + erreurs) et <strong>comment</strong> se
+        lisent les résultats (frontière, supports).
+      </p>
+      <p class="lead">
+        <strong>En résumé :</strong> le SVM a bien une « fonction de coût » au sens large (objectif + pénalités sur les mauvais placements) et un
+        <strong>entraînement</strong> automatique ; ce n'est pas la même formule que la cross-entropy de la régression logistique, ni forcément la même routine que
+        la descente de gradient stochastique des grands réseaux — mais la logique « définir un critère et le minimiser » est la même famille que dans tout le
+        chapitre.
       </p>
 
       <h5>C. Marge souple et paramètre <span class="math-inline">C</span></h5>
       <p class="lead">
-        Dans la vraie vie, les classes se <strong>chevauchent</strong> ou le bruit fait traîner quelques points dans la zone interdite. On introduit alors des
-        variables de ressort (<strong>slack</strong>) et un coefficient <span class="math-inline">C</span> qui arbitre un compromis :
+        Dans la vraie vie, les classes se <strong>chevauchent</strong> ou le bruit fait traîner quelques points dans la zone interdite. On a déjà évoqué la
+        <strong>marge souple</strong> et la <strong>hinge loss</strong> ci-dessus ; concrètement, on introduit des marges de tolérance (<strong>slack</strong>) et
+        un coefficient <span class="math-inline">C</span> qui arbitre le compromis suivant :
       </p>
       <ul>
         <li>
@@ -1205,8 +1233,8 @@
         <h5 id="svm-conclusion-title" class="svm-conclusion__title">En synthèse : la SVM dans votre boîte à outils</h5>
         <p class="lead">
           <strong>Par rapport à la régression logistique :</strong> même famille d'hypothèses (séparation souvent linéaire dans un espace choisi), mais critère
-          d'entraînement centré sur la <strong>marge</strong> plutôt que sur la log-vraisemblance ; les <strong>vecteurs de support</strong> jouent un rôle explicite
-          dans la solution.
+          d'entraînement centré sur la <strong>marge</strong> et la <strong>hinge loss</strong> plutôt que sur la log-vraisemblance ; l'optimisation est convexe et
+          traitée par des solveurs dédiés. Les <strong>vecteurs de support</strong> jouent un rôle explicite dans la solution.
         </p>
         <ul>
           <li>
