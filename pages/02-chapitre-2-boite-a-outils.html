@@ -1337,7 +1337,27 @@
         les contraintes au prix d'une marge plus étroite ; un <span class="math-inline">C</span> plus petit tolère plus d'écarts.
       </p>
 
-      <p class="lead"><strong>3. Perte en charnière (<span class="math-inline">hinge loss</span>)</strong></p>
+      <p class="lead"><strong>3. Formulation du problème SVM non linéaire (noyau)</strong></p>
+      <p class="lead">
+        Lorsqu'aucun hyperplan ne sépare les classes dans l'espace des entrées <span class="math-inline">x</span>, on peut plonger les points dans un espace de
+        <strong>caractéristiques</strong> de plus grande dimension via une application <span class="math-inline">φ</span> (souvent implicite) : les données deviennent
+        <span class="math-inline">φ</span>(<span class="math-inline">x</span><sub>i</sub>), et l'on cherche un séparateur linéaire dans cet espace — ce qui revient, dans
+        l'espace d'origine, à une <strong>frontière non linéaire</strong>.
+      </p>
+      <p class="lead">
+        Plutôt que de calculer <span class="math-inline">φ</span> explicitement, on passe au <strong>problème dual</strong> : les contraintes et l'objectif ne font
+        intervenir que des <strong>produits scalaires</strong> entre images <span class="math-inline">φ</span>(<span class="math-inline">x</span><sub>i</sub>) ·
+        <span class="math-inline">φ</span>(<span class="math-inline">x</span><sub>j</sub>). Le <strong>kernel trick</strong> consiste à les remplacer par une fonction
+        noyau <span class="math-inline">K</span>(<span class="math-inline">x</span><sub>i</sub>, <span class="math-inline">x</span><sub>j</sub>) = <span class="math-inline">φ</span>(<span class="math-inline">x</span><sub>i</sub>) · <span class="math-inline">φ</span>(<span class="math-inline">x</span><sub>j</sub>) vérifiant les conditions de Mercer (ex. noyau RBF, polynomial). La matrice de Gram
+        <span class="math-inline">K</span><sub>ij</sub> = <span class="math-inline">K</span>(<span class="math-inline">x</span><sub>i</sub>, <span class="math-inline">x</span><sub>j</sub>) remplace les produits scalaires dans le dual ; la décision s'écrit comme combinaison des noyaux sur les <strong>vecteurs de support</strong> (coefficients duaux α<sub>i</sub> non nuls).
+      </p>
+      <p class="lead">
+        En pratique, on optimise les mêmes familles de solveurs (SMO, etc.) sur les α<sub>i</sub> avec contraintes de boîte et linéarité Σ<sub>i</sub> α<sub>i</sub>
+        <span class="math-inline">y</span><sub>i</sub> = 0 ; seule la géométrie effective change, portée par <span class="math-inline">K</span> au lieu de
+        <span class="math-inline">x</span><sub>i</sub> · <span class="math-inline">x</span><sub>j</sub> — comme déjà évoqué en § 4.4 (intuition géométrique).
+      </p>
+
+      <p class="lead"><strong>4. Perte en charnière (<span class="math-inline">hinge loss</span>)</strong></p>
       <p class="lead">
         Une formulation équivalente très parlante minimise la somme des pertes « charnière » plus une régularisation sur
         <span class="math-inline">w</span> :
@@ -1361,7 +1381,7 @@
       />
 
       
-      <p class="lead"><strong>Optimiseur</span>)</strong></p>
+      <p class="lead"><strong>5. Optimiseur</strong></p>
 
       <p class="lead">
         Les implémentations classiques n'utilisent pas
@@ -1372,10 +1392,10 @@
         programmation quadratique adaptés.
       </p>
       <p class="lead">
-        <strong>Lien avec les variantes B à D :</strong> la <strong>marge dure</strong> se résout comme un programme quadratique sous contraintes linéaires (primal ou
+        <strong>Lien avec les points 1 à 3 ci-dessus :</strong> la <strong>marge dure</strong> se résout comme un programme quadratique sous contraintes linéaires (primal ou
         dual équivalent). La <strong>marge souple</strong> ajoute les multiplicateurs liés aux ξ<sub>i</sub> ; l’<strong>objectif</strong> reste quadratique en
-        <span class="math-inline">w</span> avec terme linéaire en les violations, et la <strong>hinge</strong> en est la lecture « perte + régularisation ». Pour un
-        <strong>noyau</strong>, on entraîne sur le <strong>dual</strong> en remplaçant les produits scalaires par
+        <span class="math-inline">w</span> avec terme linéaire en les violations, et la <strong>hinge</strong> (point 4) en est la lecture « perte + régularisation ». Pour un
+        <strong>noyau</strong> (point 3), on entraîne sur le <strong>dual</strong> en remplaçant les produits scalaires par
         <span class="math-inline">K</span> : les mêmes solveurs (SMO, etc.) s’appliquent aux coefficients α<sub>i</sub>, d’où l’efficacité du « kernel trick »
         sans construire la projection explicite.
       </p>
