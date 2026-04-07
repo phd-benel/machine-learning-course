@@ -83,7 +83,7 @@
               </ul>
             </li>
           </ol>
-          <p class="chapter-toc__footer">
+          <p class="chapter-toc__footer chapter-toc__item--deferred">
             <a href="#ch2-conclusion-title" class="chapter-toc__fin">Conclusion du chapitre</a>
           </p>
         </nav>
@@ -2021,9 +2021,9 @@
       </details>
 
       <!--
-        Partie II & III : contenu conservé dans le HTML mais masqué en CSS (.chapter-parts-deferred).
-        Pour republier : supprimer la classe "chapter-parts-deferred" sur le div ouvert ci-dessous,
-        et retirer "chapter-toc__item--deferred" sur les deux <li> du sommaire.
+        Partie II, III & conclusion générale : masqués en CSS (.chapter-parts-deferred).
+        Pour republier : supprimer "chapter-parts-deferred" sur les div concernés,
+        et retirer "chapter-toc__item--deferred" sur les deux <li> Partie II/III + le <p> du lien Conclusion.
       -->
       <div class="chapter-parts-deferred">
       <div class="section-divider" role="separator" aria-hidden="true"></div>
@@ -2547,6 +2547,7 @@
 
       </div><!-- /.chapter-parts-deferred (Partie II & III) -->
 
+      <div class="chapter-parts-deferred">
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
       <section class="chapter-conclusion" aria-labelledby="ch2-conclusion-title">
@@ -2703,6 +2704,8 @@
           </li>
         </ul>
       </section>
+      </div><!-- /.chapter-parts-deferred (conclusion générale) -->
+
     </section>
       </div>
     </div>
