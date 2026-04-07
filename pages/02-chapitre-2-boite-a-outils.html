@@ -1393,65 +1393,11 @@
         loading="lazy"
       />
 
-      <p class="lead"><strong>4. Exemple chiffré (deux points, valeurs volontairement simples)</strong></p>
-      <p class="lead">
-        Supposons qu'à l'issue d'une itération, pour deux exemples on ait les scores suivants (même vérité
-        <span class="math-inline">y</span> = +1 pour fixer les idées) :
-      </p>
-      <div class="table-block">
-        <div class="table-wrap">
-          <table class="data-table" aria-label="Exemple hinge loss">
-            <thead>
-              <tr>
-                <th scope="col">Exemple</th>
-                <th scope="col"><span class="math-inline">y</span> · <span class="math-inline">f</span>(<span class="math-inline">x</span>)</th>
-                <th scope="col">max(0, 1 − <span class="math-inline">y</span>·<span class="math-inline">f</span>)</th>
-                <th scope="col">Lecture</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>A</td>
-                <td class="cell-num">1,8</td>
-                <td class="cell-num">0</td>
-                <td>Marge confortable : pas de pénalité hinge.</td>
-              </tr>
-              <tr>
-                <td>B</td>
-                <td class="cell-num">0,3</td>
-                <td class="cell-num">0,7</td>
-                <td>Trop près de la frontière : perte positive.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <p class="lead">
-        L'entraînement ajuste <span class="math-inline">w</span> et <span class="math-inline">b</span> pour <strong>réduire</strong> la somme de ces pertes (sous la
-        contrainte de ne pas exploser ‖<span class="math-inline">w</span>‖).
-      </p>
+      
+      <p class="lead"><strong>Optimiseur</span>)</strong></p>
 
-      <p class="lead"><strong>5. Forme duale et noyau (idée)</strong></p>
       <p class="lead">
-        Le même problème peut s'écrire en fonction de coefficients α<sub>i</sub> associés à <strong>chaque exemple</strong> (formulation duale). La fonction de
-        décision s'écrit alors comme combinaison des exemples « actifs » — ce sont précisément les <strong>vecteurs de support</strong> (α<sub>i</sub> &gt; 0). Pour
-        un noyau <span class="math-inline">K</span>, les produits scalaires
-        <span class="math-inline">x</span><sub>i</sub>ᵀ<span class="math-inline">x</span><sub>j</sub> deviennent
-        <span class="math-inline">K</span>(<span class="math-inline">x</span><sub>i</sub>, <span class="math-inline">x</span><sub>j</sub>) sans calculer explicitement
-        la projection en grande dimension. La figure suivante illustre, sur un petit jeu simulé, que seuls certains indices portent un poids notable — cohérent avec
-        l'idée de supports.
-      </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : ordre de grandeur des contributions duales (jeu fictif, SVM linéaire)</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig47.png"
-        alt="Barres des contributions duales par exemple avec mise en évidence des vecteurs de support"
-        loading="lazy"
-      />
-
-      <p class="lead"><strong>6. Comment l'ordinateur résout le problème ? SMO et bibliothèques</strong></p>
-      <p class="lead">
-        Le problème est <strong>convexe</strong> : pas de minima locaux piégeant la solution comme en deep learning. Les implémentations classiques n'utilisent pas
+        Les implémentations classiques n'utilisent pas
         la même boucle générique que la descente de gradient stochastique sur des millions de poids, mais des <strong>algorithmes de type SMO</strong> (*Sequential
         Minimal Optimization*) : on met à jour à chaque étape de <strong>petits groupes</strong> de coefficients duaux (souvent deux α à la fois) en respectant les
         contraintes, jusqu'à convergence. C'est l'approche popularisée par John Platt pour entraîner rapidement les SVM ; les bibliothèques
