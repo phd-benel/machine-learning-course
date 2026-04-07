@@ -1285,6 +1285,61 @@
         loading="lazy"
       />
 
+      <p class="table-caption" style="margin:18px 0 8px;">Trois vues pour l’intuition du noyau (gauche → droite)</p>
+      <div class="kernel-noyau-gallery" role="group" aria-label="Trois figures sur le passage par un espace de plongement">
+        <figure class="kernel-noyau-gallery__fig">
+          <img
+            class="kernel-noyau-gallery__img"
+            src="../Figures/Part1_Noyau.png"
+            alt="Étape 1 : données et séparation impossible par une droite dans le plan"
+            loading="lazy"
+          />
+        </figure>
+        <figure class="kernel-noyau-gallery__fig">
+          <img
+            class="kernel-noyau-gallery__img"
+            src="../Figures/Part2_Noyau.png"
+            alt="Étape 2 : plongement des points dans un espace de dimension plus élevée"
+            loading="lazy"
+          />
+        </figure>
+        <figure class="kernel-noyau-gallery__fig">
+          <img
+            class="kernel-noyau-gallery__img"
+            src="../Figures/Part3_Noyau.png"
+            alt="Étape 3 : séparation linéaire par un plan dans l’espace plongé"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+      <p class="lead">
+        <strong>Passer du plan (2D) à l’espace 3D.</strong> Au lieu de travailler seulement avec
+        <span class="math-inline">x</span><sub>(1)</sub> et <span class="math-inline">x</span><sub>(2)</sub>, on associe à chaque point
+        <span class="math-inline">x</span> = (<span class="math-inline">x</span><sub>(1)</sub>, <span class="math-inline">x</span><sub>(2)</sub>) un
+        vecteur <span class="math-inline">Φ</span>(<span class="math-inline">x</span>) en dimension 3 en « enrichissant » les coordonnées : les carrés
+        <span class="math-inline">x</span><sub>(1)</sub><sup>2</sup> et <span class="math-inline">x</span><sub>(2)</sub><sup>2</sup>, plus un terme croisé
+        √2 <span class="math-inline">x</span><sub>(1)</sub><span class="math-inline">x</span><sub>(2)</sub> (avec
+        <span class="math-inline">x</span><sub>(<em>j</em>)</sub> la <em>j</em>-ième variable du vecteur
+        <span class="math-inline">x</span>). Intuitivement : on ajoute des directions qui codent des <strong>courbures</strong> et des
+        <strong>interactions</strong> entre les deux axes — ce que ne peut pas faire une simple droite dans le plan d’origine.
+      </p>
+      <div class="math-display math-display--left" role="math" aria-label="Plongement Phi de x en trois coordonnees">
+        <span class="math-inline">Φ</span>(<span class="math-inline">x</span>) = (<span class="math-inline">x</span><sub>(1)</sub><sup>2</sup>,
+        <span class="math-inline">x</span><sub>(2)</sub><sup>2</sup>, √2
+        <span class="math-inline">x</span><sub>(1)</sub><span class="math-inline">x</span><sub>(2)</sub>)
+      </div>
+      <p class="lead">
+        <strong>Du plan séparateur en 3D au « cercle » dans le plan.</strong> Dans l’espace plongé, la SVM cherche encore un
+        <strong>plan</strong> (un hyperplan) qui sépare les deux nuages : c’est la même idée qu’une droite en 2D, mais une surface de dimension 2 dans un espace 3D.
+        Lorsqu’on <strong>redescend</strong> l’équation de ce plan dans les coordonnées d’origine (<span class="math-inline">x</span><sub>(1)</sub>,
+        <span class="math-inline">x</span><sub>(2)</sub>), les points qui étaient sur le plan en 3D ne forment plus une droite : ils satisfont une relation du
+        <strong>second degré</strong> en <span class="math-inline">x</span><sub>(1)</sub> et <span class="math-inline">x</span><sub>(2)</sub> — d’où une
+        <strong>courbe fermée</strong> typique (cercle ou ellipse), comme un anneau entre deux classes en anneaux. Pensez-y ainsi : une droite dans le plan est
+        l’intersection du plan avec une « tranche » évidente ; ici, la frontière utile est l’ensemble des (<span class="math-inline">x</span><sub>(1)</sub>,
+        <span class="math-inline">x</span><sub>(2)</sub>) qui correspondent au plan de décision après le plongement — ce n’est plus une tranche linéaire, mais une
+        ligne de niveau <strong>courbe</strong>, souvent circulaire dans les exemples pédagogiques.
+      </p>
+
       <h5>4.5 À quoi sert une SVM ? Classification supervisée</h5>
       <p class="lead">
         Une SVM sert surtout à faire de la <strong>classification</strong> : apprendre une règle qui, pour un nouveau point dans l’espace des caractéristiques,
@@ -1402,7 +1457,7 @@
       <p class="lead">
         <strong>En résumé :</strong> le SVM a bien un <strong>objectif mathématique</strong> (marge + pénalités) et un <strong>entraînement</strong> automatique par
         résolution numérique ; la logique « définir un critère et le minimiser » rejoint le reste du chapitre, avec des formules et des optimiseurs différents de la
-        régression logistique ou des grands réseaux.
+        régression linéaire ou logistique.
       </p>
 
       <details class="expand-panel">
