@@ -65,7 +65,8 @@
                 <li><a href="#ch2-reseaux-neurones">6. Réseaux de neurones</a></li>
               </ul>
             </li>
-            <li>
+            <!-- Partie II & III : masquées avec le bloc principal (classe chapter-parts-deferred). Retirer la classe pour les réafficher dans le sommaire. -->
+            <li class="chapter-toc__item--deferred">
               <a href="#ch2-non-supervise">Partie II — Apprentissage non supervisé</a>
               <ul class="chapter-toc__sub">
                 <li><a href="#ch2-kmeans">1. K-means</a></li>
@@ -73,7 +74,7 @@
                 <li><a href="#ch2-pca">3. PCA</a></li>
               </ul>
             </li>
-            <li>
+            <li class="chapter-toc__item--deferred">
               <a href="#ch2-rl">Partie III — Apprentissage par renforcement</a>
               <ul class="chapter-toc__sub">
                 <li><a href="#ch2-rl-cartographie">1. Enjeux du RL</a></li>
@@ -2019,6 +2020,12 @@
         </div>
       </details>
 
+      <!--
+        Partie II & III : contenu conservé dans le HTML mais masqué en CSS (.chapter-parts-deferred).
+        Pour republier : supprimer la classe "chapter-parts-deferred" sur le div ouvert ci-dessous,
+        et retirer "chapter-toc__item--deferred" sur les deux <li> du sommaire.
+      -->
+      <div class="chapter-parts-deferred">
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 
       <h3 id="ch2-non-supervise" class="ch2-partie">Partie II — Apprentissage non supervisé : explorer la jungle sans étiquettes</h3>
@@ -2537,6 +2544,8 @@
           </ul>
         </div>
       </details>
+
+      </div><!-- /.chapter-parts-deferred (Partie II & III) -->
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
 

@@ -890,6 +890,12 @@ footer{
 .chapter-toc__fin:hover{
   text-decoration:underline;
 }
+/* Chapitre 2 : masquer Partie II & III tout en gardant le HTML (retirer .chapter-parts-deferred et .chapter-toc__item--deferred pour republier) */
+.chapter-parts-deferred,
+.chapter-toc__item--deferred{
+  display:none !important;
+}
+
 .chapter-main [id]{
   scroll-margin-top:5.5rem;
 }
