@@ -1330,11 +1330,26 @@
       </div>
       <p class="lead">
         <strong>Du plan séparateur en 3D au « cercle » dans le plan.</strong> Dans l’espace plongé, la SVM cherche encore un
-        <strong>plan</strong> (un hyperplan) qui sépare les deux nuages : c’est la même idée qu’une droite en 2D, mais une surface de dimension 2 dans un espace 3D.
-        Lorsqu’on <strong>redescend</strong> l’équation de ce plan dans les coordonnées d’origine (<span class="math-inline">x</span><sub>(1)</sub>,
-        <span class="math-inline">x</span><sub>(2)</sub>), les points qui étaient sur le plan en 3D ne forment plus une droite : ils satisfont une relation du
-        <strong>second degré</strong> en <span class="math-inline">x</span><sub>(1)</sub> et <span class="math-inline">x</span><sub>(2)</sub> — d’où une
-        <strong>courbe fermée</strong> typique (cercle ou ellipse), comme un anneau entre deux classes en anneaux. 
+        <strong>plan</strong> (un hyperplan) qui sépare les images <span class="math-inline">Φ</span>(<span class="math-inline">x</span>) des deux classes :
+        c’est la même logique qu’une droite qui coupe un nuage dans le plan, mais ici la « coupure » vit dans la dimension 3.
+        <strong>Donc : ce n’est pas « le plan 3D qui se retransforme », c’est l’ensemble des <span class="math-inline">x</span> du plan dont l’image
+        <span class="math-inline">Φ</span>(<span class="math-inline">x</span>) se trouve sur le séparateur en 3D.</strong> Ces
+        <span class="math-inline">x</span> sont les points de la <strong>frontière de décision</strong> vue depuis vos coordonnées d’origine ; ils satisfont une
+        équation du <strong>second degré</strong> en <span class="math-inline">x</span><sub>(1)</sub> et <span class="math-inline">x</span><sub>(2)</sub> — d’où une
+        <strong>courbe</strong> (cercle, ellipse, etc.), pas une droite, là où les deux classes en anneaux ne pouvaient pas être coupées par une ligne.
+      </p>
+      <p class="lead">
+        <strong>Et le noyau dans tout ça ?</strong> Pour comparer deux points après plongement, il faudrait en principe calculer le produit scalaire
+        <span class="math-inline">Φ</span>(<span class="math-inline">x</span>) · <span class="math-inline">Φ</span>(<span class="math-inline">x</span>′). Or, pour
+        le <span class="math-inline">Φ</span> ci-dessus, ce produit se réécrit uniquement avec les coordonnées d’entrée :
+        <span class="math-inline">Φ</span>(<span class="math-inline">x</span>) · <span class="math-inline">Φ</span>(<span class="math-inline">x</span>′) =
+        (<span class="math-inline">x</span> · <span class="math-inline">x</span>′)<sup>2</sup> — le carré du produit scalaire usuel dans le plan. La fonction
+        <strong>K</strong>(<span class="math-inline">x</span>, <span class="math-inline">x</span>′) = (<span class="math-inline">x</span> ·
+        <span class="math-inline">x</span>′)<sup>2</sup> est précisément le <strong>noyau polynomial (degré 2)</strong> associé à ce plongement : elle remplace
+        <span class="math-inline">Φ</span>(<span class="math-inline">x</span>) · <span class="math-inline">Φ</span>(<span class="math-inline">x</span>′) sans jamais
+        former les trois coordonnées de <span class="math-inline">Φ</span> à la main. Intuitivement : le noyau répond à la question « à quel point ces deux points
+        <span class="math-inline">x</span> et <span class="math-inline">x</span>′ seraient-ils <em>alignés</em> avec la même « richesse » non linéaire ? » en un seul
+        nombre — et c’est ce nombre qui alimente l’entraînement du SVM (forme duale), au lieu de manipuler explicitement l’espace 3D.
       </p>
 
       <h5>4.5 À quoi sert une SVM ? Classification supervisée</h5>
