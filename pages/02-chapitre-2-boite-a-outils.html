@@ -1293,54 +1293,6 @@
         points.
       </p>
 
-      <details class="expand-panel">
-        <summary>Extension — du binaire au multi-classes (OvR et OvO)</summary>
-        <div class="expand-panel__body">
-          <p class="lead">
-            Bien que le modèle SVM (<em>Support Vector Machine</em>) soit d’abord conçu pour la <strong>classification binaire</strong> (séparer deux classes), on
-            peut l’étendre au <strong>multi-classes</strong> avec deux stratégies principales.
-          </p>
-
-          <p class="lead"><strong>1. One-vs-Rest (OvR) ou One-vs-All</strong></p>
-          <p class="lead">
-            C’est la méthode la plus courante — c’est aussi celle utilisée par défaut pour les SVM dans <strong>scikit-learn</strong>.
-          </p>
-          <ul>
-            <li><strong>Principe :</strong> on entraîne <strong>un classifieur par classe</strong>.</li>
-            <li>
-              <strong>Fonctionnement :</strong> pour <span class="math-inline">N</span> classes, on crée <span class="math-inline">N</span> modèles binaires.
-              Chaque modèle apprend à distinguer <strong>une classe donnée</strong> de <strong>toutes les autres réunies</strong>.
-            </li>
-            <li>
-              <strong>Décision :</strong> pour prédire, on soumet le point aux <span class="math-inline">N</span> modèles et on choisit la classe dont le modèle
-              affiche le <strong>score de confiance</strong> (ou la marge) la plus élevée.
-            </li>
-          </ul>
-
-          <p class="lead"><strong>2. One-vs-One (OvO)</strong></p>
-          <p class="lead">
-            Cette approche est plus <strong>coûteuse en calcul</strong> (plus de modèles à entraîner), mais elle peut être intéressante sur des petits jeux de
-            données.
-          </p>
-          <ul>
-            <li><strong>Principe :</strong> on entraîne un classifieur pour <strong>chaque paire de classes</strong>.</li>
-            <li>
-              <strong>Fonctionnement :</strong> pour <span class="math-inline">N</span> classes, on construit
-              <span class="math-inline">N</span>(<span class="math-inline">N</span> − 1) / 2 modèles. Par exemple, pour trois classes A, B et C, on obtient trois
-              modèles : (A contre B), (A contre C) et (B contre C).
-            </li>
-            <li>
-              <strong>Décision :</strong> chaque modèle vote pour une des deux classes qu’il oppose ; la classe qui recueille le <strong>plus de votes</strong>
-              l’emporte.
-            </li>
-          </ul>
-        </div>
-        <img
-        class="cover-image"
-        src="../Figures/MultiClass.gif"
-        loading="lazy"
-      />
-      </details>
 
       <h5>4.6 Comment ça s'entraîne ? Objectif, « perte » et optimiseur</h5>
       <p class="lead">
@@ -1457,8 +1409,67 @@
               <a href="https://scikit-learn.org/stable/modules/svm.html" target="_blank" rel="noopener noreferrer">scikit-learn — Support Vector Machines</a> (guide
               utilisateur et liens vers les articles ci-dessus).
             </li>
+            <li>
+              <strong>Cours (FR) :</strong>
+              <a
+                href="https://openclassrooms.com/fr/courses/5264666-appliquez-l-apprentissage-statistique-aux-objets-connectes/5361336-realisez-les-machines-a-vaste-marge-svm-pour-la-classification"
+                target="_blank"
+                rel="noopener noreferrer"
+                >OpenClassrooms — Réalisez les machines à vaste marge (SVM) pour la classification</a>
+              (parcours « Appliquez l’apprentissage statistique aux objets connectés »).
+            </li>
           </ul>
         </div>
+      </details>
+
+      
+      <details class="expand-panel">
+        <summary>Extension — du binaire au multi-classes (OvR et OvO)</summary>
+        <div class="expand-panel__body">
+          <p class="lead">
+            Bien que le modèle SVM (<em>Support Vector Machine</em>) soit d’abord conçu pour la <strong>classification binaire</strong> (séparer deux classes), on
+            peut l’étendre au <strong>multi-classes</strong> avec deux stratégies principales.
+          </p>
+
+          <p class="lead"><strong>1. One-vs-Rest (OvR) ou One-vs-All</strong></p>
+          <p class="lead">
+            C’est la méthode la plus courante — c’est aussi celle utilisée par défaut pour les SVM dans <strong>scikit-learn</strong>.
+          </p>
+          <ul>
+            <li><strong>Principe :</strong> on entraîne <strong>un classifieur par classe</strong>.</li>
+            <li>
+              <strong>Fonctionnement :</strong> pour <span class="math-inline">N</span> classes, on crée <span class="math-inline">N</span> modèles binaires.
+              Chaque modèle apprend à distinguer <strong>une classe donnée</strong> de <strong>toutes les autres réunies</strong>.
+            </li>
+            <li>
+              <strong>Décision :</strong> pour prédire, on soumet le point aux <span class="math-inline">N</span> modèles et on choisit la classe dont le modèle
+              affiche le <strong>score de confiance</strong> (ou la marge) la plus élevée.
+            </li>
+          </ul>
+
+          <p class="lead"><strong>2. One-vs-One (OvO)</strong></p>
+          <p class="lead">
+            Cette approche est plus <strong>coûteuse en calcul</strong> (plus de modèles à entraîner), mais elle peut être intéressante sur des petits jeux de
+            données.
+          </p>
+          <ul>
+            <li><strong>Principe :</strong> on entraîne un classifieur pour <strong>chaque paire de classes</strong>.</li>
+            <li>
+              <strong>Fonctionnement :</strong> pour <span class="math-inline">N</span> classes, on construit
+              <span class="math-inline">N</span>(<span class="math-inline">N</span> − 1) / 2 modèles. Par exemple, pour trois classes A, B et C, on obtient trois
+              modèles : (A contre B), (A contre C) et (B contre C).
+            </li>
+            <li>
+              <strong>Décision :</strong> chaque modèle vote pour une des deux classes qu’il oppose ; la classe qui recueille le <strong>plus de votes</strong>
+              l’emporte.
+            </li>
+          </ul>
+        </div>
+        <img
+        class="cover-image"
+        src="../Figures/MultiClass.gif"
+        loading="lazy"
+      />
       </details>
 
       <section class="svm-conclusion" aria-labelledby="svm-conclusion-title">
