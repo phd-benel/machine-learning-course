@@ -1854,11 +1854,42 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
       </div>
       
 
+      <h6>5. Le fléau de l’arbre : le sur-apprentissage (overfitting)</h6>
+      <p class="lead">
+        Un arbre est un modèle très <strong>flexible</strong> : si on le laisse grandir sans contrainte, il peut continuer à découper jusqu’à isoler presque chaque
+        observation. On peut alors obtenir des feuilles qui ne contiennent <strong>qu’un seul point</strong> (ou très peu de points) : l’arbre “apprend par cœur”
+        les détails du jeu d’entraînement, y compris le <strong>bruit</strong>.
+      </p>
+      <p class="lead">
+        C’est le mécanisme typique du <strong>sur-apprentissage</strong> : excellente performance sur les données vues, puis dégradation sur des données nouvelles.
+        En termes biais/variance, un arbre très profond a souvent un <strong>biais faible</strong> (il peut épouser des formes complexes) mais une
+        <strong>variance forte</strong> (une petite modification des données peut changer fortement l’arbre appris).
+      </p>
+      <p class="lead">
+        <strong>La solution : l’élagage (pruning).</strong> L’idée est de supprimer (ou d’empêcher) les branches qui n’apportent pas de gain significatif en
+        <strong>généralisation</strong> : elles améliorent surtout l’entraînement, mais rendent la règle plus fragile.
+      </p>
+      <ul>
+        <li>
+          <strong>Pré-élagage (pré-pruning)</strong> : on <strong>limite la croissance</strong> pendant la construction de l’arbre via
+          <code>max_depth</code>, <code>min_samples_split</code>, <code>min_samples_leaf</code>, <code>min_impurity_decrease</code>.
+        </li>
+        <li>
+          <strong>Post-élagage (post-pruning)</strong> : on laisse pousser un arbre plus grand, puis on <strong>coupe après coup</strong> les branches peu utiles.
+          Dans CART, on rencontre souvent l’<strong>élagage par complexité de coût</strong> : on pénalise les arbres trop grands et on choisit la taille optimale par
+          validation.
+        </li>
+      </ul>
+      <p class="lead">
+        Intuition : une branche qui ne “gagne” que sur quelques points est souvent le signe qu’on modélise une exception locale. L’élagage force l’arbre à préférer
+        des règles <strong>plus simples</strong> et généralement plus robustes.
+      </p>
+
       <h5>5.2 Un arbre trop profond : variance et sur-apprentissage</h5>
       <p class="lead">
-        Si l’on laisse l’arbre se <strong>subdiviser</strong> sans limite, il peut coller à chaque point d’entraînement : la frontière devient très découpée et le
-        modèle <strong>généralise mal</strong> (forte <strong>variance</strong>). C’est l’analogue inverse de la SVM qui, avec un bon réglage, cherche une marge
-        stable : ici, la stabilité passe par limiter la profondeur, le nombre minimal d’exemples par feuille, ou en agrégeant plusieurs arbres.
+        En pratique, le sur-apprentissage d’un arbre se repère souvent visuellement : la frontière devient très découpée et le modèle
+        <strong>généralise mal</strong> (forte <strong>variance</strong>). La stabilité passe par l’<strong>élagage</strong> (contraintes de croissance) ou, mieux
+        encore sur des données bruitées, par l’agrégation de plusieurs arbres.
       </p>
 
       <h5>5.3 Random Forest : plusieurs arbres, un vote</h5>
