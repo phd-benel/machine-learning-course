@@ -1645,6 +1645,45 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
         <strong>horizontale</strong>, puis à nouveau verticale, etc. On obtient ainsi une frontière anguleuse faite de <strong>segments successifs</strong>,
         capable d’approximer des séparations non linéaires, au prix d’une forme moins “lisse”.
       </p>
+
+      <h6>3. Le critère de choix : comment diviser ? (la pureté)</h6>
+      <p class="lead">
+        C’est le <strong>cœur</strong> de l’apprentissage d’un arbre : à chaque nœud, l’algorithme doit décider <strong>quelle question poser</strong> en premier.
+        Concrètement, il teste de nombreux candidats (variable + seuil) et choisit celui qui rend les sous-groupes obtenus aussi <strong>purs</strong> que possible
+        (c’est-à-dire contenant majoritairement une seule classe).
+      </p>
+      <p class="lead">
+        Pour quantifier cette idée de pureté, on utilise une mesure d’<strong>impureté</strong>. Deux choix classiques, très proches dans l’esprit, dominent en
+        classification : <strong>l’entropie</strong> et <strong>l’indice de Gini</strong>.
+      </p>
+      <ul>
+        <li>
+          <strong>L’entropie</strong> : mesure du <strong>désordre</strong>. Si un nœud contient des classes très mélangées, l’entropie est élevée ; si une seule
+          classe domine (nœud presque pur), l’entropie est faible. Si <span class="math-inline">p_k</span> est la proportion de la classe
+          <span class="math-inline">k</span> dans le nœud, alors :
+          <span class="math-inline">H = -\sum_k p_k \log_2(p_k)</span>.
+        </li>
+        <li>
+          <strong>L’indice de Gini</strong> : interprétation “probabiliste” très intuitive. C’est la probabilité de <strong>mal classer</strong> un élément si l’on
+          attribue au hasard une étiquette selon les proportions du nœud. Sa formule est :
+          <span class="math-inline">G = 1 - \sum_k p_k^2</span>. C’est le critère utilisé par l’algorithme <strong>CART</strong> dans de nombreuses implémentations.
+        </li>
+      </ul>
+      <p class="lead">
+        Une fois une impureté choisie, il faut mesurer si une question (un split) est “bonne”. L’idée est simple : une bonne division doit
+        <strong>réduire</strong> l’impureté globale. On compare donc l’impureté <strong>avant</strong> la coupure et l’impureté moyenne <strong>après</strong> la
+        coupure.
+      </p>
+      <p class="lead">
+        C’est exactement le <strong>gain d’information</strong> (pour l’entropie) : si un nœud parent <span class="math-inline">P</span> est séparé en deux nœuds
+        enfants <span class="math-inline">L</span> et <span class="math-inline">R</span>, on calcule :
+        <span class="math-inline">\mathrm{Gain} = H(P) - \Big(\frac{n_L}{n}H(L) + \frac{n_R}{n}H(R)\Big)</span>.
+        On choisit la question qui <strong>maximise</strong> ce gain (donc qui diminue le plus le “désordre”).
+      </p>
+      <p class="lead">
+        Avec Gini, on applique la même logique (on parle souvent de <strong>réduction d’impureté</strong>) : on choisit la coupure qui fait le plus baisser
+        <span class="math-inline">G</span> en moyenne pondérée.
+      </p>
       <p class="lead">
         La figure suivante illustre ce principe avec un arbre <strong>peu profond</strong> (<code>max_depth = 3</code>) sur des données simulées en forme de
         croissants : la frontière est déjà anguleuse, mais reste encore simple.
