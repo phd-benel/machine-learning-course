@@ -1627,6 +1627,11 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
         Le chemin suivi depuis la racine jusqu’à une feuille est exactement la suite des conditions que l’exemple a satisfaites : c’est pour cela qu’on dit qu’un
         arbre est un modèle <strong>interprétable</strong> (une « boîte blanche »).
       </p>
+      <img
+        class="cover-image"
+        src="../Figures/Arbre.png"
+        loading="lazy"
+      />
 
       <h6>2. Le concept de partitionnement récursif</h6>
       <p class="lead">
@@ -1865,6 +1870,11 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
         En termes biais/variance, un arbre très profond a souvent un <strong>biais faible</strong> (il peut épouser des formes complexes) mais une
         <strong>variance forte</strong> (une petite modification des données peut changer fortement l’arbre appris).
       </p>
+      <img
+        class="cover-image"
+        src="../Figures/Surapprentissage_Arbre.png"
+        loading="lazy"
+      />
       <p class="lead">
         <strong>La solution : l’élagage (pruning).</strong> L’idée est de supprimer (ou d’empêcher) les branches qui n’apportent pas de gain significatif en
         <strong>généralisation</strong> : elles améliorent surtout l’entraînement, mais rendent la règle plus fragile.
