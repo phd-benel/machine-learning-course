@@ -1964,6 +1964,49 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         loading="lazy"
       />
 
+      <h6>2. Le hasard au niveau des colonnes (Feature Randomness)</h6>
+      <p class="lead">
+        Le bagging rend déjà les arbres différents parce qu’ils ne voient pas exactement les mêmes <strong>lignes</strong>. Mais ce n’est pas encore suffisant pour
+        rendre la forêt vraiment “aléatoire” : si une variable est très informative, beaucoup d’arbres risquent de choisir <strong>la même</strong> variable au
+        sommet, et donc de se ressembler.
+      </p>
+      <p class="lead">
+        C’est ici qu’intervient le hasard au niveau des <strong>colonnes</strong> (les <em>features</em>).
+      </p>
+      <ul>
+        <li>
+          <strong>Dans un arbre classique</strong>, à chaque nœud on cherche la meilleure coupure en comparant <strong>toutes</strong> les variables disponibles.
+        </li>
+        <li>
+          <strong>Dans une Random Forest</strong>, à chaque division, l’arbre n’a le droit de chercher la meilleure coupure que parmi un
+          <strong>sous-ensemble aléatoire</strong> de colonnes. Autrement dit : on “cache” volontairement une partie des variables à chaque nœud.
+        </li>
+      </ul>
+      <p class="lead">
+        <strong>Pourquoi ?</strong> Parce que cela force les arbres à explorer des pistes différentes. Une variable trop dominante ne peut plus “écraser” toutes les
+        autres dans tous les arbres : certains arbres devront construire une bonne séparation en s’appuyant sur d’autres signaux. Résultat : les arbres sont
+        <strong>moins corrélés</strong> entre eux, et l’agrégation (vote/moyenne) devient beaucoup plus efficace pour stabiliser le modèle.
+      </p>
+      <p class="lead">
+        En pratique, ce mécanisme correspond à un hyperparamètre du type <code>max_features</code> (combien de colonnes sont tirées au hasard à chaque nœud). C’est
+        l’une des clés qui rendent la forêt à la fois <strong>robuste</strong> et performante sur des données tabulaires.
+      </p>
+
+      <h6>3. Le processus de vote (inférence)</h6>
+      <p class="lead">
+        Une fois tous les arbres entraînés, la forêt doit produire une <strong>prédiction finale</strong>. L’idée est d’agréger les décisions individuelles : chaque
+        arbre donne une réponse, et la forêt combine ces réponses pour obtenir un résultat plus stable.
+      </p>
+      <ul>
+        <li>
+          <strong>Classification</strong> : la forêt applique un <strong>vote à la majorité</strong>. Par exemple, si 70 arbres prédisent “Oui” et 30 prédisent
+          “Non”, la forêt répond <strong>“Oui”</strong>.
+        </li>
+        <li>
+          <strong>Régression</strong> : la forêt prend la <strong>moyenne</strong> des valeurs prédites par tous les arbres (ce qui lisse les prédictions extrêmes).
+        </li>
+      </ul>
+
       <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
       <img
         class="cover-image"
