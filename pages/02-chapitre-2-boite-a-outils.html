@@ -2053,6 +2053,26 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         réserver un jeu de test séparé. (On garde néanmoins de bonnes pratiques : un vrai jeu de test final reste utile pour une évaluation impartiale.)
       </p>
 
+      <h6>6. L’importance des variables (Feature Importance)</h6>
+      <p class="lead">
+        Même si une forêt est moins “lisible” qu’un arbre unique, elle fournit souvent un outil très utile d’<strong>interprétabilité</strong> : le classement des
+        <strong>variables importantes</strong>. L’idée est de répondre à la question : <em>quelles variables ont le plus aidé à réduire le désordre dans la forêt ?</em>
+      </p>
+      <p class="lead">
+        Le mécanisme le plus courant (notamment dans de nombreuses implémentations de type CART) consiste à cumuler, pour chaque variable, la
+        <strong>réduction d’impureté</strong> obtenue quand cette variable est utilisée pour une coupure, puis à moyenner sur tous les arbres. Intuition :
+        une variable est jugée importante si elle apparaît dans des coupures qui rendent les nœuds enfants beaucoup plus <strong>purs</strong>.
+      </p>
+      <p class="lead">
+        Concrètement, on obtient un score par variable, puis on les trie : cela sert à <strong>prioriser</strong> des capteurs, guider une exploration, ou expliquer
+        “ce que le modèle regarde” (sans prétendre à une causalité).
+      </p>
+      <p class="lead">
+        Attention toutefois : cette importance n’est pas une preuve de causalité, et elle peut être biaisée (variables corrélées, variables avec beaucoup de valeurs
+        distinctes…). Pour une analyse plus robuste, on peut aussi utiliser l’<strong>importance par permutation</strong> : on mélange une variable et on mesure la
+        chute de performance.
+      </p>
+
       <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
       <img
         class="cover-image"
