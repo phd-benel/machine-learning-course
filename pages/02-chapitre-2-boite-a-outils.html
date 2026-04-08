@@ -1758,98 +1758,100 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
         favorise une structure <strong>stable</strong> et généralisable.
       </p>
 
-      <p class="table-caption">Exemple guidé : « Dois-je aller jouer au tennis dehors ? »</p>
-      <p class="lead">
-        Voici un petit dataset de 6 jours passés. La cible est <strong>Jouer ?</strong> (Oui/Non). L’arbre va chercher une première question qui réduit au maximum
-        le désordre, afin d’aboutir à des feuilles <strong>pures</strong> (100% Oui ou 100% Non).
-      </p>
-      <div class="table-block">
-        <div class="table-wrap">
-          <table class="data-table" aria-label="Dataset tennis (6 jours)">
-            <thead>
-              <tr>
-                <th scope="col">Jour</th>
-                <th scope="col">Météo</th>
-                <th scope="col">Humidité</th>
-                <th scope="col">Vent</th>
-                <th scope="col">Jouer ? (cible)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>J1</td><td>Soleil</td><td>Haute</td><td>Faible</td><td>Non</td></tr>
-              <tr><td>J2</td><td>Soleil</td><td>Haute</td><td>Fort</td><td>Non</td></tr>
-              <tr><td>J3</td><td>Nuageux</td><td>Haute</td><td>Faible</td><td>Oui</td></tr>
-              <tr><td>J4</td><td>Pluie</td><td>Normale</td><td>Faible</td><td>Oui</td></tr>
-              <tr><td>J5</td><td>Pluie</td><td>Normale</td><td>Fort</td><td>Non</td></tr>
-              <tr><td>J6</td><td>Nuageux</td><td>Normale</td><td>Fort</td><td>Oui</td></tr>
-            </tbody>
-          </table>
+      <div class="quote quote--exercise">
+        <p class="quote--exercise__title">Exemple guidé : « Dois-je aller jouer au tennis dehors ? »</p>
+        <p class="lead">
+          Voici un petit dataset de 6 jours passés. La cible est <strong>Jouer ?</strong> (Oui/Non). L’arbre va chercher une première question qui réduit au
+          maximum le désordre, afin d’aboutir à des feuilles <strong>pures</strong> (100% Oui ou 100% Non).
+        </p>
+        <div class="table-block">
+          <div class="table-wrap">
+            <table class="data-table" aria-label="Dataset tennis (6 jours)">
+              <thead>
+                <tr>
+                  <th scope="col">Jour</th>
+                  <th scope="col">Météo</th>
+                  <th scope="col">Humidité</th>
+                  <th scope="col">Vent</th>
+                  <th scope="col">Jouer ? (cible)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>J1</td><td>Soleil</td><td>Haute</td><td>Faible</td><td>Non</td></tr>
+                <tr><td>J2</td><td>Soleil</td><td>Haute</td><td>Fort</td><td>Non</td></tr>
+                <tr><td>J3</td><td>Nuageux</td><td>Haute</td><td>Faible</td><td>Oui</td></tr>
+                <tr><td>J4</td><td>Pluie</td><td>Normale</td><td>Faible</td><td>Oui</td></tr>
+                <tr><td>J5</td><td>Pluie</td><td>Normale</td><td>Fort</td><td>Non</td></tr>
+                <tr><td>J6</td><td>Nuageux</td><td>Normale</td><td>Fort</td><td>Oui</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        <p class="lead">
+          <strong>Étape 1 : calcul du désordre initial (entropie).</strong> Avant de poser une question, l’algorithme regarde la cible : ici, 3 <em>Oui</em> et
+          3 <em>Non</em>. C’est un nœud très mélangé (50/50).
+        </p>
+        <p class="lead">
+          <strong>Étape 2 : tester des divisions (gain d’information / réduction d’impureté).</strong> L’algorithme évalue les variables candidates.
+        </p>
+        <ul>
+          <li>
+            <strong>Test sur la Météo</strong> :
+            <ul>
+              <li><strong>Nuageux</strong> : (J3, J6) → 2 Oui, 0 Non → séparation parfaite.</li>
+              <li><strong>Soleil</strong> : (J1, J2) → 0 Oui, 2 Non → séparation parfaite.</li>
+              <li><strong>Pluie</strong> : (J4, J5) → 1 Oui, 1 Non → encore mélangé.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Test sur le Vent</strong> :
+            <ul>
+              <li><strong>Faible</strong> : (J1 Non, J3 Oui, J4 Oui) → encore mélangé.</li>
+              <li><strong>Fort</strong> : (J2 Non, J5 Non, J6 Oui) → encore mélangé.</li>
+            </ul>
+          </li>
+        </ul>
+        <p class="lead">
+          <strong>Décision :</strong> la <strong>Météo</strong> est la variable qui réduit le plus le désordre ; elle devient le <strong>nœud racine</strong>.
+        </p>
+
+        <p class="lead">
+          <strong>Étape 3 : créer les branches et descendre.</strong> L’arbre trace ses premières branches :
+        </p>
+        <ul>
+          <li><strong>Branche Nuageux</strong> : feuille → verdict = <strong>Oui</strong>.</li>
+          <li><strong>Branche Soleil</strong> : feuille → verdict = <strong>Non</strong>.</li>
+          <li><strong>Branche Pluie</strong> : pas encore pur (1 Oui, 1 Non) → on continue uniquement sur (J4, J5).</li>
+        </ul>
+
+        <p class="lead">
+          <strong>Étape 4 : sous-division (récursivité).</strong> Sur les jours de <strong>Pluie</strong>, on peut tester <strong>Humidité</strong> ou
+          <strong>Vent</strong>. Ici, <strong>Vent</strong> sépare parfaitement :
+        </p>
+        <ul>
+          <li>J4 : Vent = Faible → <strong>Oui</strong></li>
+          <li>J5 : Vent = Fort → <strong>Non</strong></li>
+        </ul>
+        <p class="lead">
+          L’arbre s’arrête : toutes les feuilles sont désormais <strong>pures</strong>.
+        </p>
+
+        <p class="lead">
+          <strong>Résultat final : la logique apprise.</strong> Le modèle a transformé le tableau en règles :
+        </p>
+        <ul>
+          <li><strong>SI</strong> Météo = Nuageux <strong>ALORS</strong> Jouer.</li>
+          <li><strong>SI</strong> Météo = Soleil <strong>ALORS</strong> Ne pas jouer.</li>
+          <li>
+            <strong>SI</strong> Météo = Pluie :
+            <ul>
+              <li><strong>ET SI</strong> Vent = Faible <strong>ALORS</strong> Jouer.</li>
+              <li><strong>ET SI</strong> Vent = Fort <strong>ALORS</strong> Ne pas jouer.</li>
+            </ul>
+          </li>
+        </ul>
       </div>
-
-      <p class="lead">
-        <strong>Étape 1 : calcul du désordre initial (entropie).</strong> Avant de poser une question, l’algorithme regarde la cible : ici, 3 <em>Oui</em> et
-        3 <em>Non</em>. C’est un nœud très mélangé (50/50).
-      </p>
-      <p class="lead">
-        <strong>Étape 2 : tester des divisions (gain d’information / réduction d’impureté).</strong> L’algorithme évalue les variables candidates.
-      </p>
-      <ul>
-        <li>
-          <strong>Test sur la Météo</strong> :
-          <ul>
-            <li><strong>Nuageux</strong> : (J3, J6) → 2 Oui, 0 Non → séparation parfaite.</li>
-            <li><strong>Soleil</strong> : (J1, J2) → 0 Oui, 2 Non → séparation parfaite.</li>
-            <li><strong>Pluie</strong> : (J4, J5) → 1 Oui, 1 Non → encore mélangé.</li>
-          </ul>
-        </li>
-        <li>
-          <strong>Test sur le Vent</strong> :
-          <ul>
-            <li><strong>Faible</strong> : (J1 Non, J3 Oui, J4 Oui) → encore mélangé.</li>
-            <li><strong>Fort</strong> : (J2 Non, J5 Non, J6 Oui) → encore mélangé.</li>
-          </ul>
-        </li>
-      </ul>
-      <p class="lead">
-        <strong>Décision :</strong> la <strong>Météo</strong> est la variable qui réduit le plus le désordre ; elle devient le <strong>nœud racine</strong>.
-      </p>
-
-      <p class="lead">
-        <strong>Étape 3 : créer les branches et descendre.</strong> L’arbre trace ses premières branches :
-      </p>
-      <ul>
-        <li><strong>Branche Nuageux</strong> : feuille → verdict = <strong>Oui</strong>.</li>
-        <li><strong>Branche Soleil</strong> : feuille → verdict = <strong>Non</strong>.</li>
-        <li><strong>Branche Pluie</strong> : pas encore pur (1 Oui, 1 Non) → on continue uniquement sur (J4, J5).</li>
-      </ul>
-
-      <p class="lead">
-        <strong>Étape 4 : sous-division (récursivité).</strong> Sur les jours de <strong>Pluie</strong>, on peut tester <strong>Humidité</strong> ou
-        <strong>Vent</strong>. Ici, <strong>Vent</strong> sépare parfaitement :
-      </p>
-      <ul>
-        <li>J4 : Vent = Faible → <strong>Oui</strong></li>
-        <li>J5 : Vent = Fort → <strong>Non</strong></li>
-      </ul>
-      <p class="lead">
-        L’arbre s’arrête : toutes les feuilles sont désormais <strong>pures</strong>.
-      </p>
-
-      <p class="lead">
-        <strong>Résultat final : la logique apprise.</strong> Le modèle a transformé le tableau en règles :
-      </p>
-      <ul>
-        <li><strong>SI</strong> Météo = Nuageux <strong>ALORS</strong> Jouer.</li>
-        <li><strong>SI</strong> Météo = Soleil <strong>ALORS</strong> Ne pas jouer.</li>
-        <li>
-          <strong>SI</strong> Météo = Pluie :
-          <ul>
-            <li><strong>ET SI</strong> Vent = Faible <strong>ALORS</strong> Jouer.</li>
-            <li><strong>ET SI</strong> Vent = Fort <strong>ALORS</strong> Ne pas jouer.</li>
-          </ul>
-        </li>
-      </ul>
       
 
       <h5>5.2 Un arbre trop profond : variance et sur-apprentissage</h5>
