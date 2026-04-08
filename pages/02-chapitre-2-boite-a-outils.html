@@ -2031,6 +2031,15 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         chemin de règles) contre une <strong>forte réduction de variance</strong>.
       </p>
 
+      
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig49.png"
+        alt="Comparaison côte à côte des régions de décision d’un arbre profond et d’une forêt aléatoire"
+        loading="lazy"
+      />
+
       <h6>5. Un atout majeur : l’erreur Out-of-Bag (OOB)</h6>
       <p class="lead">
         Le bootstrap a une conséquence très pratique : chaque arbre n’est pas entraîné sur <strong>toutes</strong> les observations. Quand on tire
@@ -2053,6 +2062,12 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         réserver un jeu de test séparé. (On garde néanmoins de bonnes pratiques : un vrai jeu de test final reste utile pour une évaluation impartiale.)
       </p>
 
+      <img
+        class="cover-image"
+        src="../Figures/Out of bag.jpg""
+        loading="lazy"
+      />
+
       <h6>6. L’importance des variables (Feature Importance)</h6>
       <p class="lead">
         Même si une forêt est moins “lisible” qu’un arbre unique, elle fournit souvent un outil très utile d’<strong>interprétabilité</strong> : le classement des
@@ -2073,13 +2088,6 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         chute de performance.
       </p>
 
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig49.png"
-        alt="Comparaison côte à côte des régions de décision d’un arbre profond et d’une forêt aléatoire"
-        loading="lazy"
-      />
 
       
       <p class="table-caption" style="margin:12px 0 8px;">Figure : dix variables les plus importantes (Random Forest, jeu breast cancer)</p>
