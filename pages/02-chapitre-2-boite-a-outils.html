@@ -1922,6 +1922,42 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
 
 Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle. Au lieu de confier la décision à un seul expert (un arbre), nous allons consulter une assemblée d'experts. C'est le principe de la Forêt Aléatoire : on crée des centaines d'arbres différents, et on fait voter la majorité. C'est ce qu'on appelle une méthode d'Ensemble Learning (Apprentissage par ensemble).
       </p>
+
+      <h6>1. Le concept de Bagging (Bootstrap Aggregating)</h6>
+      <p class="lead">
+        Le <strong>bagging</strong> (pour <em>Bootstrap Aggregating</em>) est la première brique qui introduit du <strong>hasard</strong> dans une forêt. L’objectif
+        est simple : si tous les arbres voient exactement les mêmes données, ils risquent de se ressembler et de faire les <strong>mêmes erreurs</strong>. Pour
+        obtenir une “assemblée” utile, il faut des experts <strong>différents</strong>.
+      </p>
+      <p class="lead">
+        Le bagging combine deux idées.
+      </p>
+      <ul>
+        <li>
+          <strong>Le bootstrap</strong> : on crée, à partir du dataset d’origine (taille <span class="math-inline">n</span>), plusieurs sous-échantillons en
+          effectuant un tirage aléatoire <strong>avec remise</strong>. Concrètement, chaque arbre est entraîné sur un “nouveau” dataset obtenu en tirant
+          <span class="math-inline">n</span> lignes au hasard :
+          <ul>
+            <li><strong>certaines lignes</strong> peuvent être tirées plusieurs fois (répétées),</li>
+            <li><strong>d’autres</strong> peuvent ne pas être tirées du tout (ignorées par cet arbre).</li>
+          </ul>
+          Ainsi, même si tous les arbres utilisent la même recette (un arbre de décision), ils n’apprennent pas sur exactement la même information.
+        </li>
+        <li>
+          <strong>L’agrégation</strong> : une fois tous les arbres entraînés, on <strong>combine</strong> leurs prédictions pour produire une réponse plus stable.
+          Intuition : un arbre peut “déraper” sur un détail du bootstrap, mais la moyenne (ou le vote) de nombreux arbres tend à lisser ces dérapages.
+        </li>
+      </ul>
+      <p class="lead">
+        On peut résumer la mécanique ainsi : <strong>Bootstrap</strong> → entraîner beaucoup d’arbres <strong>différents</strong> → <strong>Agréger</strong> pour
+        obtenir une prédiction plus robuste.
+      </p>
+      <img
+        class="cover-image"
+        src="../Figures/Ensemble-learning.webp"
+        loading="lazy"
+      />
+
       <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
       <img
         class="cover-image"
@@ -1930,13 +1966,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         loading="lazy"
       />
 
-      <h5>5.4 Importance des variables : ce que la forêt met en avant</h5>
-      <p class="lead">
-        Un avantage pratique des forêts est le classement des <strong>importances de variables</strong> (contribution moyenne à la réduction d’impureté sur tous
-        les arbres). Ce n’est pas une causalité statistique stricte, mais un <strong>indicateur utile</strong> pour savoir quelles entrées le modèle exploite le
-        plus — par exemple en diagnostic ou en priorisation de capteurs. La figure suivante illustre les dix variables les plus marquantes sur le jeu
-        <em>Breast cancer</em> de scikit-learn (données tabulaires réelles).
-      </p>
+      
       <p class="table-caption" style="margin:12px 0 8px;">Figure : dix variables les plus importantes (Random Forest, jeu breast cancer)</p>
       <img
         class="cover-image"
@@ -1945,54 +1975,6 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         loading="lazy"
       />
 
-      <p class="table-caption">Repères rapides : SVM, arbre seul, forêt aléatoire</p>
-      <div class="table-block">
-        <div class="table-wrap">
-          <table class="data-table" aria-label="Comparaison SVM arbre Random Forest">
-            <thead>
-              <tr>
-                <th scope="col">Critère</th>
-                <th scope="col">SVM</th>
-                <th scope="col">Arbre de décision</th>
-                <th scope="col">Random Forest</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Idée directrice</td>
-                <td>Maximiser une <strong>marge</strong> (ou version souple / noyau)</td>
-                <td>Suite de <strong>seuils</strong> sur les variables (régions)</td>
-                <td><strong>Ensemble</strong> d’arbres + vote (bootstrap, sous-échantillon de variables)</td>
-              </tr>
-              <tr>
-                <td>Interprétabilité</td>
-                <td>Limite avec noyau ; marge lisible en linéaire</td>
-                <td class="cell-highlight">Souvent élevée (chemins « si … alors … »)</td>
-                <td>Importances de variables utiles ; arbre individuel moins central</td>
-              </tr>
-              <tr>
-                <td>Typique sur…</td>
-                <td>Données vectorielles, noyau si frontière non linéaire</td>
-                <td>Tabulaire, règles métier, petits jeux</td>
-                <td>Tabulaire, benchmarks « premier modèle fort »</td>
-              </tr>
-              <tr>
-                <td>Principal piège</td>
-                <td>Choix noyau / <span class="math-inline">C</span> / <span class="math-inline">γ</span></td>
-                <td><strong>Sur-apprentissage</strong> si arbre trop profond</td>
-                <td>Taille mémoire / temps si très grand nombre d’arbres</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <p class="lead">
-        La <strong>Random Forest</strong> se situe souvent entre les deux extrêmes : elle conserve la capacité à modéliser des relations <strong>non linéaires</strong>
-        et des variables hétérogènes sans normalisation obligatoire, tout en <strong>réduisant la variance</strong> par rapport à un arbre unique. Sur des
-        <strong>tableaux</strong> de taille moyenne, c’est une référence pour un <strong>premier modèle performant</strong> avant d’explorer le gradient boosting ou les
-        réseaux profonds.
-      </p>
 
       <section class="tree-conclusion" aria-labelledby="tree-conclusion-title">
         <h5 id="tree-conclusion-title" class="tree-conclusion__title">En synthèse : arbre et forêt dans la boîte à outils</h5>
@@ -2033,6 +2015,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       </details>
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
+      <div class="chapter-parts-deferred">
 
       <h4 id="ch2-reseaux-neurones">6. Les Réseaux de Neurones : l’approche bio-inspirée</h4>
       <p class="lead">
@@ -2311,6 +2294,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
           </ul>
         </div>
       </details>
+    </div>
 
       <!--
         Partie II, III & conclusion générale : masqués en CSS (.chapter-parts-deferred).
