@@ -1895,20 +1895,32 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
         des règles <strong>plus simples</strong> et généralement plus robustes.
       </p>
 
-      <h5>5.2 Un arbre trop profond : variance et sur-apprentissage</h5>
-      <p class="lead">
-        En pratique, le sur-apprentissage d’un arbre se repère souvent visuellement : la frontière devient très découpée et le modèle
-        <strong>généralise mal</strong> (forte <strong>variance</strong>). La stabilité passe par l’<strong>élagage</strong> (contraintes de croissance) ou, mieux
-        encore sur des données bruitées, par l’agrégation de plusieurs arbres.
-      </p>
 
-      <h5>5.3 Random Forest : plusieurs arbres, un vote</h5>
+
+      <h6>6. Synthèse : Atouts et Faiblesses</h6>
+      <ul>
+        <li>
+          <strong>Atouts</strong> :
+          <ul>
+            <li><strong>Totalement interprétable</strong> (modèle <em>White Box</em>) : chaque prédiction correspond à un chemin de règles « si… alors… ».</li>
+            <li><strong>Pas besoin de normaliser</strong> les données : les comparaisons par seuil ne dépendent pas d’une mise à l’échelle commune.</li>
+            <li><strong>Gère nativement le non-linéaire</strong> : les coupures successives construisent une frontière par morceaux.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Faiblesses</strong> :
+          <ul>
+            <li><strong>Instabilité</strong> : une petite modification des données peut changer fortement l’arbre appris.</li>
+            <li><strong>Tendance forte à l’overfitting</strong> si l’arbre est trop profond (d’où l’élagage et/ou les ensembles).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h5>5.2 Random Forest : plusieurs arbres, un vote</h5>
       <p class="lead">
-        Une <strong>forêt aléatoire</strong> entraîne un grand nombre d’arbres sur des <strong>échantillons bootstrap</strong> (tirages avec remise) du jeu
-        d’apprentissage ; à chaque coupe, on ne considère souvent qu’un <strong>sous-ensemble aléatoire de variables</strong> (<em>feature bagging</em>). Les
-        arbres sont décorrélés : leurs erreurs ne se cumulent pas toutes dans le même sens. La prédiction finale est le <strong>vote majoritaire</strong>
-        (classification) ou la moyenne (régression). Par rapport à <strong>un seul</strong> arbre profond, la frontière tend à être plus <strong>régulière</strong>
-        sur des problèmes bruités — au prix d’un modèle moins lisible mot à mot.
+        Nous avons vu qu'un arbre de décision est un outil puissant et interprétable, mais il a un défaut majeur : il est instable. Une légère modification dans vos données d'entraînement peut changer toute la structure de l'arbre. C'est un modèle "sensible", capable d'apprendre par cœur les bruits de vos données (le sur-apprentissage).
+
+Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle. Au lieu de confier la décision à un seul expert (un arbre), nous allons consulter une assemblée d'experts. C'est le principe de la Forêt Aléatoire : on crée des centaines d'arbres différents, et on fait voter la majorité. C'est ce qu'on appelle une méthode d'Ensemble Learning (Apprentissage par ensemble).
       </p>
       <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
       <img
