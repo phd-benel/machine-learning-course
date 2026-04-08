@@ -1627,10 +1627,27 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
         Le chemin suivi depuis la racine jusqu’à une feuille est exactement la suite des conditions que l’exemple a satisfaites : c’est pour cela qu’on dit qu’un
         arbre est un modèle <strong>interprétable</strong> (une « boîte blanche »).
       </p>
+
+      <h6>2. Le concept de partitionnement récursif</h6>
       <p class="lead">
-        En dimension 2, les frontières d’un arbre sont des <strong>droites parallèles aux axes</strong> : l’espace est découpé en rectangles. La figure suivante
-        montre un arbre <strong>peu profond</strong> (<code>max_depth = 3</code>) sur des données simulées en forme de croissants : la frontière est anguleuse mais
-        encore simple.
+        La logique profonde d’un arbre est celle du <strong>partitionnement récursif</strong> : au lieu de chercher une seule frontière globale, il découpe
+        progressivement l’espace des données en <strong>régions</strong> de plus en plus petites. Chaque nœud ajoute une condition (un test), ce qui revient à
+        <strong>scinder</strong> une région en deux sous-régions, puis à recommencer sur chacune d’elles.
+      </p>
+      <p class="lead">
+        En dimension 2, ces régions sont des <strong>rectangles</strong>. En dimension 3, des <strong>boîtes</strong>. Et, plus généralement, en dimension
+        <span class="math-inline">d</span>, on parle d’<strong>hyper-rectangles</strong>. Pourquoi ? Parce que les tests d’un arbre (dans sa forme la plus courante)
+        sont des comparaisons du type <em>variable ≤ seuil</em>, donc des coupures <strong>parallèles aux axes</strong>.
+      </p>
+      <p class="lead">
+        Visuellement, cela contraste avec un <strong>SVM linéaire</strong> : le SVM trace une frontière « d’un seul trait » (une droite, souvent perçue comme une
+        <strong>diagonale</strong>), alors qu’un arbre construit une séparation par étapes, comme un escalier : une coupe <strong>verticale</strong>, puis une coupe
+        <strong>horizontale</strong>, puis à nouveau verticale, etc. On obtient ainsi une frontière anguleuse faite de <strong>segments successifs</strong>,
+        capable d’approximer des séparations non linéaires, au prix d’une forme moins “lisse”.
+      </p>
+      <p class="lead">
+        La figure suivante illustre ce principe avec un arbre <strong>peu profond</strong> (<code>max_depth = 3</code>) sur des données simulées en forme de
+        croissants : la frontière est déjà anguleuse, mais reste encore simple.
       </p>
       <p class="table-caption" style="margin:12px 0 8px;">Figure : régions de décision d’un arbre peu profond (données simulées)</p>
       <img
