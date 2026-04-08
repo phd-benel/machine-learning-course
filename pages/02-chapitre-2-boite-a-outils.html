@@ -2101,20 +2101,41 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
 
       <section class="tree-conclusion" aria-labelledby="tree-conclusion-title">
         <h5 id="tree-conclusion-title" class="tree-conclusion__title">En synthèse : arbre et forêt dans la boîte à outils</h5>
+        <p class="lead">
+          Cette section marque surtout un <strong>changement de “vision du monde”</strong> dans l’apprentissage supervisé : on passe progressivement des modèles
+          <strong>paramétriques</strong> (qui apprennent un nombre fixé de paramètres et imposent une forme globale) vers des modèles
+          <strong>non paramétriques</strong> (dont la complexité s’adapte aux données). À noter : <strong>ils restent tous supervisés</strong> — on apprend toujours à
+          partir de couples <span class="math-inline">(X, Y)</span> ; ce qui change, c’est la <strong>forme</strong> de la décision.
+        </p>
         <ul>
           <li>
-            <strong>Arbre :</strong> modèle à base de seuils, idéal pour l’<strong>explicabilité</strong> et les prototypes rapides ; surveiller la profondeur pour
-            limiter le sur-apprentissage.
+            <strong>Modèles linéaires (régression logistique, etc.) :</strong> ils “voient” le monde comme une <strong>droite (ou hyperplan)</strong> : une règle
+            globale, simple, qui cherche à réduire une erreur (log-loss, MSE…). C’est souvent un excellent point de départ : rapide, stable, et facile à diagnostiquer.
           </li>
           <li>
-            <strong>Random Forest :</strong> <strong>ensemble</strong> d’arbres sur données et variables tirées aléatoirement ; <strong>vote</strong> ou moyenne ;
-            souvent robuste et compétitive sans réglage extrême.
+            <strong>SVM :</strong> même famille géométrique (hyperplan), mais avec une philosophie différente : c’est un <strong>géomètre</strong> muni d’un
+            <strong>compas</strong> qui cherche la séparation la plus “prudente” en <strong>maximisant la marge</strong>. La frontière est très contrôlée ; avec un
+            noyau, on garde l’idée de marge mais dans un espace transformé.
           </li>
           <li>
-            <strong>Par rapport à la SVM :</strong> moins centrée sur une marge géométrique unique, plus flexible sur des données <strong>mixtes</strong> (catégoriel
-            encodé, nombres) ; les importances de variables offrent un levier d’analyse que la SVM standard ne fournit pas directement.
+            <strong>Arbre de décision :</strong> il “voit” le monde comme une suite de <strong>règles</strong> emboîtées (« si… alors… »). C’est un modèle
+            <strong>non paramétrique</strong> (sa complexité augmente avec la profondeur) et naturellement <strong>non linéaire</strong> (frontières par morceaux).
+            Atout majeur : l’<strong>explicabilité</strong>. Piège majeur : l’<strong>instabilité</strong> et le <strong>sur-apprentissage</strong> si l’on ne
+            contrôle pas la croissance (pruning, contraintes).
+          </li>
+          <li>
+            <strong>Random Forest :</strong> elle conserve la “vision” par règles, mais elle change d’échelle : au lieu d’un seul expert instable, on consulte une
+            <strong>assemblée</strong> d’arbres entraînés sur des données/variables tirées au hasard. Le <strong>vote</strong> (classification) ou la
+            <strong>moyenne</strong> (régression) réduisent fortement la <strong>variance</strong> : c’est souvent robuste et compétitif sans réglage extrême, et les
+            <strong>importances de variables</strong> apportent un levier d’analyse pratique.
           </li>
         </ul>
+        <p class="lead">
+          Et ensuite ? Les <strong>réseaux de neurones</strong> prolongent encore ce changement de représentation : ils ne tracent pas seulement une droite ou des
+          rectangles, ils apprennent une <strong>composition de transformations</strong> (des couches) qui fabrique progressivement une représentation adaptée à la
+          tâche. Autrement dit, après le <em>géomètre</em> (SVM) et le <em>juriste des règles</em> (arbres), on va voir un modèle qui “voit” le monde comme un
+          <strong>empilement de filtres</strong> capables de construire des notions de plus en plus abstraites.
+        </p>
       </section>
 
       <details class="expand-panel">
