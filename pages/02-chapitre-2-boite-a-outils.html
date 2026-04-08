@@ -2031,6 +2031,28 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         chemin de règles) contre une <strong>forte réduction de variance</strong>.
       </p>
 
+      <h6>5. Un atout majeur : l’erreur Out-of-Bag (OOB)</h6>
+      <p class="lead">
+        Le bootstrap a une conséquence très pratique : chaque arbre n’est pas entraîné sur <strong>toutes</strong> les observations. Quand on tire
+        <span class="math-inline">n</span> fois <em>avec remise</em> dans un dataset de taille <span class="math-inline">n</span>, une observation a une probabilité
+        non négligeable de ne <strong>jamais</strong> être tirée pour cet arbre. En moyenne, environ <strong>36%</strong> des lignes sont “laissées de côté”.
+      </p>
+      <div class="math-display">
+        Probabilité qu’une ligne ne soit jamais tirée ≈ (1 − 1/<span class="math-inline">n</span>)<sup><span class="math-inline">n</span></sup> ≈ e<sup>−1</sup> ≈ 0,368
+      </div>
+      <p class="lead">
+        Ces observations non utilisées par un arbre s’appellent ses données <strong>Out-of-Bag</strong> (OOB). On peut donc s’en servir pour <strong>tester</strong>
+        cet arbre immédiatement : on lui demande de prédire ses points OOB, puis on mesure l’erreur.
+      </p>
+      <p class="lead">
+        En répétant cette idée sur toute la forêt, on obtient une estimation globale : pour chaque observation, on agrège la prédiction uniquement des arbres qui ne
+        l’ont <strong>pas</strong> vue à l’entraînement (ceux pour lesquels elle est OOB), puis on compare à la vraie cible. Cela fournit l’<strong>erreur OOB</strong>.
+      </p>
+      <p class="lead">
+        C’est une forme de <strong>validation croisée intégrée</strong> et “gratuite” : on obtient un indicateur de généralisation sans devoir, dès le départ,
+        réserver un jeu de test séparé. (On garde néanmoins de bonnes pratiques : un vrai jeu de test final reste utile pour une évaluation impartiale.)
+      </p>
+
       <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
       <img
         class="cover-image"
