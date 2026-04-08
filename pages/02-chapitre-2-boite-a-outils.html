@@ -1588,19 +1588,44 @@
 
       <h4 id="ch2-arbres-foret">5. Arbres de Décision et Random Forest : La Force du Collectif</h4>
       <p class="lead">
-        Là où la SVM trace une frontière globale (souvent lisse) entre classes, un <strong>arbre de décision</strong> procède par une suite de questions du type
-        « si la variable <span class="math-inline">x</span><sub>j</sub> est au-dessus d’un seuil, aller à gauche, sinon à droite ». C’est proche d’un
-        <strong>organigramme</strong> : lisible, mais chaque arbre pris isolément peut être instable et sensible au bruit. La
-        <strong>forêt aléatoire</strong> (<span class="math-inline">Random Forest</span>) combine de nombreux arbres entraînés sur des sous-échantillons
-        différents et vote la décision finale — d’où l’image du <strong>collectif</strong> qui lisse les excès d’un seul modèle.
+        Jusqu'ici, nous avons traité nos données comme des points dans un espace géométrique, cherchant la "meilleure ligne" pour prédire une valeur ou séparer des classes. Mais l'esprit humain ne décide pas toujours en traçant des frontières mathématiques. Face à un problème complexe, nous procédons souvent par une série de choix binaires : Est-ce qu'il pleut ? Si oui, ai-je un parapluie ?
+
+L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste". Contrairement au SVM ou à la régression logistique qui tentent de séparer les données d'un seul bloc, l'arbre de décision fragmente le problème. Il découpe l'espace en zones de plus en plus petites, créant une structure hiérarchique qui imite le raisonnement logique. C'est le premier pas vers les modèles non-paramétriques, capables de capturer des relations qu'une simple droite ne pourra jamais percevoir.
       </p>
 
       <h5>5.1 Arbre de décision : des règles emboîtées</h5>
+      
+
+      <h6>1. L’anatomie d’un arbre (le vocabulaire)</h6>
       <p class="lead">
-        À chaque <strong>nœud interne</strong>, on choisit une variable et un seuil qui <strong>sépare</strong> le mieux les exemples (selon un critère
-        d’<strong>impureté</strong> : indice de Gini ou entropie en classification). Les feuilles donnent la classe prédite (souvent la classe majoritaire dans
-        la région). La prédiction pour un nouveau point consiste à le faire <strong>descendre</strong> l’arbre jusqu’à une feuille : on obtient une règle explicable
-        (« si … alors … »), ce qui plaît en milieu réglementé — contrairement à un réseau profond opaque.
+        Un <strong>arbre de décision</strong> est une suite de questions <strong>emboîtées</strong>. À chaque question, on « oriente » un exemple vers la suite du
+        raisonnement, jusqu’à atteindre une décision finale. Pour bien le comprendre, il faut maîtriser son vocabulaire : il décrit à la fois la
+        <strong>structure</strong> (ce qu’on voit) et le <strong>processus de prédiction</strong> (ce qu’on fait quand on l’utilise).
+      </p>
+      <ul>
+        <li>
+          <strong>Le nœud racine (Root Node)</strong> : c’est la <strong>première question</strong>, celle qui s’applique à <strong>toutes</strong> les données.
+          Elle découpe l’ensemble initial en grands sous-groupes. Exemple : « <em>Âge &lt; 30 ?</em> ».
+        </li>
+        <li>
+          <strong>Les nœuds internes</strong> : ce sont les <strong>questions intermédiaires</strong>. Chaque nœud interne teste une variable (et souvent un
+          <strong>seuil</strong>) pour affiner la séparation : « <em>Revenu &lt; 2500 ?</em> », « <em>Nombre d’achats &ge; 3 ?</em> », etc.
+        </li>
+        <li>
+          <strong>Les branches</strong> : ce sont les <strong>issues possibles</strong> d’un test. Dans le cas le plus courant, un test binaire produit deux
+          branches : <strong>vrai / faux</strong> (ou <strong>oui / non</strong>). Chaque branche représente un sous-ensemble de données qui répond de la même façon
+          à la question.
+        </li>
+        <li>
+          <strong>Les feuilles (Leaf Nodes)</strong> : ce sont les <strong>nœuds finaux</strong>, là où l’on rend la décision. En
+          <strong>classification</strong>, une feuille porte une <strong>classe prédite</strong> (souvent la classe majoritaire parmi les exemples arrivés dans cette
+          feuille) ; en <strong>régression</strong>, elle porte une <strong>valeur</strong> (souvent une moyenne).
+        </li>
+      </ul>
+      <p class="lead">
+        On peut lire un arbre comme une règle de type <strong>si… alors…</strong>. Par exemple : <em>si (Âge &lt; 30) et (Revenu &lt; 2500), alors “Classe A”</em>.
+        Le chemin suivi depuis la racine jusqu’à une feuille est exactement la suite des conditions que l’exemple a satisfaites : c’est pour cela qu’on dit qu’un
+        arbre est un modèle <strong>interprétable</strong> (une « boîte blanche »).
       </p>
       <p class="lead">
         En dimension 2, les frontières d’un arbre sont des <strong>droites parallèles aux axes</strong> : l’espace est découpé en rectangles. La figure suivante
