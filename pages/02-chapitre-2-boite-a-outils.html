@@ -2159,7 +2159,6 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       </details>
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
-      <div class="chapter-parts-deferred">
 
       <h4 id="ch2-reseaux-neurones">6. Les Réseaux de Neurones : l’approche bio-inspirée</h4>
       <p class="lead">
@@ -2170,21 +2169,20 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         <strong>composition</strong> : chaque couche transforme l’information ; empilées, elles peuvent représenter des relations que ni une droite ni un seul arbre
         ne capturent facilement.
       </p>
-      <p class="lead">
-        Ce parcours est volontairement <strong>narratif et progressif</strong> : d’abord le neurone « comme une formule », puis la nécessité de la
-        <strong>non-linéarité</strong>, ensuite l’<strong>entraînement</strong> (perte, descente, rétropropagation), enfin des <strong>exemples</strong> de domaines.
-        Accrochez-vous : la section est longue — comme un mini-chapitre dans le chapitre — parce que ces idées valent le détour pour tout le reste de votre parcours
-        en apprentissage profond.
-      </p>
-
+      
       <h5>6.1 Inspiration biologique : signal, seuil, réponse</h5>
       <p class="lead">
         Dans une caricature utile du neurone biologique, des signaux arrivent par les dendrites, se <strong>cumulent</strong> au soma, et si le dépasse un certain
         niveau, le neurone « tire » un influx le long de l’axone. L’analogie informatique retient trois ingrédients : des <strong>entrées pondérées</strong>, une
         agrégation (souvent une somme), une <strong>non-linéarité</strong> ou un seuil qui décide si la sortie est active ou non. Le réseau de neurones artificiel ne
-        modélise pas la chimie ni les spikes milliseconde par milliseconde : il s’agit d’un <strong>schéma de calcul</strong> efficace pour ajuster des millions de
-        paramètres sur GPU.
+        modélise pas la chimie ni les spikes milliseconde par milliseconde : il s’agit d’un <strong>schéma de calcul</strong>.
       </p>
+
+      <img
+        class="cover-image"
+        src="../Figures/neurone-biologique-et-artificiel.webp"
+        loading="lazy"
+      />
 
       <h5>6.2 Le neurone artificiel : d’abord une régression logistique déguisée</h5>
       <p class="lead">
@@ -2438,7 +2436,6 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
           </ul>
         </div>
       </details>
-    </div>
 
       <!--
         Partie II, III & conclusion générale : masqués en CSS (.chapter-parts-deferred).
