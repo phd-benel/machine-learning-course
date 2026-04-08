@@ -1645,6 +1645,17 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
         <strong>horizontale</strong>, puis à nouveau verticale, etc. On obtient ainsi une frontière anguleuse faite de <strong>segments successifs</strong>,
         capable d’approximer des séparations non linéaires, au prix d’une forme moins “lisse”.
       </p>
+      <p class="lead">
+        La figure suivante illustre ce principe avec un arbre <strong>peu profond</strong> (<code>max_depth = 3</code>) sur des données simulées en forme de
+        croissants : la frontière est déjà anguleuse, mais reste encore simple.
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : régions de décision d’un arbre peu profond (données simulées)</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig48.png"
+        alt="Deux classes en croissants avec régions colorées séparées par des frontières parallèles aux axes"
+        loading="lazy"
+      />
 
       <h6>3. Le critère de choix : comment diviser ? (la pureté)</h6>
       <p class="lead">
@@ -1661,12 +1672,17 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
           <strong>L’entropie</strong> : mesure du <strong>désordre</strong>. Si un nœud contient des classes très mélangées, l’entropie est élevée ; si une seule
           classe domine (nœud presque pur), l’entropie est faible. Si <span class="math-inline">p_k</span> est la proportion de la classe
           <span class="math-inline">k</span> dans le nœud, alors :
-          <span class="math-inline">H = -\sum_k p_k \log_2(p_k)</span>.
+          <div class="math-display">
+            <span class="math-inline">H</span> = − &Sigma;<sub>k</sub> <span class="math-inline">p</span><sub>k</sub> log<sub>2</sub>(<span class="math-inline">p</span><sub>k</sub>)
+          </div>
         </li>
         <li>
           <strong>L’indice de Gini</strong> : interprétation “probabiliste” très intuitive. C’est la probabilité de <strong>mal classer</strong> un élément si l’on
           attribue au hasard une étiquette selon les proportions du nœud. Sa formule est :
-          <span class="math-inline">G = 1 - \sum_k p_k^2</span>. C’est le critère utilisé par l’algorithme <strong>CART</strong> dans de nombreuses implémentations.
+          <div class="math-display">
+            <span class="math-inline">G</span> = 1 − &Sigma;<sub>k</sub> <span class="math-inline">p</span><sub>k</sub><sup>2</sup>
+          </div>
+          C’est le critère utilisé par l’algorithme <strong>CART</strong> dans de nombreuses implémentations.
         </li>
       </ul>
       <p class="lead">
@@ -1677,24 +1693,23 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
       <p class="lead">
         C’est exactement le <strong>gain d’information</strong> (pour l’entropie) : si un nœud parent <span class="math-inline">P</span> est séparé en deux nœuds
         enfants <span class="math-inline">L</span> et <span class="math-inline">R</span>, on calcule :
-        <span class="math-inline">\mathrm{Gain} = H(P) - \Big(\frac{n_L}{n}H(L) + \frac{n_R}{n}H(R)\Big)</span>.
+      </p>
+      <div class="math-display">
+        Gain = H(<span class="math-inline">P</span>) −
+        <span style="white-space:nowrap;">(</span>
+        <span class="math-inline">n</span><sub>L</sub>/<span class="math-inline">n</span> · H(<span class="math-inline">L</span>)
+        +
+        <span class="math-inline">n</span><sub>R</sub>/<span class="math-inline">n</span> · H(<span class="math-inline">R</span>)
+        <span style="white-space:nowrap;">)</span>
+      </div>
+      <p class="lead">
         On choisit la question qui <strong>maximise</strong> ce gain (donc qui diminue le plus le “désordre”).
       </p>
       <p class="lead">
         Avec Gini, on applique la même logique (on parle souvent de <strong>réduction d’impureté</strong>) : on choisit la coupure qui fait le plus baisser
         <span class="math-inline">G</span> en moyenne pondérée.
       </p>
-      <p class="lead">
-        La figure suivante illustre ce principe avec un arbre <strong>peu profond</strong> (<code>max_depth = 3</code>) sur des données simulées en forme de
-        croissants : la frontière est déjà anguleuse, mais reste encore simple.
-      </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : régions de décision d’un arbre peu profond (données simulées)</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig48.png"
-        alt="Deux classes en croissants avec régions colorées séparées par des frontières parallèles aux axes"
-        loading="lazy"
-      />
+      
 
       <h5>5.2 Un arbre trop profond : variance et sur-apprentissage</h5>
       <p class="lead">
