@@ -1709,6 +1709,54 @@ L'Arbre de Décision marque le passage d'une IA "géomètre" à une IA "analyste
         Avec Gini, on applique la même logique (on parle souvent de <strong>réduction d’impureté</strong>) : on choisit la coupure qui fait le plus baisser
         <span class="math-inline">G</span> en moyenne pondérée.
       </p>
+
+      <h6>4. L’algorithme d’apprentissage (ID3, C4.5 ou CART)</h6>
+      <p class="lead">
+        Une fois le critère de “bonne coupure” défini (gain d’information, Gini…), l’apprentissage d’un arbre consiste à <strong>construire</strong> la structure
+        nœud par nœud. Les algorithmes historiques — <strong>ID3</strong>, <strong>C4.5</strong> et <strong>CART</strong> — suivent tous la même philosophie :
+        répéter le même geste de décision locale sur des sous-ensembles de plus en plus petits.
+      </p>
+      <p class="lead">
+        <strong>Approche gloutonne (Greedy)</strong> : à chaque nœud, l’arbre choisit la meilleure question <strong>à l’instant T</strong> (celle qui maximise la
+        réduction d’impureté) <em>sans</em> anticiper les coups suivants. Autrement dit, il ne cherche pas “l’arbre globalement optimal” parmi tous les arbres
+        possibles (ce serait trop coûteux) ; il construit une solution efficace par une série de meilleurs choix locaux.
+      </p>
+      <p class="lead">
+        Schéma général (classification) :
+      </p>
+      <ul>
+        <li><strong>Étape 1</strong> : au nœud courant, calculer l’impureté (entropie ou Gini) des exemples présents.</li>
+        <li>
+          <strong>Étape 2</strong> : tester des candidats (<strong>variable + seuil</strong>), et mesurer la baisse d’impureté obtenue après séparation.
+        </li>
+        <li><strong>Étape 3</strong> : choisir la meilleure coupure et créer les nœuds enfants.</li>
+        <li><strong>Étape 4</strong> : répéter récursivement sur chaque enfant (partitionnement récursif).</li>
+      </ul>
+      <p class="lead">
+        <strong>Condition d’arrêt : quand s’arrête-t-on de diviser ?</strong> Sans règle d’arrêt, un arbre peut continuer jusqu’à “tout expliquer”, y compris le
+        bruit. En pratique, on stoppe la croissance quand l’un des critères suivants est atteint :
+      </p>
+      <ul>
+        <li>
+          <strong>Feuille pure (ou quasi pure)</strong> : tous (ou presque tous) les exemples dans le nœud appartiennent à la même classe, donc l’impureté est
+          proche de 0.
+        </li>
+        <li>
+          <strong>Profondeur maximale</strong> : on impose une limite (<code>max_depth</code>) pour éviter des règles trop longues et trop spécifiques.
+        </li>
+        <li>
+          <strong>Trop peu d’échantillons</strong> : on interdit des divisions si le nœud contient trop peu d’exemples (p. ex. <code>min_samples_split</code>) ou
+          si une future feuille serait trop petite (p. ex. <code>min_samples_leaf</code>).
+        </li>
+        <li>
+          <strong>Gain insuffisant</strong> : si la meilleure coupure n’apporte qu’une réduction d’impureté négligeable, on préfère garder une feuille (règle de
+          type <code>min_impurity_decrease</code>).
+        </li>
+      </ul>
+      <p class="lead">
+        La conséquence directe est un compromis : plus on laisse l’arbre grandir, plus il s’adapte finement au jeu d’entraînement ; plus on le contraint, plus on
+        favorise une structure <strong>stable</strong> et généralisable.
+      </p>
       
 
       <h5>5.2 Un arbre trop profond : variance et sur-apprentissage</h5>
