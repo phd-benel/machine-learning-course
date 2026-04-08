@@ -1992,6 +1992,12 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         l’une des clés qui rendent la forêt à la fois <strong>robuste</strong> et performante sur des données tabulaires.
       </p>
 
+      <img
+        class="cover-image"
+        src="../Figures/Feature_Random.png"
+        loading="lazy"
+      />
+
       <h6>3. Le processus de vote (inférence)</h6>
       <p class="lead">
         Une fois tous les arbres entraînés, la forêt doit produire une <strong>prédiction finale</strong>. L’idée est d’agréger les décisions individuelles : chaque
@@ -2006,6 +2012,24 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
           <strong>Régression</strong> : la forêt prend la <strong>moyenne</strong> des valeurs prédites par tous les arbres (ce qui lisse les prédictions extrêmes).
         </li>
       </ul>
+
+      <h6>4. Pourquoi ça marche ? (la réduction de la variance)</h6>
+      <p class="lead">
+        Un point contre-intuitif en machine learning est qu’un modèle “faible” peut devenir “fort” lorsqu’on en combine beaucoup. Un arbre seul, surtout s’il est
+        profond, est souvent <strong>instable</strong> : il peut changer fortement si l’on modifie légèrement les données d’entraînement. C’est typiquement une
+        signature de <strong>variance élevée</strong>.
+      </p>
+      <p class="lead">
+        La Random Forest exploite exactement ce point : en construisant des arbres <strong>différents</strong> (bootstrap + sous-ensemble de variables) puis en
+        faisant une <strong>moyenne</strong> (régression) ou un <strong>vote</strong> (classification), on “annule” une partie des erreurs aléatoires de chaque
+        arbre. Si un arbre se trompe à cause d’un détail du bruit, un autre arbre — entraîné sur un échantillon différent — ne fera pas nécessairement la même
+        erreur.
+      </p>
+      <p class="lead">
+        C’est l’<strong>effet de lissage</strong> : au lieu d’une frontière très “hachée” et sensible (arbre unique profond), l’agrégation produit une frontière
+        généralement plus <strong>régulière</strong> et une décision plus <strong>robuste</strong>. En bref : on échange un peu d’interprétabilité fine (un seul
+        chemin de règles) contre une <strong>forte réduction de variance</strong>.
+      </p>
 
       <p class="table-caption" style="margin:12px 0 8px;">Figure : même jeu simulé — arbre unique très profond vs forêt aléatoire</p>
       <img
