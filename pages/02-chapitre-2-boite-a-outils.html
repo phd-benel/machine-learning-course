@@ -2410,43 +2410,92 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         </li>
       </ul>
 
-      <h5>6.8 Au-delà du MLP : quelques repères par domaine</h5>
-      <p class="lead">
-        <strong>Vision :</strong> les <strong>convolutions</strong> (CNN) exploitent la structure spatiale des images : filtres locaux, empilement, sous-échantillonnage.
-        <strong>Langage et séquences :</strong> les <strong>LSTM</strong> / <strong>GRU</strong> gèrent la mémoire temporelle ; les
-        <strong>transformers</strong> modélisent des dépendances à longue distance par mécanismes d’attention. <strong>Données tabulaires :</strong> un MLP ou des
-        architectures en gradient boosting restent souvent compétitifs ; le bon modèle dépend du budget de données, du bruit et de l’interopérabilité requise.
-      </p>
-      <p class="lead">
-        La figure 53 illustre un MLP « générique » sur des données en <strong>deux lunes</strong> : la frontière se courbe pour épouser la géométrie des classes —
-        même principe que vous avez vu avec la SVM à noyau, avec un autre moteur d’optimisation et une autre famille d’hypothèses.
-      </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : MLP sur données « deux lunes » (simulation)</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig53.png"
-        alt="Frontieres non lineaires entre deux classes en forme de croissants"
-        loading="lazy"
-      />
-
-      <section class="nn-conclusion" aria-labelledby="nn-conclusion-title">
-        <h5 id="nn-conclusion-title" class="nn-conclusion__title">Fil conducteur : du neurone logistique au réseau profond</h5>
+      <aside class="quote quote--exercise" aria-label="Exemple : backprop sur un reseau 1-1-1-1">
+        <h5 class="quote--exercise__title">Exemple calculé : réseau 1-1-1-1 (forward + backprop)</h5>
         <p class="lead">
-          <strong>Répétons l’essentiel.</strong> Un neurone avec entrées <span class="math-inline">x</span>, poids <span class="math-inline">w</span>, biais <span class="math-inline">b</span>, somme <span class="math-inline">z</span> = <span class="math-inline">w</span>ᵀ<span class="math-inline">x</span> + <span class="math-inline">b</span> et activation sigmoïde sur la <strong>dernière couche</strong> binaire, c’est la même structure mathématique que la <strong>régression logistique</strong> du § 3. La profondeur ajoute des couches qui
-          <strong>reparamètrent</strong> l’espace des entrées : ce n’est plus une seule séparation linéaire dans l’espace d’origine, mais une séparation (souvent plus
-          simple) dans un espace de <strong>représentations</strong> apprises.
+          Prenons un réseau <strong>1-1-1-1</strong> (1 entrée, 2 couches cachées, 1 sortie). Pour se concentrer sur la structure, on garde l’activation identité :
         </p>
+        <div class="math-display">
+          <span class="math-inline">&sigma;</span>(<span class="math-inline">z</span>) = <span class="math-inline">z</span>
+        </div>
+
+        <span class="exercise-block-title">1) Structure du réseau (données et poids)</span>
         <ul>
-          <li>
-            <strong>Forces :</strong> expressivité élevée, cadre unifié pour la régression et la classification, exploitation des GPU, transfert d’apprentissage
-            possible à partir de grands modèles pré-entraînés.
-          </li>
-          <li>
-            <strong>Limites :</strong> besoin de données et de régularisation (dropout, weight decay, early stopping) ; sensibilité aux hyperparamètres ; modèles
-            profonds souvent <strong>boîte noire</strong> sans outils d’interprétation additionnels.
-          </li>
+          <li><strong>Entrée</strong> : <span class="math-inline">x</span> = 1,0</li>
+          <li><strong>Cible</strong> : <span class="math-inline">y</span> = 1,0</li>
+          <li><strong>Poids</strong> : <span class="math-inline">w</span><sub>1</sub> = 0,5 (Entrée &rarr; Cachée 1)</li>
+          <li><strong>Poids</strong> : <span class="math-inline">w</span><sub>2</sub> = 0,5 (Cachée 1 &rarr; Cachée 2)</li>
+          <li><strong>Poids</strong> : <span class="math-inline">w</span><sub>3</sub> = 0,5 (Cachée 2 &rarr; Sortie)</li>
         </ul>
-      </section>
+
+        <span class="exercise-block-title">2) Forward pass (activations)</span>
+        <p class="lead">On avance simplement en multipliant.</p>
+        <div class="math-display math-display--left">
+          <strong>Cachée 1</strong> :
+          <span class="math-inline">h</span><sub>1</sub> = <span class="math-inline">x</span> &middot; <span class="math-inline">w</span><sub>1</sub>
+          = 1,0 &middot; 0,5 = <strong>0,5</strong>
+        </div>
+        <div class="math-display math-display--left">
+          <strong>Cachée 2</strong> :
+          <span class="math-inline">h</span><sub>2</sub> = <span class="math-inline">h</span><sub>1</sub> &middot; <span class="math-inline">w</span><sub>2</sub>
+          = 0,5 &middot; 0,5 = <strong>0,25</strong>
+        </div>
+        <div class="math-display math-display--left">
+          <strong>Sortie</strong> :
+          <span class="math-inline">ŷ</span> = <span class="math-inline">h</span><sub>2</sub> &middot; <span class="math-inline">w</span><sub>3</sub>
+          = 0,25 &middot; 0,5 = <strong>0,125</strong>
+        </div>
+        <p class="lead">
+          L’erreur brute vaut :
+          <span class="math-inline">ŷ</span> − <span class="math-inline">y</span> = 0,125 − 1,0 = <strong>−0,875</strong>.
+          (Dans le cas MSE <span class="math-inline">L</span> = ½(<span class="math-inline">ŷ</span> − <span class="math-inline">y</span>)², on a aussi
+          &part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span> = <span class="math-inline">ŷ</span> − <span class="math-inline">y</span>.)
+        </p>
+
+        <span class="exercise-block-title">3) Backward pass (cascade de gradients)</span>
+        <p class="lead">
+          On part du dernier étage avec :
+          &part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span> = <strong>−0,875</strong>.
+        </p>
+
+        <p class="lead"><strong>Étape A — gradient pour</strong> <span class="math-inline">w</span><sub>3</sub></p>
+        <div class="math-display math-display--left">
+          &part;<span class="math-inline">L</span>/&part;<span class="math-inline">w</span><sub>3</sub>
+          =
+          (&part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span>)
+          &middot;
+          <span class="math-inline">h</span><sub>2</sub>
+          =
+          (−0,875) &middot; 0,25
+          =
+          <strong>−0,21875</strong>
+        </div>
+
+        <p class="lead"><strong>Étape B — gradient pour</strong> <span class="math-inline">w</span><sub>2</sub></p>
+        <div class="math-display math-display--left">
+          &part;<span class="math-inline">L</span>/&part;<span class="math-inline">w</span><sub>2</sub>
+          =
+          \u200b((&part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span>) &middot; <span class="math-inline">w</span><sub>3</sub>) &middot; <span class="math-inline">h</span><sub>1</sub>
+          =
+          ((−0,875 &middot; 0,5) &middot; 0,5)
+          =
+          <strong>−0,21875</strong>
+        </div>
+
+        <p class="lead"><strong>Étape C — gradient pour</strong> <span class="math-inline">w</span><sub>1</sub></p>
+        <div class="math-display math-display--left">
+          &part;<span class="math-inline">L</span>/&part;<span class="math-inline">w</span><sub>1</sub>
+          =
+          \u200b((&part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span>) &middot; <span class="math-inline">w</span><sub>3</sub> &middot; <span class="math-inline">w</span><sub>2</sub>) &middot; <span class="math-inline">x</span>
+          =
+          ((−0,875 &middot; 0,5 &middot; 0,5) &middot; 1,0)
+          =
+          <strong>−0,21875</strong>
+        </div>
+        <p class="lead">
+          Ce mini-calcul montre exactement la “chaîne” : plus on remonte, plus le gradient est un produit de termes (poids, activations, dérivées locales).
+        </p>
+      </aside>
 
       <aside class="quote quote--exercise" aria-label="Exercice : mini-reseau et retropropagation au stylo">
         <h5 class="quote--exercise__title">À faire : mini réseau « à la main » (forward + une étape de backprop)</h5>
