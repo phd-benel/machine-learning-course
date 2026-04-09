@@ -2475,7 +2475,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         <div class="math-display math-display--left">
           &part;<span class="math-inline">L</span>/&part;<span class="math-inline">w</span><sub>2</sub>
           =
-          \u200b((&part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span>) &middot; <span class="math-inline">w</span><sub>3</sub>) &middot; <span class="math-inline">h</span><sub>1</sub>
+          ((&part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span>) &middot; <span class="math-inline">w</span><sub>3</sub>) &middot; <span class="math-inline">h</span><sub>1</sub>
           =
           ((−0,875 &middot; 0,5) &middot; 0,5)
           =
@@ -2486,7 +2486,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         <div class="math-display math-display--left">
           &part;<span class="math-inline">L</span>/&part;<span class="math-inline">w</span><sub>1</sub>
           =
-          \u200b((&part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span>) &middot; <span class="math-inline">w</span><sub>3</sub> &middot; <span class="math-inline">w</span><sub>2</sub>) &middot; <span class="math-inline">x</span>
+          ((&part;<span class="math-inline">L</span>/&part;<span class="math-inline">ŷ</span>) &middot; <span class="math-inline">w</span><sub>3</sub> &middot; <span class="math-inline">w</span><sub>2</sub>) &middot; <span class="math-inline">x</span>
           =
           ((−0,875 &middot; 0,5 &middot; 0,5) &middot; 1,0)
           =
@@ -2563,18 +2563,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         </p>
       </aside>
 
-      <details class="expand-panel">
-        <summary>Corrigé succinct (auto-vérification)</summary>
-        <div class="expand-panel__body">
-          <p class="lead">
-            Avec les valeurs de l’énoncé : <span class="math-inline">h</span><sub>1</sub> = 0,4 , <span class="math-inline">h</span><sub>2</sub> = 0,2 ,
-            <span class="math-inline">ŷ</span> = 0,5 , L = 0,125. Gradient sur la sortie : ∂L/∂<span class="math-inline">ŷ</span> = −0,5. D’où
-            ∂L/∂<span class="math-inline">v</span><sub>1</sub> = −0,2 , ∂L/∂<span class="math-inline">v</span><sub>2</sub> = −0,1 , ∂L/∂<span class="math-inline">c</span> = −0,5.
-            Puis ∂L/∂<span class="math-inline">h</span><sub>1</sub> = −0,25 , ∂L/∂<span class="math-inline">h</span><sub>2</sub> = −0,25, et les dérivées par rapport aux <span class="math-inline">w</span> et <span class="math-inline">b</span> s’obtiennent en multipliant par les entrées appropriées. Vérifiez vos mises à jour en recalculant <span class="math-inline">ŷ</span> et L.
-          </p>
-        </div>
-      </details>
-
+    
       <details class="expand-panel">
         <summary>Références et lectures pour aller plus loin (réseaux de neurones)</summary>
         <div class="expand-panel__body">
