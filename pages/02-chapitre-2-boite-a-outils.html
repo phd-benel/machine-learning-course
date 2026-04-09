@@ -2303,7 +2303,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         loading="lazy"
       />
 
-      <img class="cover-image" src="../Figures/FIg27.jpg" loading="lazy" />
+      <img class="cover-image" src="../Figures/Forward_Back.png" loading="lazy" />
 
 
       <h5>6.7 Rétropropagation : la règle de la chaîne, étage par étage</h5>
@@ -2320,6 +2320,95 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         alt="Chaines de cercles relies par fleches illustrant la retropropagation"
         loading="lazy"
       />
+
+      <p class="lead">
+        L’idée fondamentale est l’<strong>attribution du crédit</strong> (<em>credit assignment</em>) : si le modèle se trompe, <strong>quels poids</strong> sont
+        responsables, et <strong>dans quelle mesure</strong> ? Pour répondre, on propage un signal d’erreur depuis la sortie vers l’entrée.
+      </p>
+
+      <h6>1) Le mécanisme de la règle de la chaîne</h6>
+      <p class="lead">
+        Considérons un neurone simplifié où la sortie <span class="math-inline">a</span> est le résultat d’une activation <span class="math-inline">&sigma;</span>
+        appliquée à une somme pondérée <span class="math-inline">z</span>. Pour un poids <span class="math-inline">w</span>, la loss
+        <span class="math-inline">L</span> dépend de <span class="math-inline">w</span> via une cascade :
+      </p>
+      <div class="math-display math-display--left">
+        <span class="math-inline">w</span> &rarr; <span class="math-inline">z</span> &rarr; <span class="math-inline">a</span> &rarr; <span class="math-inline">L</span>
+      </div>
+      <p class="lead">
+        La règle de la chaîne dit que l’impact d’une variation de <span class="math-inline">w</span> sur <span class="math-inline">L</span> se calcule en
+        multipliant des dérivées <strong>locales</strong> :
+      </p>
+      <div class="math-display">
+        &part;<span class="math-inline">L</span>/&part;<span class="math-inline">w</span>
+        =
+        (&part;<span class="math-inline">L</span>/&part;<span class="math-inline">a</span>)
+        &middot;
+        (&part;<span class="math-inline">a</span>/&part;<span class="math-inline">z</span>)
+        &middot;
+        (&part;<span class="math-inline">z</span>/&part;<span class="math-inline">w</span>)
+      </div>
+
+      <h6>2) Décomposition étage par étage (réseau profond)</h6>
+      <p class="lead">
+        Dans un réseau profond, le même calcul se répète de couche en couche. Notons
+        <span class="math-inline">w</span><sub>jk</sub><sup>(l)</sup> le poids reliant le neurone <span class="math-inline">k</span> de la couche
+        <span class="math-inline">(l&nbsp;&minus;&nbsp;1)</span> au neurone <span class="math-inline">j</span> de la couche <span class="math-inline">(l)</span>.
+        On introduit une quantité centrale : l’<strong>erreur locale</strong> (souvent notée delta).
+      </p>
+      <ul>
+        <li>
+          <strong>L’erreur locale</strong> :
+          <span class="math-inline">&delta;</span><sub>j</sub><sup>(l)</sup> = &part;<span class="math-inline">L</span>/&part;<span class="math-inline">z</span><sub>j</sub><sup>(l)</sup>.
+          Elle représente la “responsabilité” du neurone <span class="math-inline">j</span> (à la couche <span class="math-inline">l</span>) dans l’erreur totale.
+        </li>
+        <li>
+          <strong>La remontée du gradient</strong> : l’erreur à la couche <span class="math-inline">(l)</span> se calcule à partir de la couche suivante
+          <span class="math-inline">(l&nbsp;+&nbsp;1)</span> :
+        </li>
+      </ul>
+      <div class="math-display">
+        <span class="math-inline">&delta;</span><sub>j</sub><sup>(l)</sup>
+        =
+        &Big(
+        &Sigma;<sub>m</sub>
+        <span class="math-inline">&delta;</span><sub>m</sub><sup>(l+1)</sup>
+        &middot;
+        <span class="math-inline">w</span><sub>mj</sub><sup>(l+1)</sup>
+        &Big)
+        &middot;
+        <span class="math-inline">&sigma;</span>&prime;(<span class="math-inline">z</span><sub>j</sub><sup>(l)</sup>)
+      </div>
+
+      <h6>3) Attribution du “crédit” (ou de la faute)</h6>
+      <p class="lead">
+        Une fois <span class="math-inline">&delta;</span><sub>j</sub><sup>(l)</sup> connu, le gradient du poids
+        <span class="math-inline">w</span><sub>jk</sub><sup>(l)</sup> s’écrit simplement :
+      </p>
+      <div class="math-display">
+        &part;<span class="math-inline">L</span>/&part;<span class="math-inline">w</span><sub>jk</sub><sup>(l)</sup>
+        =
+        <span class="math-inline">a</span><sub>k</sub><sup>(l-1)</sup>
+        &middot;
+        <span class="math-inline">&delta;</span><sub>j</sub><sup>(l)</sup>
+      </div>
+      <p class="lead">
+        <strong>Intuition :</strong> le gradient est le produit de l’activation d’entrée (le signal “aller”) par l’erreur locale (le signal “retour”). Si
+        l’entrée <span class="math-inline">a</span><sub>k</sub><sup>(l-1)</sup> est nulle, le poids n’a aucune responsabilité dans l’erreur actuelle.
+      </p>
+
+      <h6>4) Synthèse algorithmique (vue “ingénieur”)</h6>
+      <ul>
+        <li>
+          <strong>Forward pass</strong> : calculer et stocker toutes les sommes <span class="math-inline">z</span> et activations <span class="math-inline">a</span>.
+        </li>
+        <li><strong>Erreur finale</strong> : initialiser le signal à la dernière couche (à partir de &part;<span class="math-inline">L</span>/&part;<span class="math-inline">a</span><sub>sortie</sub>).</li>
+        <li><strong>Backward pass</strong> : propager les <span class="math-inline">&delta;</span> de droite à gauche.</li>
+        <li>
+          <strong>Mise à jour</strong> : l’optimiseur ajuste les poids (descente de gradient) :
+          <span class="math-inline">w</span> &larr; <span class="math-inline">w</span> − <span class="math-inline">&eta;</span> &middot; (&part;<span class="math-inline">L</span>/&part;<span class="math-inline">w</span>)
+        </li>
+      </ul>
 
       <h5>6.8 Au-delà du MLP : quelques repères par domaine</h5>
       <p class="lead">
