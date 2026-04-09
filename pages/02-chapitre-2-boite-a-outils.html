@@ -2187,16 +2187,14 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         <figure class="kernel-noyau-gallery__fig">
           <img
             class="kernel-noyau-gallery__img"
-            src="../Figures/RéseauNeuronne_Arti.jpg"
-            alt="Étape 1 : données et séparation impossible par une droite dans le plan"
+            src="../Figures/RéseauNeuronne_Bio.jpg"
             loading="lazy"
           />
         </figure>
         <figure class="kernel-noyau-gallery__fig">
           <img
             class="kernel-noyau-gallery__img"
-            src="../Figures/RéseauNeuronne_Bio.jpg"
-            alt="Étape 2 : plongement des points dans un espace de dimension plus élevée"
+            src="../Figures/RéseauNeuronne_Arti.jpg"
             loading="lazy"
           />
         </figure>
@@ -2236,12 +2234,12 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         alt="Reseau avec deux entrees, trois neurones caches et une sortie"
         loading="lazy"
       />
-      <p class="lead">
-        <strong>Notation utile.</strong> Si <span class="math-inline">a</span><sup>(ℓ)</sup> désigne le vecteur d’activations de la couche ℓ, on écrit schématiquement
-        <span class="math-inline">a</span><sup>(ℓ)</sup> = <span class="math-inline">f</span><sub>ℓ</sub>(<span class="math-inline">W</span><sup>(ℓ)</sup><span class="math-inline">a</span><sup>(ℓ−1)</sup> + <span class="math-inline">b</span><sup>(ℓ)</sup>). L’empilement de fonctions non linéaires
-        <span class="math-inline">f</span><sub>ℓ</sub> est ce qui donne au réseau sa <strong>expressivité</strong> — à condition de ne pas se limiter à des
-        identités linéaires sans activation.
-      </p>
+      <img
+        class="cover-image"
+        src="../Figures/MLP-Neural-Network-Model-Architecture.webp"
+        loading="lazy"
+      />
+      
 
       <h5>6.4 Pourquoi la non-linéarité est indispensable</h5>
       <p class="lead">
@@ -2252,7 +2250,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       <p class="lead">
         Le cas d’école est le <strong>XOR</strong> : quatre points du plan, deux classes en diagonale. Aucune droite ne sépare les deux classes ; un classifieur
         linéaire (régression logistique sans enrichissement de features) échoue. Un petit MLP avec une couche cachée peut, lui, redessiner des régions non convexes.
-        La figure 58 montre une solution typique après entraînement.
+        La figure suivante montre une solution typique après entraînement.
       </p>
       <p class="table-caption" style="margin:12px 0 8px;">Figure : problème XOR — frontière possible avec un MLP</p>
       <img
@@ -2262,7 +2260,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         loading="lazy"
       />
       <p class="lead">
-        La figure 54 compare, sur des <strong>cercles imbriqués</strong> simulés, une <strong>régression logistique</strong> (séparation linéaire) et un
+        La figure suivante compare, sur des <strong>cercles imbriqués</strong> simulés, une <strong>régression logistique</strong> (séparation linéaire) et un
         <strong>MLP</strong> avec une couche cachée : même données, capacités différentes. C’est le même genre de constat que pour la SVM à noyau ou les arbres, sous
         une autre forme algorithmique.
       </p>
@@ -2294,7 +2292,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         Comme pour la régression linéaire, le cycle fondamental reste : <strong>forward pass</strong> (calculer la sortie), <strong>loss</strong> (écart aux
         étiquettes), <strong>backward pass</strong> (gradients), <strong>mise à jour</strong> des poids — souvent par <strong>descente de gradient stochastique</strong>
         ou variantes (Adam, RMSprop…). La loss peut être MSE en régression, entropie croisée en classification, etc. Sur de grands jeux, on traite des
-        <strong>mini-batches</strong> : compromis entre bruit utile et coût de calcul. La figure 55 montre l’allure typique d’une courbe de loss qui décroît puis
+        <strong>mini-batches</strong> : compromis entre bruit utile et coût de calcul. La figure suivante montre l’allure typique d’une courbe de loss qui décroît puis
         se stabilise — pas toujours monotone à l’échelle du mini-batch, mais la tendance compte.
       </p>
       <p class="table-caption" style="margin:12px 0 8px;">Figure : exemple de courbe de loss au fil des itérations</p>
@@ -2304,6 +2302,9 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         alt="Courbe montrant la diminution de la loss en fonction des iterations"
         loading="lazy"
       />
+
+      <img class="cover-image" src="../Figures/FIg27.jpg" loading="lazy" />
+
 
       <h5>6.7 Rétropropagation : la règle de la chaîne, étage par étage</h5>
       <p class="lead">
