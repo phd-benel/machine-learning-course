@@ -75,34 +75,20 @@
 
       <hr style="border:none;border-top:1px solid var(--border);margin:28px 0 22px;" />
 
-      <h3>Challenge ML : Arena « Beyond the Overfit »</h3>
+      <h3>Challenge ML : « Beyond the Overfit »</h3>
 
-      <p><strong>Le Défi</strong></p>
       <p>
-        L'objectif est de construire un classifieur capable de reconnaître les combinaisons du Poker à partir d'un tirage de 5 cartes. La difficulté
-        majeure réside dans le <strong>déséquilibre extrême</strong> des classes et la nécessité pour le modèle d'apprendre des relations logiques
-        (suites, paires, couleurs) plutôt que de simplement mémoriser les données.
+        Pour mettre en pratique les concepts de Model Engineering, vous participerez à une compétition de classification sur le UCI Poker Hand Dataset. L'objectif est de construire un modèle capable de généraliser sur des combinaisons de cartes jamais vues, malgré un fort déséquilibre des classes (allant de la simple "paire" à la rarissime "quinte flush royale").
       </p>
+      <img class="cover-image" src="../Figures/Challenge.png"  />
+
 
       <h4>1. Préparation et Compréhension des Données</h4>
       <p>
-        Le dataset se compose de 10 variables prédictives représentant les 5 cartes d'une main tirée d'un jeu standard de 52 cartes.
+        Chaque enregistrement est un exemple d'une main composée de cinq cartes à jouer tirées d'un jeu standard de 52 cartes. Chaque carte est décrite à l'aide de deux attributs (l'enseigne et le rang), pour un total de 10 attributs prédictifs. Il existe un attribut de classe qui décrit la "Main de Poker".
       </p>
-      <p><strong>Accès aux données :</strong></p>
-      <p>
-        Vous pouvez télécharger le jeu de données directement via ce lien :
-        <a href="../poker-hand-training-true.data" download="poker-hand-training-true.data">Télécharger poker-hand-training-true.data</a>
-      </p>
-      <p><strong>Configuration de l'environnement :</strong></p>
-      <p>
-        Pour garantir la compatibilité avec l'Arena, il est fortement conseillé d'utiliser un environnement virtuel (<code>venv</code> ou
-        <code>conda</code>) avec les spécifications suivantes :
-      </p>
-      <ul>
-        <li><strong>Python :</strong> 3.10, 3.11 ou 3.12</li>
-        <li><strong>PyTorch :</strong> <code>2.1.0</code> (version stable recommandée pour l'export)</li>
-        <li><strong>NumPy :</strong> <code>1.26.4</code></li>
-      </ul>
+
+      
       <p><strong>Structure des caractéristiques (10 features) :</strong></p>
       <p>Pour chaque carte <em>i</em> (de 1 à 5) :</p>
       <ul>
@@ -115,10 +101,23 @@
       </ul>
       <p><strong>Classes cibles (Labels 0 à 9) :</strong></p>
       <p>
-        Le modèle doit prédire la main finale, allant de <strong>0</strong> (Rien en main) à <strong>9</strong> (Quinte Flush Royale). L'ordre des
-        cartes dans le fichier est important : il existe par exemple 480 manières différentes de représenter une Quinte Flush Royale selon l'ordre des
-        cartes fournies.
+        Le modèle doit prédire la main finale, allant de <strong>0</strong> (Rien en main) à <strong>9</strong> (Quinte Flush Royale). 
       </p>
+      <img class="cover-image" src="../Figures/Data_Chall.png"  />
+
+      <p>
+        Vous pouvez télécharger le jeu de données directement via ce lien :
+        <a href="../poker-hand-training-true.data" download="poker-hand-training-true.data">Télécharger poker-hand-training-true.data</a>
+      </p>
+      <p><strong>Configuration de l'environnement :</strong></p>
+      <p>
+        Pour garantir la compatibilité avec l'Arena, il faut avec les spécifications suivantes :
+      </p>
+      <ul>
+        <li><strong>Python :</strong> 3.10, 3.11 ou 3.12</li>
+        <li><strong>PyTorch :</strong> <code>2.10.0</code> </li>
+        <li><strong>NumPy :</strong> <code>1.26.4</code></li>
+      </ul>
       <p>Voici le code pour charger votre environnement :</p>
       <pre><code>import os
 import pandas as pd
@@ -146,7 +145,9 @@ train_dataset = TensorDataset(
 # DataLoader pour l'entraînement
 train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)</code></pre>
 
-      <h4>2. Entraînement et Export (TorchScript)</h4>
+
+
+      <h4>2. Export (TorchScript)</h4>
       <p>
         Après avoir optimisé votre architecture (MLP), exportez votre modèle via <code>torch.jit</code> pour qu'il soit sérialisé et prêt pour
         l'évaluation :
@@ -169,12 +170,7 @@ print("Modèle exporté avec succès : poker_model_jit1.pt")</code></pre>
         <li><strong>Limite :</strong> Vous avez droit à <strong>5 tentatives</strong> au total.</li>
       </ul>
 
-      <hr style="border:none;border-top:1px solid var(--border);margin:22px 0 18px;" />
 
-      <p class="quote">
-        <strong>Conseil technique :</strong> Étant donné que les classes comme la « Royal Flush » sont extrêmement rares, travaillez sur votre
-        stratégie de <em>loss</em> (pondération) et de <em>sampling</em> pour éviter que le modèle ne les ignore totalement lors de l'apprentissage.
-      </p>
     </section>
 
     <nav class="book-nav">
