@@ -78,7 +78,7 @@
       <h3>Challenge ML : « Beyond the Overfit »</h3>
 
       <p>
-        Pour mettre en pratique les concepts de Model Engineering, vous participerez à une compétition de classification sur le UCI Poker Hand Dataset. L'objectif est de construire un modèle capable de généraliser sur des combinaisons de cartes jamais vues, malgré un fort déséquilibre des classes (allant de la simple "paire" à la rarissime "quinte flush royale").
+        Pour mettre en pratique les concepts de Model Engineering, vous participerez à une compétition de classification sur le UCI Poker Hand Dataset. L'objectif est de construire un modèle "Réseaux de Neuronnes" capable de généraliser sur des combinaisons de cartes jamais vues, malgré un fort déséquilibre des classes (allant de la simple "paire" à la rarissime "quinte flush royale").
       </p>
       <img class="cover-image" src="../Figures/Challenge.png"  />
 
@@ -149,7 +149,7 @@ train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)</code></p
 
       <h4>2. Export (TorchScript)</h4>
       <p>
-        Après avoir optimisé votre architecture (MLP), exportez votre modèle via <code>torch.jit</code> pour qu'il soit sérialisé et prêt pour
+        Après avoir optimisé votre architecture (Réseaux de Neuronnes), exportez votre modèle via <code>torch.jit</code> pour qu'il soit sérialisé et prêt pour
         l'évaluation :
       </p>
       <pre><code># Passage en mode évaluation et export obligatoire
