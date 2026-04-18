@@ -30,18 +30,30 @@
       <h2>Chapitre 3 : Ingénierie et Optimisation du Modèle</h2>
 
       <p class="lead">
-        Objectif : passer de la théorie à la réalité technique — entraînement, persistance, stabilité, évaluation et contraintes de calcul.
+        Ce chapitre quitte la théorie pour aborder la réalité technique du Model Engineering. L'accent est mis sur les réseaux de neurones, où
+        l'architecture et la gestion des poids deviennent prépondérantes. Nous explorons les mécanismes qui transforment un algorithme en un produit
+        stable et reproductible.
       </p>
 
-      <h3>Mécanismes d’entraînement et persistance</h3>
+      <h3>Les axes clés</h3>
       <ul>
-        <li>Poids (weights) et itérations d’optimisation.</li>
-        <li>Sauvegarde et reprise : checkpoints, freeze/reload, reproductibilité.</li>
-        <li>Learning Rate Strategy</li>
-        <li>Transfert Learning</li>
-
+        <li>
+          <strong>Ingénierie de l'entraînement</strong> : Stratégies de Transfer Learning, gestion des checkpoints et optimisation des taux
+          d'apprentissage.
+        </li>
+        <li>
+          <strong>Stabilité et Robustesse</strong> : Maîtrise de la généralisation via la régularisation (Dropout, Early Stopping) et la lutte contre
+          le sur-apprentissage.
+        </li>
+        <li>
+          <strong>Validation et Fiabilité</strong> : Protocoles d'évaluation rigoureux et choix des métriques adaptées aux contraintes métiers réelles.
+        </li>
 
       </ul>
+
+      <p> L'ensemble des démonstrations techniques et le contenu détaillé de ce chapitre sont accessibles directement dans le
+        Notebook Colab associé. </p>
+
       <div style="margin-top:14px;display:flex;justify-content:center;">
         <a
           class="btn btn-soft"
@@ -59,27 +71,6 @@
           />
           <span><strong>Démo Colab</strong> — Chapitre 3</span>
         </a>
-      </div>
-
-      <h3>Stabilité et généralisation</h3>
-      <ul>
-        <li>Sur-apprentissage (overfitting) et sous-apprentissage.</li>
-        <li>Régularisation : pénalités, dropout, early stopping, data augmentation (selon le domaine).</li>
-      </ul>
-
-      <h3>Protocoles d’évaluation</h3>
-      <ul>
-        <li>Choix des métriques selon le risque métier et le déséquilibre de classes.</li>
-        <li>Validation : train/val/test, cross-validation, robustesse statistique.</li>
-      </ul>
-
-      <p class="quote">
-        À retenir : un modèle “performant” n’est pas un modèle “prêt” — l’évaluation, la stabilité et la reproductibilité font partie du
-        produit technique.
-      </p>
-
-      <div class="btn-row">
-        <button class="btn btn-soft" type="button" data-mark-read>Marquer comme lu</button>
       </div>
     </section>
 
