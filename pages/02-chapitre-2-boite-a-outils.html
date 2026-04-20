@@ -3442,9 +3442,13 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         Une fois posés le vocabulaire et l’objectif (politique, gain actualisé), il reste la question <strong>opérationnelle</strong> : comment trouver ou approcher une
         bonne politique lorsque la dynamique <span class="math-inline">P</span> et la récompense <span class="math-inline">R</span> ne sont connues qu’imparfaitement —
         voire pas du tout ? Les méthodes se distinguent d’abord selon que l’agent <strong>s’appuie sur un modèle</strong> de l’environnement ou qu’il reste
-        <strong>sans modèle</strong> et progresse surtout par échantillonnage. La <strong>figure suivante</strong> propose une lecture synthétique de cette alternative
-        avant d’examiner chaque famille en détail.
+        <strong>sans modèle</strong> et progresse surtout par échantillonnage. La <strong>figure suivante</strong> propose une schématisation synthétique des différentes familles de méthodes RL.
       </p>
+      <img
+      class="cover-image"
+      src="../Figures/rl_tax.svg"
+      loading="lazy"
+    />
 
       <h6>A. Méthodes model-based (basées sur un modèle)</h6>
       <p class="lead">L’agent dispose ou construit une « simulation » interne de l’environnement.</p>
@@ -3477,7 +3481,6 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         </li>
       </ul>
 
-      <hr />
       <p class="lead">
         Pour illustrer comment un agent peut naviguer dans l’inconnu sans modèle préalable, nous allons maintenant approfondir le <strong>Q-learning</strong>. Cet
         algorithme permet de construire dynamiquement une table de « qualité » <span class="math-inline">Q</span>(<span class="math-inline">s</span>,
