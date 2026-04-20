@@ -3340,57 +3340,137 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         Ce n’est qu’un <strong>exemple culturel</strong> : en industrie, le même schéma apparaît en robotique (collisions rares mais coûteuses), logistique ou
         pilotage énergétique. La figure suivante fixe la <strong>boucle</strong> minimale à avoir en tête.
       </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : interaction agent ↔ environnement (actions, récompenses, nouvel état)</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig67.png"
-        alt="Schema avec Agent et Environnement et fleches action et recompense"
-        loading="lazy"
-      />
-
-      <h5 id="ch2-rl-cartographie">1. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
+    
+      
+      <h5 id="ch2-rl-mdp">1. Formalisation : Le Processus de Décision de Markov (MDP)</h5>
       <p class="lead">
-        Avant d’entrer dans une méthode précise, il est utile de situer <strong>où</strong> les algorithmes peuvent buter — sans exhaustivité, mais pour cadrer vos
-        attentes lorsque vous lirez la littérature (exploration, généralisation, stabilité…).
+        Pour qu’une machine puisse apprendre de manière autonome, il est impératif de traduire le concept intuitif d’« essai-erreur » en un formalisme mathématique
+        rigoureux. Le <strong>Processus de Décision Markovien (MDP)</strong> est ce cadre. Il sert de langage universel pour décrire l’interaction dynamique entre un
+        <strong>agent</strong> (l’entité décisionnelle) et son <strong>environnement</strong> (le monde extérieur).
       </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : quatre défis typiques</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig68.png"
-        alt="Quatre panneaux texte sur exploration, recompense retardee, observation, stochasticite"
-        loading="lazy"
-      />
+
+      <h6>1. Le cycle fondamental</h6>
+      <p class="lead">
+        L’apprentissage par renforcement (RL) est une boucle de rétroaction discrète se déroulant à chaque étape de temps <span class="math-inline">t</span>. La
+        <strong>figure suivante</strong> modélise cet échange permanent :
+      </p>
       <ul>
         <li>
-          <strong>Exploration / exploitation :</strong> faut-il retenter une action peu essayée ou répéter ce qui marche déjà ? Un compromis mal réglé bloque
-          l’apprentissage.
+          <strong>L’agent</strong> : le système qui perçoit l’état, choisit une action et apprend de ses conséquences.
         </li>
         <li>
-          <strong>Récompense retardée :</strong> la « bonne » action peut être plusieurs pas avant un gain visible (crédit assigné à l’ancienne action).
+          <strong>L’environnement</strong> : tout ce qui répond à l’agent. Il est régi par des lois souvent inconnues de l’agent au départ.
         </li>
         <li>
-          <strong>Grande dimension / observation partielle :</strong> le tableau des valeurs ne tient plus en mémoire — d’où les réseaux de neurones pour
-          approximer des fonctions.
+          <strong>L’état (<span class="math-inline">S</span><sub>t</sub> ∈ <span class="math-inline">𝒮</span>)</strong> : la configuration du monde à l’instant
+          <span class="math-inline">t</span>. <span class="math-inline">𝒮</span> est l’espace d’états, qui peut être fini (grille) ou continu (coordonnées GPS).
         </li>
         <li>
-          <strong>Stochasticité :</strong> le monde peut être aléatoire ; on raisonne souvent en <strong>espérance</strong> de retour.
+          <strong>L’action (<span class="math-inline">A</span><sub>t</sub> ∈ <span class="math-inline">𝒜</span>)</strong> : le choix effectué par l’agent.
+          <span class="math-inline">𝒜</span> est l’espace des actions possibles.
+        </li>
+        <li>
+          <strong>La récompense (<span class="math-inline">R</span><sub>t+1</sub> ∈ <span class="math-inline">ℝ</span>)</strong> : le signal scalaire renvoyé par
+          l’environnement. C’est la seule source d’information permettant de guider l’apprentissage. Elle est définie par une fonction
+          <span class="math-inline">R</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>).
         </li>
       </ul>
 
-      <h5 id="ch2-rl-mdp">2. Vocabulaire et formalisme minimal (MDP)</h5>
+      <h6>2. Propriétés fondamentales : « Markov » et « décision »</h6>
+      <p class="lead">Le terme MDP repose sur deux piliers conceptuels :</p>
+      <ul>
+        <li>
+          <strong>La propriété de Markov</strong> : un état possède cette propriété si le futur est indépendant du passé, sachant le présent.
+          <blockquote>
+            <p class="lead">
+              <strong>Formulation mathématique</strong> :
+              <span class="math-inline">P</span>(<span class="math-inline">S</span><sub>t+1</sub> | <span class="math-inline">S</span><sub>t</sub>,
+              <span class="math-inline">A</span><sub>t</sub>).
+            </p>
+          </blockquote>
+          Cela signifie que <span class="math-inline">S</span><sub>t</sub> contient toute l’information pertinente (mémoire compressée) pour prédire
+          <span class="math-inline">S</span><sub>t+1</sub>. Si vous connaissez la position et la vitesse d’un drone à <span class="math-inline">t</span>, vous n’avez
+          pas besoin de savoir d’où il venait à <span class="math-inline">t</span> − 1.
+        </li>
+        <li>
+          <strong>Le processus de décision</strong> : la trajectoire du système est pilotée par l’agent. On définit la <strong>probabilité de transition</strong>
+          <span class="math-inline">P</span>(<span class="math-inline">s</span>′ | <span class="math-inline">s</span>, <span class="math-inline">a</span>) :
+          <div class="math-display">
+            <span class="math-inline">P</span>(<span class="math-inline">s</span>′ | <span class="math-inline">s</span>, <span class="math-inline">a</span>) =
+            Prob(<span class="math-inline">S</span><sub>t+1</sub> = <span class="math-inline">s</span>′ | <span class="math-inline">S</span><sub>t</sub> =
+            <span class="math-inline">s</span>, <span class="math-inline">A</span><sub>t</sub> = <span class="math-inline">a</span>)
+          </div>
+          C’est la « physique » du monde : si je tourne à gauche (<span class="math-inline">a</span>) alors que je suis face au mur (<span class="math-inline">s</span>),
+          quelle est la probabilité que je sois dans l’état <span class="math-inline">s</span>′ au tour suivant ?
+        </li>
+      </ul>
+
+      <h6>3. Terminologie : politique, gain et horizon</h6>
+      <ul>
+        <li>
+          <strong>La politique (<span class="math-inline">π</span>)</strong> : c’est le cerveau de l’agent, une fonction de décision. On la note
+          <span class="math-inline">π</span>(<span class="math-inline">a</span>|<span class="math-inline">s</span>). Elle peut être déterministe
+          (<span class="math-inline">a</span> = <span class="math-inline">π</span>(<span class="math-inline">s</span>)) ou stochastique (une distribution de probabilités
+          sur les actions). L’objectif du RL est de trouver la <strong>politique optimale</strong> <span class="math-inline">π</span><sup>*</sup> qui maximise
+          l’espérance du gain futur.
+        </li>
+        <li>
+          <strong>Le gain cumulé (<span class="math-inline">G</span><sub>t</sub>) et l’horizon</strong> : l’agent cherche à maximiser la somme pondérée des récompenses :
+          <div class="math-display">
+            <span class="math-inline">G</span><sub>t</sub> = <span class="math-inline">R</span><sub>t+1</sub> + <span class="math-inline">γ</span>
+            <span class="math-inline">R</span><sub>t+2</sub> + <span class="math-inline">γ</span>²<span class="math-inline">R</span><sub>t+3</sub> + …
+          </div>
+          <strong><span class="math-inline">γ</span> (le facteur d’escompte)</strong>, compris entre 0 et 1, gère l’importance relative du futur. Il évite que la somme
+          soit infinie et permet d’ajuster l’horizon :
+          <ul>
+            <li><span class="math-inline">γ</span> ≈ 0 : stratégie à court terme.</li>
+            <li><span class="math-inline">γ</span> ≈ 1 : stratégie à long terme (indispensable pour les jeux de stratégie comme les échecs).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h6>4. Les approches de résolution</h6>
       <p class="lead">
-        On modélise souvent le problème comme un <strong>processus de décision markovien</strong> (MDP) : l’état suivant et la récompense dépendent de l’état courant
-        et de l’action (<strong>propriété de Markov</strong> — le futur conditionnel au présent ne dépend pas du passé plus loin). Une <strong>politique</strong>
-        <span class="math-inline">π</span>(<span class="math-inline">a</span>|<span class="math-inline">s</span>) indique comment choisir les actions (souvent de façon
-        stochastique en pratique). L’objectif est de maximiser une somme (discounted) des récompenses :
-        <span class="math-inline">G</span><sub>t</sub> = <span class="math-inline">R</span><sub>t+1</sub> + <span class="math-inline">γ</span>
-        <span class="math-inline">R</span><sub>t+2</sub> + <span class="math-inline">γ</span>²<span class="math-inline">R</span><sub>t+3</sub> + … avec un facteur
-        <span class="math-inline">γ</span> ∈ [0, 1] qui pèse l’avenir.
+        La <strong>figure suivante</strong> présente une taxonomie essentielle pour comprendre comment nous résolvons un MDP en pratique. La distinction majeure réside
+        dans la connaissance ou non des « règles » du monde (<span class="math-inline">P</span> et <span class="math-inline">R</span>).
       </p>
+
+      <h6>A. Méthodes model-based (basées sur un modèle)</h6>
+      <p class="lead">L’agent dispose ou construit une « simulation » interne de l’environnement.</p>
+      <ol>
+        <li>
+          <strong>Modèle déjà connu (planning)</strong> : les règles sont explicites et fixes. C’est le cas du jeu d’échecs ou du go. L’agent peut anticiper des millions
+          de coups à l’avance sans agir réellement car il connaît parfaitement la fonction <span class="math-inline">P</span>(<span class="math-inline">s</span>′ |
+          <span class="math-inline">s</span>, <span class="math-inline">a</span>).
+        </li>
+        <li>
+          <strong>Modèle appris (<em>world models</em>)</strong> : l’agent ne connaît pas les règles, mais il essaie de les apprendre. Il construit son propre simulateur
+          interne (souvent via des réseaux de neurones profonds, comme les <em>World Models</em> de Yann Le Cun). Il peut alors s’entraîner « dans sa tête » avant
+          d’affronter la réalité.
+        </li>
+      </ol>
+
+      <h6>B. Méthodes model-free (sans modèle)</h6>
       <p class="lead">
-        Les familles d’algorithmes sont nombreuses : <strong>recherche de politique</strong> (policy gradients), <strong>acteur–critique</strong>, méthodes basées sur
-        un <strong>modèle</strong> de transitions, ou encore approches <strong>sans modèle</strong> (<em>model-free</em>) qui estiment directement des valeurs d’actions ou
-        d’états à partir d’échantillons. Dans la suite, nous ne développons qu’une brique historique et pédagogique : le <strong>Q-learning</strong> tabulaire.
+        C’est le cas le plus courant où l’environnement est trop complexe pour être modélisé. L’agent apprend uniquement par <strong>échantillonnage</strong> (en vivant
+        des expériences réelles).
+      </p>
+      <ul>
+        <li>
+          <strong>Approche par la valeur (<span class="math-inline">Q</span>)</strong> : on estime la « richesse » potentielle d’une action dans un état donné. C’est ici
+          que se situe le <strong>Q-learning</strong>.
+        </li>
+        <li>
+          <strong>Approche par la politique (<em>policy gradient</em>)</strong> : on ajuste directement les paramètres de comportement <span class="math-inline">π</span>
+          pour favoriser les actions qui mènent statistiquement à de meilleurs scores.
+        </li>
+      </ul>
+
+      <hr />
+      <p class="lead">
+        Pour illustrer comment un agent peut naviguer dans l’inconnu sans modèle préalable, nous allons maintenant approfondir le <strong>Q-learning</strong>. Cet
+        algorithme permet de construire dynamiquement une table de « qualité » <span class="math-inline">Q</span>(<span class="math-inline">s</span>,
+        <span class="math-inline">a</span>) qui, au fil des erreurs, devient le guide infaillible de l’agent.
       </p>
 
       <h5 id="ch2-rl-qlearning">3. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
@@ -3479,6 +3559,36 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
           </li>
         </ul>
       </section>
+
+      <h5 id="ch2-rl-cartographie">Cartographie des enjeux (pourquoi le RL est difficile)</h5>
+      <p class="lead">
+        Avant d’entrer dans une méthode précise, il est utile de situer <strong>où</strong> les algorithmes peuvent buter — sans exhaustivité, mais pour cadrer vos
+        attentes lorsque vous lirez la littérature (exploration, généralisation, stabilité…).
+      </p>
+      <p class="table-caption" style="margin:12px 0 8px;">Figure : quatre défis typiques</p>
+      <img
+        class="cover-image"
+        src="../Figures/Fig68.png"
+        alt="Quatre panneaux texte sur exploration, recompense retardee, observation, stochasticite"
+        loading="lazy"
+      />
+      <ul>
+        <li>
+          <strong>Exploration / exploitation :</strong> faut-il retenter une action peu essayée ou répéter ce qui marche déjà ? Un compromis mal réglé bloque
+          l’apprentissage.
+        </li>
+        <li>
+          <strong>Récompense retardée :</strong> la « bonne » action peut être plusieurs pas avant un gain visible (crédit assigné à l’ancienne action).
+        </li>
+        <li>
+          <strong>Grande dimension / observation partielle :</strong> le tableau des valeurs ne tient plus en mémoire — d’où les réseaux de neurones pour
+          approximer des fonctions.
+        </li>
+        <li>
+          <strong>Stochasticité :</strong> le monde peut être aléatoire ; on raisonne souvent en <strong>espérance</strong> de retour.
+        </li>
+      </ul>
+
 
       <details class="expand-panel">
         <summary>Références et lectures (RL &amp; Q-learning)</summary>
