@@ -2679,7 +2679,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         Σ<sub>j=1..k</sub> Σ<sub><span class="math-inline">x</span> ∈ cluster j</sub> ‖<span class="math-inline">x</span> − <span class="math-inline">μ</span><sub>j</sub>‖²
       </div>
       <p class="lead">
-        <strong>Algorithme de Lloyd</strong> (version standard) : on initialise les <span class="math-inline">k</span> centres (souvent <span class="math-inline">k</span> points tirés au hasard parmi les données, ou méthode <span class="math-inline">k</span>-means++) ; puis on alterne :
+        <strong>Algorithme de Lloyd</strong> (version standard) : on initialise les <span class="math-inline">k</span> centres (souvent <span class="math-inline">k</span> points tirés au hasard parmi les données) ; puis on alterne :
       </p>
       <ol>
         <li>
@@ -2709,10 +2709,147 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       <p class="table-caption" style="margin:12px 0 8px;">Figure : à initialisation défavorable, les centroïdes se rapprochent des vrais nuages en quelques itérations</p>
       <img
         class="cover-image"
-        src="../Figures/Fig60.png"
+        src="../Figures/Kmeans.gif"
         alt="Quatre panneaux montrant l evolution des centroides au fil des iterations"
         loading="lazy"
       />
+
+      <blockquote class="quote quote--exercise">
+        <h5>Exemple calculé : C’est parti pour une démonstration « à la main »</h5>
+        <p class="lead">
+          Pour que vous puissiez bien voir le mouvement des centres et l’évolution de l’inertie, nous allons tricher un peu sur l’initialisation pour forcer
+          l’algorithme à « travailler » sur deux itérations.
+        </p>
+        <p class="lead"><strong>Nos données :</strong></p>
+        <ul>
+          <li>
+            <strong>Groupe 1 :</strong> P1(1,1), P2(1,2), P3(2,1), P4(2,2)
+          </li>
+          <li>
+            <strong>Groupe 2 :</strong> P5(8,8), P6(8,9), P7(9,8), P8(9,9)
+          </li>
+        </ul>
+        <hr />
+
+        <h6>Étape 0 : Initialisation</h6>
+        <p class="lead">
+          On choisit deux centres au hasard, mais un peu « hors-jeu » pour voir le déplacement :
+        </p>
+        <ul>
+          <li>
+            <strong><span class="math-inline">μ</span><sub>1</sub> (Rouge) :</strong> <span class="math-inline">(0, 0)</span>
+          </li>
+          <li>
+            <strong><span class="math-inline">μ</span><sub>2</sub> (Vert) :</strong> <span class="math-inline">(10, 10)</span>
+          </li>
+        </ul>
+        <hr />
+
+        <h6>Itération 1 : le premier grand saut</h6>
+        <h6>1) Assignation (Qui va où ?)</h6>
+        <p class="lead">
+          On calcule la distance de chaque point vers <span class="math-inline">(0,0)</span> et <span class="math-inline">(10,10)</span>.
+        </p>
+        <ul>
+          <li>
+            Les points <strong>P1, P2, P3, P4</strong> sont tous plus proches de <span class="math-inline">(0,0)</span>. Ils rejoignent le <strong>Cluster 1</strong>.
+          </li>
+          <li>
+            Les points <strong>P5, P6, P7, P8</strong> sont tous plus proches de <span class="math-inline">(10,10)</span>. Ils rejoignent le <strong>Cluster 2</strong>.
+          </li>
+        </ul>
+
+        <h6>2) Mise à jour (Où vont les chefs ?)</h6>
+        <p class="lead">
+          On calcule le nouveau centre (barycentre) pour chaque groupe.
+        </p>
+        <ul>
+          <li>
+            <strong>Nouveau <span class="math-inline">μ</span><sub>1</sub> :</strong>
+            <div class="math-display math-display--left" role="math" aria-label="Nouveau mu1">
+              x = (1+1+2+2)/4 = 1.5, &nbsp; y = (1+2+1+2)/4 = 1.5 &nbsp; ⇒ &nbsp; <strong><span class="math-inline">μ</span><sub>1</sub>(1.5, 1.5)</strong>
+            </div>
+          </li>
+          <li>
+            <strong>Nouveau <span class="math-inline">μ</span><sub>2</sub> :</strong>
+            <div class="math-display math-display--left" role="math" aria-label="Nouveau mu2">
+              x = (8+8+9+9)/4 = 8.5, &nbsp; y = (8+9+8+9)/4 = 8.5 &nbsp; ⇒ &nbsp; <strong><span class="math-inline">μ</span><sub>2</sub>(8.5, 8.5)</strong>
+            </div>
+          </li>
+        </ul>
+
+        <h6>3) Calcul de l’inertie (WCSS)</h6>
+        <p class="lead">
+          À ce stade, l’inertie intra-classe est déjà faible car les centres se sont placés pile au milieu des nuages.
+        </p>
+        <ul>
+          <li>
+            Distance² de P1(1,1) à <span class="math-inline">μ</span><sub>1</sub>(1.5, 1.5) =
+            <span class="math-inline">(0.5)</span>² + <span class="math-inline">(0.5)</span>² = <strong>0.5</strong>
+          </li>
+          <li>
+            Pour les 4 points du Cluster 1, la somme est : <strong>0.5 × 4 = 2.0</strong>
+          </li>
+          <li>
+            Le Cluster 2 est symétrique : somme = <strong>2.0</strong>
+          </li>
+          <li>
+            <strong><span class="math-inline">WCSS</span><sub>Total</sub> = 2.0 + 2.0 = 4.0</strong>
+          </li>
+        </ul>
+        <hr />
+
+        <h6>Itération 2 : la vérification de stabilité</h6>
+        <p class="lead">
+          L’algorithme de Lloyd ne s’arrête pas là : il doit vérifier si une meilleure configuration existe.
+        </p>
+        <h6>1) Assignation (Est-ce qu’un point veut changer ?)</h6>
+        <p class="lead">
+          On compare les distances entre nos points et les <strong>nouveaux</strong> centres <span class="math-inline">μ</span><sub>1</sub>(1.5, 1.5) et
+          <span class="math-inline">μ</span><sub>2</sub>(8.5, 8.5).
+        </p>
+        <ul>
+          <li>
+            Prenez P4(2,2) : est-il plus proche de <span class="math-inline">(1.5, 1.5)</span> ou de <span class="math-inline">(8.5, 8.5)</span> ? Clairement du premier.
+          </li>
+          <li>
+            <strong>Résultat :</strong> aucun point ne change de camp. Les clusters restent identiques.
+          </li>
+        </ul>
+
+        <h6>2) Mise à jour (Est-ce que les chefs bougent encore ?)</h6>
+        <p class="lead">
+          On recalcule la moyenne des points pour chaque groupe.
+        </p>
+        <ul>
+          <li>
+            Comme les membres des groupes n’ont pas changé, le calcul de la moyenne redonne exactement les mêmes résultats :
+            <strong><span class="math-inline">μ</span><sub>1</sub> reste à (1.5, 1.5)</strong> et
+            <strong><span class="math-inline">μ</span><sub>2</sub> reste à (8.5, 8.5)</strong>.
+          </li>
+        </ul>
+
+        <h6>3) Stabilisation de l’inertie</h6>
+        <p class="lead">
+          L’inertie reste à <strong>4.0</strong>. Elle ne peut plus diminuer.
+        </p>
+        <hr />
+
+        <h6>Conclusion : convergence</h6>
+        <p class="lead">
+          L’algorithme s’arrête ici car :
+        </p>
+        <ol>
+          <li>Les <strong>affectations</strong> n’ont pas changé.</li>
+          <li>Les <strong>centres</strong> sont restés immobiles.</li>
+          <li>L’<strong>inertie</strong> est stabilisée (minimum atteint).</li>
+        </ol>
+        <p class="lead" style="margin-bottom:0;">
+          <strong>L’intuition à retenir :</strong> l’itération 1 a fait le « gros du travail » en déplaçant les centres du néant
+          <span class="math-inline">(0,0)</span> vers la réalité des données <span class="math-inline">(1.5, 1.5)</span>. L’itération 2 a servi de « contrôle qualité »
+          pour confirmer qu’on ne pouvait pas faire mieux. C’est ce qu’on appelle la <strong>convergence</strong>.
+        </p>
+      </blockquote>
 
       <h5>1.1 Choisir <span class="math-inline">k</span> : le piège du nombre de groupes</h5>
       <p class="lead">
@@ -2752,6 +2889,12 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         (segments clients, modes de défaillance…). L’exploration non supervisée est souvent une <strong>étape</strong> avant un modèle supervisé ou un rapport
         exploratoire.
       </p>
+
+      <img
+        class="cover-image"
+        src="../Figures/Unlabeled_to_labeled.png"
+        loading="lazy"
+      />
 
       <section class="unsupervised-conclusion" aria-labelledby="unsupervised-kmeans-title">
         <h5 id="unsupervised-kmeans-title" class="unsupervised-conclusion__title">K-means : points clés</h5>
