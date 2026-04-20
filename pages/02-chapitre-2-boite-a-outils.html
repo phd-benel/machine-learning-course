@@ -3349,11 +3349,15 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         <strong>agent</strong> (l’entité décisionnelle) et son <strong>environnement</strong> (le monde extérieur).
       </p>
 
-      <h6>1. Le cycle fondamental</h6>
       <p class="lead">
         L’apprentissage par renforcement (RL) est une boucle de rétroaction discrète se déroulant à chaque étape de temps <span class="math-inline">t</span>. La
         <strong>figure suivante</strong> modélise cet échange permanent :
       </p>
+      <img
+      class="cover-image"
+      src="../Figures/MDP-model.webp"
+      loading="lazy"
+    />
       <ul>
         <li>
           <strong>L’agent</strong> : le système qui perçoit l’état, choisit une action et apprend de ses conséquences.
@@ -3376,7 +3380,6 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         </li>
       </ul>
 
-      <h6>2. Propriétés fondamentales : « Markov » et « décision »</h6>
       <p class="lead">Le terme MDP repose sur deux piliers conceptuels :</p>
       <ul>
         <li>
@@ -3405,7 +3408,13 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         </li>
       </ul>
 
-      <h6>3. Terminologie : politique, gain et horizon</h6>
+      <p class="lead">
+        Comprendre la <strong>boucle</strong> (état, action, récompense, transition) ne suffit pas : encore faut-il décider <em>quoi faire</em> dans chaque situation et
+        <em>pourquoi</em> ces choix sont bons. L’agent doit donc se donner une <strong>règle de comportement</strong> — la <strong>politique</strong>
+        <span class="math-inline">π</span> — et un <strong>critère d’optimisation</strong> qui agrège les récompenses dans le temps. Sans politique, il n’y a pas de
+        stratégie ; sans objectif de long terme (via le <strong>gain cumulé</strong> <span class="math-inline">G</span><sub>t</sub> et le facteur
+        <span class="math-inline">γ</span>), une action apparemment peu rentable immédiatement peut pourtant ouvrir la voie au succès — c’est l’enjeu central du RL.
+      </p>
       <ul>
         <li>
           <strong>La politique (<span class="math-inline">π</span>)</strong> : c’est le cerveau de l’agent, une fonction de décision. On la note
@@ -3429,10 +3438,12 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         </li>
       </ul>
 
-      <h6>4. Les approches de résolution</h6>
       <p class="lead">
-        La <strong>figure suivante</strong> présente une taxonomie essentielle pour comprendre comment nous résolvons un MDP en pratique. La distinction majeure réside
-        dans la connaissance ou non des « règles » du monde (<span class="math-inline">P</span> et <span class="math-inline">R</span>).
+        Une fois posés le vocabulaire et l’objectif (politique, gain actualisé), il reste la question <strong>opérationnelle</strong> : comment trouver ou approcher une
+        bonne politique lorsque la dynamique <span class="math-inline">P</span> et la récompense <span class="math-inline">R</span> ne sont connues qu’imparfaitement —
+        voire pas du tout ? Les méthodes se distinguent d’abord selon que l’agent <strong>s’appuie sur un modèle</strong> de l’environnement ou qu’il reste
+        <strong>sans modèle</strong> et progresse surtout par échantillonnage. La <strong>figure suivante</strong> propose une lecture synthétique de cette alternative
+        avant d’examiner chaque famille en détail.
       </p>
 
       <h6>A. Méthodes model-based (basées sur un modèle)</h6>
