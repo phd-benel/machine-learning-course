@@ -3126,15 +3126,19 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       <h5 id="ch2-pca">3. PCA : réduire la dimension sans étiquettes</h5>
       
       <p class="lead">
-        Imaginez que vous essayez de photographier un troupeau d’oiseaux en plein vol. De face, ils semblent entassés ; d’en haut, vous voyez clairement leur forme.
-        <strong>La PCA fait exactement cela avec vos données :</strong> elle cherche les <strong>meilleures directions</strong> pour observer le nuage.
+        Immaginez que vous essayez de photographier un troupeau d'oiseaux en plein vol. Si vous prenez la photo de face, tous les oiseaux semblent entassés les uns sur
+        les autres. Si vous prenez la photo d'en haut, vous voyez clairement la forme et l'étendue du troupeau.
       </p>
       <p class="lead">
-        Là où le <strong>partitionnement</strong> (K-means, DBSCAN) cherche à créer des groupes distincts, la PCA cherche les axes qui révèlent la structure la plus
-        importante : <strong>là où ça change le plus</strong>.
+        La PCA fait exactement cela avec vos données.
       </p>
       <p class="lead">
-        <strong>L’intuition clé :</strong> variabilité = information. La PCA cherche les axes qui capturent le maximum de cette information.
+        Là où le partitionnement (comme K-means ou DBSCAN) cherche à créer des groupes distincts (des "familles" de points), la PCA cherche les meilleures directions
+        pour observer vos données. Son but n'est pas de regrouper, mais de réorganiser l'espace pour mettre en lumière la structure la plus importante : là où ça change
+        le plus.
+      </p>
+      <p class="lead">
+        L'intuition clé à retenir : Variabilité = Information. La PCA cherche les axes qui capturent le maximum de cette information.
       </p>
       <img
         class="cover-image"
