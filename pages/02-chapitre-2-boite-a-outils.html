@@ -2964,13 +2964,160 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         loading="lazy"
       />
 
-      <h5>2.1 DBSCAN : ce qu’il faut avoir en tête</h5>
-      <p class="lead">
-        <strong>Échelle :</strong> comme pour K-means, si les variables ne sont pas comparables, normalisez (souvent <strong>StandardScaler</strong>) avant de mesurer
-        les distances. <strong>Sensibilité à <span class="math-inline">ε</span> :</strong> un <span class="math-inline">ε</span> trop petit fragmente tout en bruit ;
-        trop grand fusionne des groupes distincts. <strong>Interprétation :</strong> les étiquettes de cluster restent des outils d’exploration — le « sens » métier
-        vient encore de votre analyse.
-      </p>
+      <blockquote class="quote quote--exercise">
+        <h5 class="quote--exercise__title">Exercice guidé — DBSCAN, pas à pas</h5>
+        <p class="lead">
+          <strong>DBSCAN</strong> est un algorithme radicalement différent du K-means. Là où le K-means est un « gouvernement centralisé » (tout tourne autour des
+          chefs/centroïdes), le DBSCAN est un <strong>mouvement de voisinage</strong> : on s’étend de proche en proche tant qu’il y a du monde.
+        </p>
+        <p class="lead">
+          Reprenons nos 8 points avec les réglages suivants :
+        </p>
+        <ul>
+          <li>
+            <strong><span class="math-inline">ε = 2</span></strong> (le rayon de détection).
+          </li>
+          <li>
+            <strong><span class="math-inline">min_samples = 3</span></strong> (il faut être au moins 3 pour former un club « dense »).
+          </li>
+        </ul>
+        <hr />
+
+        <span class="exercise-block-title">1) Définitions : le statut des points</span>
+        <p class="lead">
+          Avant de commencer, DBSCAN doit juger chaque point :
+        </p>
+        <ol>
+          <li>
+            <strong>Point cœur (Core point) :</strong> il a au moins 3 voisins (lui inclus) dans son rayon de 2. C’est un moteur de cluster.
+          </li>
+          <li>
+            <strong>Point frontière (Border point) :</strong> il n’a pas 3 voisins, mais il touche un point cœur. Il est accepté dans le groupe.
+          </li>
+          <li>
+            <strong>Bruit (Noise) :</strong> il est tout seul et loin de tout point cœur.
+          </li>
+        </ol>
+        <hr />
+
+        <span class="exercise-block-title">2) Déroulement étape par étape (propagation)</span>
+
+        <span class="exercise-block-title">Étape 1 : exploration du premier nuage</span>
+        <p class="lead">
+          L’algorithme pioche un point au hasard, disons <strong>P1(1, 1)</strong>.
+        </p>
+        <ul>
+          <li>
+            <strong>Calcul du voisinage :</strong> qui est à une distance <span class="math-inline">≤ 2</span> de P1 ?
+            <ul>
+              <li>P2(1,2) est à distance 1.</li>
+              <li>P3(2,1) est à distance 1.</li>
+              <li>P4(2,2) est à distance <span class="math-inline">√(1² + 1²) ≈ 1.41</span>.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Verdict :</strong> P1 a <strong>4 voisins</strong> (P1, P2, P3, P4). Comme <span class="math-inline">4 ≥ 3</span>, <strong>P1 est un point cœur</strong>.
+            Un nouveau cluster (ID=0) est créé.
+          </li>
+        </ul>
+
+        <span class="exercise-block-title">Étape 2 : l’effet « tache d’huile » (expansion)</span>
+        <p class="lead">
+          DBSCAN va maintenant visiter les voisins de P1 pour voir s’ils peuvent agrandir le groupe.
+        </p>
+        <ul>
+          <li>
+            Il visite <strong>P2(1, 2)</strong> : P2 a aussi P1, P3 et P4 dans son rayon de 2. P2 est donc aussi un <strong>point cœur</strong>. Il propage le cluster.
+          </li>
+          <li>Même chose pour <strong>P3</strong> et <strong>P4</strong>.</li>
+          <li>
+            <strong>Résultat :</strong> les points {P1, P2, P3, P4} forment le <strong>Cluster 0</strong>. Ils sont tous « cœurs » car ils sont dans une zone dense.
+          </li>
+        </ul>
+
+        <span class="exercise-block-title">Étape 3 : le saut vers le second nuage</span>
+        <p class="lead">
+          L’algorithme cherche d’autres points non visités. Il arrive sur <strong>P5(8, 8)</strong>.
+        </p>
+        <ul>
+          <li>
+            <strong>Calcul du voisinage :</strong> les points du premier groupe sont à une distance d’environ 9 (trop loin). En revanche, P6, P7 et P8 sont à une
+            distance <span class="math-inline">≤ 2</span>.
+          </li>
+          <li>
+            <strong>Verdict :</strong> P5 a 4 voisins proches. <strong>P5 est un point cœur</strong>. Un second cluster (ID=1) démarre.
+          </li>
+          <li>Par propagation, P6, P7 et P8 rejoignent le <strong>Cluster 1</strong>.</li>
+        </ul>
+        <hr />
+
+        <span class="exercise-block-title">3) L’intuition du bruit (le point « exclu »)</span>
+        <p class="lead">
+          Imaginons un 9ème point <strong>P9(15, 15)</strong>.
+        </p>
+        <ol>
+          <li>DBSCAN l’analyse : il n’a <strong>aucun voisin</strong> dans son rayon <span class="math-inline">ε = 2</span>.</li>
+          <li>Il ne peut pas être un « cœur ».</li>
+          <li>Il n’est pas non plus le voisin d’un « cœur » existant.</li>
+          <li><strong>Verdict :</strong> P9 est marqué <strong>−1 (bruit)</strong>. Il est ignoré.</li>
+        </ol>
+        <p class="lead">
+          <strong>Interprétation pour nos données :</strong> ici, DBSCAN a « compris » qu’il y avait deux zones de forte activité séparées par un grand vide. Si nous
+          avions ajouté des points dispersés, DBSCAN les aurait nettoyés automatiquement, là où K-means aurait essayé de les intégrer de force dans un groupe, quitte
+          à fausser la moyenne.
+        </p>
+        <hr />
+
+        <span class="exercise-block-title">Conclusion</span>
+        <ul>
+          <li>
+            <strong>K-means</strong> est un algorithme d’<strong>optimisation</strong> : il a une fonction objectif (le WCSS) et il cherche à la minimiser.
+          </li>
+          <li>
+            <strong>DBSCAN</strong> est un algorithme de <strong>recherche par voisinage</strong> : il ne cherche pas un score global minimum ; il suit une règle locale :
+            <em>« si j’ai assez de voisins, je m’étends ; sinon, je m’arrête »</em>.
+          </li>
+        </ul>
+        <p class="lead">
+          Si on veut forcer l’analogie, on pourrait dire que DBSCAN cherche à <strong>maximiser la connectivité de densité</strong>.
+        </p>
+        <p class="lead">
+          Au lieu de minimiser la distance par rapport à un centre, il valide deux conditions :
+        </p>
+        <ol>
+          <li><strong>La densité locale :</strong> est-ce qu’on respecte <code>min_samples</code> ?</li>
+          <li><strong>La connectivité :</strong> est-ce que les points sont « atteignables » de proche en proche ?</li>
+        </ol>
+        <p class="lead">
+          Le fait de ne pas chercher à minimiser une distance globale (comme le WCSS) lui permet de réussir là où K-means échoue :
+        </p>
+        <ul>
+          <li>
+            <strong>Pas de forme imposée :</strong> K-means minimise la distance au carré, ce qui crée mathématiquement des formes circulaires. DBSCAN peut suivre des
+            formes de <strong>serpents</strong>, de <strong>croissants</strong> ou de <strong>cercles concentriques</strong>.
+          </li>
+          <li>
+            <strong>Indifférence au bruit :</strong> K-means <em>doit</em> inclure chaque point. DBSCAN préfère exclure un point qui ne respecte pas la règle de densité,
+            plutôt que de tenter de l’optimiser.
+          </li>
+        </ul>
+        <p class="lead">
+          Comme DBSCAN ne minimise pas une fonction mathématique globale, il n’a pas de « score » automatique (comme l’inertie) pour vous dire si vos paramètres sont bons.
+        </p>
+        <ul>
+          <li>
+            En <strong>K-means</strong>, vous regardez la courbe du coude (Elbow) pour voir quand l’inertie chute.
+          </li>
+          <li>
+            En <strong>DBSCAN</strong>, vous devez tester <span class="math-inline">ε</span> et <code>min_samples</code> à tâtons (ou utiliser des techniques comme le graphe
+            des distances aux K-voisins), car il n’y a pas de WCSS pour vous guider.
+          </li>
+        </ul>
+        <p class="lead" style="margin-bottom:0;">
+          <strong>En résumé :</strong> K-means est un <strong>comptable</strong> (il minimise les coûts/distances), tandis que DBSCAN est un <strong>explorateur</strong>
+          (il trace les frontières d’une forêt tant qu’elle est dense).
+        </p>
+      </blockquote>
 
       <h5 id="ch2-pca">3. PCA : réduire la dimension sans étiquettes</h5>
       <p class="lead">
