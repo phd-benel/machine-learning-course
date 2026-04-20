@@ -3031,7 +3031,10 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
           </li>
           <li>Même chose pour <strong>P3</strong> et <strong>P4</strong>.</li>
           <li>
-            <strong>Résultat :</strong> les points {P1, P2, P3, P4} forment le <strong>Cluster 0</strong>. Ils sont tous « cœurs » car ils sont dans une zone dense.
+            <strong>Résultat :</strong> les points {P1, P2, P3, P4} forment le <strong>Cluster 0</strong>. Ils sont tous « cœurs » car ils sont dans une zone dense.*
+            <p>Mais comment DBSCAN sait si deux points cœurs sont dans un même cluster ? 
+              
+              Imaginons deux points cœurs, A et B. DBSCAN ne se demande pas s'ils sont proches l'un de l'autre dans l'absolu. Il se demande : « Existe-t-il un chemin de points cœurs entre A et B ? » Si A est dans le rayon $\epsilon$ de B, ils sont directement liés. Si A n'est pas dans le rayon de B, mais qu'il y a un point cœur C qui touche les deux, alors A et B sont fusionnés dans le même cluster. C'est exactement comme une réaction en chaîne ou une propagation de virus : si vous touchez quelqu'un qui touche quelqu'un d'autre, vous faites tous partie de la même « chaîne de transmission </p>
           </li>
         </ul>
 
