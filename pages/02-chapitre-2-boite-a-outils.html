@@ -3066,9 +3066,10 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
           avions ajouté des points dispersés, DBSCAN les aurait nettoyés automatiquement, là où K-means aurait essayé de les intégrer de force dans un groupe, quitte
           à fausser la moyenne.
         </p>
-        <hr />
+      </blockquote>
 
-        <span class="exercise-block-title">Conclusion</span>
+      <section class="tree-conclusion" aria-labelledby="dbscan-conclusion-title">
+        <h5 id="dbscan-conclusion-title" class="tree-conclusion__title">Conclusion : DBSCAN vs K-means</h5>
         <ul>
           <li>
             <strong>K-means</strong> est un algorithme d’<strong>optimisation</strong> : il a une fonction objectif (le WCSS) et il cherche à la minimiser.
@@ -3117,7 +3118,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
           <strong>En résumé :</strong> K-means est un <strong>comptable</strong> (il minimise les coûts/distances), tandis que DBSCAN est un <strong>explorateur</strong>
           (il trace les frontières d’une forêt tant qu’elle est dense).
         </p>
-      </blockquote>
+      </section>
 
       <h5 id="ch2-pca">3. PCA : réduire la dimension sans étiquettes</h5>
       <p class="lead">
