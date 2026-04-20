@@ -3124,24 +3124,130 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       </section>
 
       <h5 id="ch2-pca">3. PCA : réduire la dimension sans étiquettes</h5>
+      
       <p class="lead">
-        Le <strong>partitionnement</strong> (K-means, DBSCAN) cherche des <strong>groupes</strong> de points. L’<strong>Analyse en Composantes Principales</strong>
-        (PCA) cherche les <strong>directions</strong> où les données varient le plus — autrement dit un nouveau repère orthogonaux (les composantes principales), ordonné
-        par part de variance expliquée. Mathématiquement, sur données centrées, on diagonalise la matrice de covariance (ou on fait une SVD sur la matrice des données)
-        : la première composante <strong>PC1</strong> maximise la variance projetée ; <strong>PC2</strong> est orthogonale à PC1 et maximise la variance résiduelle, etc.
+        Imaginez que vous essayez de photographier un troupeau d’oiseaux en plein vol. De face, ils semblent entassés ; d’en haut, vous voyez clairement leur forme.
+        <strong>La PCA fait exactement cela avec vos données :</strong> elle cherche les <strong>meilleures directions</strong> pour observer le nuage.
       </p>
       <p class="lead">
-        Usages typiques : <strong>visualiser</strong> en 2D ou 3D un nuage de grande dimension ; <strong>compresser</strong> en ne gardant que les premières
-        composantes ; détecter une <strong>colinéarité</strong> forte entre variables ; préparer des données avant un autre modèle (attention : la PCA est
-        <strong>linéaire</strong> — les relations non linéaires peuvent échapper à ce résumé).
+        Là où le <strong>partitionnement</strong> (K-means, DBSCAN) cherche à créer des groupes distincts, la PCA cherche les axes qui révèlent la structure la plus
+        importante : <strong>là où ça change le plus</strong>.
       </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : nuage 2D et directions des deux premières composantes principales</p>
+      <p class="lead">
+        <strong>L’intuition clé :</strong> variabilité = information. La PCA cherche les axes qui capturent le maximum de cette information.
+      </p>
       <img
         class="cover-image"
-        src="../Figures/Fig65.png"
-        alt="Nuage de points avec fleches PC1 et PC2 issues de la PCA"
+        src="../Figures/pca_intuition.png"
         loading="lazy"
       />
+      <img
+        class="cover-image"
+        src="../Figures/PCA_Projection_Illustration.gif"
+        loading="lazy"
+      />
+
+      <p class="lead">
+        La PCA est un algorithme <strong>non supervisé</strong> : elle “apprend” la géométrie interne de vos données brutes, sans étiquettes.
+      </p>
+      <ol>
+        <li><strong>Le centre :</strong> on calcule le barycentre et on <strong>centre</strong> les données (le centre devient l’origine).</li>
+        <li>
+          <strong>Rotation (PC1) :</strong> on cherche l’axe qui maximise l’<strong>étalement</strong> (la variance) des projections : c’est la direction où les données
+          varient le plus.
+        </li>
+        <li><strong>Orthogonalité (PC2) :</strong> PC2 doit être <strong>perpendiculaire</strong> à PC1 et capturer la variabilité restante.</li>
+        <li><strong>Nouveau repère :</strong> on exprime les données dans les coordonnées (PC1, PC2, …).</li>
+      </ol>
+      <img
+        class="cover-image"
+        src="../Figures/pca.gif"
+        loading="lazy"
+      />
+      <h6>3) Le lien avec la mathématique (le minimum vital)</h6>
+      <p class="lead">
+        Sans entrer dans les formules, retenez que la PCA s’appuie sur une décomposition (souvent une <strong>SVD</strong>) qui extrait des directions “optimales”
+        (composantes principales) et la part de variance associée. En bref : elle trouve le “meilleur angle de vue”, puis classe ces angles par importance.
+      </p>
+      <p class="lead">
+        Si l’on imagine que votre nuage de points est un objet physique (comme une éponge ou un ballon de rugby), les <strong>vecteurs propres</strong> et les
+        <strong>valeurs propres</strong> décrivent sa forme fondamentale.
+      </p>
+      <ul>
+        <li>
+          <strong>Vecteurs propres</strong> (<span class="math-inline">v⃗</span>) : ce sont les directions. Ils indiquent les axes de symétrie du nuage. Le premier
+          vecteur propre pointe exactement vers là où le nuage est le plus étiré.
+        </li>
+        <li>
+          <strong>Valeurs propres</strong> (<span class="math-inline">λ</span>) : c’est la force ou la longueur. Elles indiquent l’importance de chaque direction. Une
+          grande valeur propre signifie que cet axe capture énormément d’étalement (de variance).
+        </li>
+      </ul>
+      <p class="lead">
+        <strong>L’intuition :</strong> le vecteur propre est la « flèche » qui montre le chemin, et la valeur propre est le « poids » qui dit si ce chemin est une
+        autoroute (beaucoup d’infos) ou un petit sentier (du bruit).
+      </p>
+
+      <h6>2) Le cycle algorithmique (l’entraînement)</h6>
+      <p class="lead">
+        La PCA ne fait pas de descente de gradient comme un réseau de neurones ; elle suit un protocole algébrique rigide en 4 étapes clés :
+      </p>
+
+      <p class="lead"><strong>Étape A : le centrage (standardisation)</strong></p>
+      <p class="lead">
+        Avant toute chose, on soustrait la moyenne à chaque point. On déplace le nuage pour que son centre de gravité soit à l’origine <span class="math-inline">(0,0)</span>.
+      </p>
+      <div class="math-display math-display--left" role="math" aria-label="Centrage PCA">
+        Z = X − X̄
+      </div>
+
+      <p class="lead"><strong>Étape B : la matrice de covariance</strong></p>
+      <p class="lead">
+        L’algorithme calcule comment les variables varient ensemble. Si la variable <span class="math-inline">X</span> augmente quand <span class="math-inline">Y</span>
+        augmente, elles sont corrélées. Cette matrice résume toutes les relations du nuage.
+      </p>
+      <div class="math-display math-display--left" role="math" aria-label="Covariance PCA">
+        C = (1/(n−1)) Zᵀ Z
+      </div>
+
+      <p class="lead"><strong>Étape C : la décomposition (SVD ou diagonalisation)</strong></p>
+      <p class="lead">
+        C’est le « moteur ». L’algorithme résout l’équation suivante pour trouver les vecteurs propres (<span class="math-inline">V</span>) et les valeurs propres
+        (<span class="math-inline">L</span>) :
+      </p>
+      <div class="math-display math-display--left" role="math" aria-label="Equation valeurs propres PCA">
+        C v⃗ = λ v⃗
+      </div>
+      <p class="lead">
+        À ce stade, l’algorithme a « appris » tous les angles de vue possibles et les a classés du plus informatif au moins informatif.
+      </p>
+
+      <p class="lead"><strong>Étape D : la projection (réduction)</strong></p>
+      <p class="lead">
+        C’est l’étape finale. On choisit les <span class="math-inline">k</span> meilleurs vecteurs (ceux avec les plus grosses valeurs propres) et on projette les
+        données originales sur ces nouveaux axes.
+      </p>
+      <div class="math-display math-display--left" role="math" aria-label="Projection PCA">
+        X_nouveau = Z × V_choisis
+      </div>
+
+      <h6>3) Pourquoi la SVD est-elle « magique » ?</h6>
+      <p class="lead">
+        La SVD (<em>Singular Value Decomposition</em>) est souvent préférée car elle est plus stable numériquement. Elle décompose directement votre matrice de données
+        <span class="math-inline">X</span> en trois morceaux :
+      </p>
+      <div class="math-display math-display--left" role="math" aria-label="SVD PCA">
+        X = U Σ Vᵀ
+      </div>
+      <ul>
+        <li><span class="math-inline">V</span> contient nos fameuses composantes principales (les directions).</li>
+        <li><span class="math-inline">Σ</span> (Sigma) contient les valeurs singulières (liées à la variance).</li>
+      </ul>
+      <p class="lead">
+        <strong>L’intuition de l’apprentissage :</strong> entraîner une PCA, c’est comme demander à l’algorithme : « Donne-moi la hiérarchie des dimensions ». Il ne
+        cherche pas à prédire une valeur, il cherche à réorganiser votre espace pour que la première dimension soit la plus riche possible, la seconde un peu moins, et
+        ainsi de suite.
+      </p>
       <p class="table-caption" style="margin:12px 0 8px;">Figure : éboulis des variances (jeu Iris, 4 variables)</p>
       <img
         class="cover-image"
@@ -3149,42 +3255,30 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         alt="Diagramme en barres des variances expliquees par composante et courbe cumulee"
         loading="lazy"
       />
+      <h6>4) Pourquoi réduire la dimension ? (cas d’usages)</h6>
       <p class="lead">
-        Le graphique « <strong>éboulis</strong> » (<em>scree plot</em>) montre souvent que les premières composantes concentrent une grande part de la variance : on
-        peut alors projeter ou reconstruire avec peu de dimensions — en acceptant une <strong>erreur de reconstruction</strong> contrôlée (variance non expliquée).
+        Le graphique « <strong>éboulis</strong> » (<em>scree plot</em>) montre souvent que les premières composantes concentrent une grande part de la variance : on peut
+        alors projeter ou reconstruire avec peu de dimensions — en acceptant une <strong>erreur de reconstruction</strong> contrôlée (variance non expliquée).
       </p>
-
-      <div class="table-block">
-        <p class="table-caption">Trois outils, trois questions</p>
-        <div class="table-wrap">
-          <table class="data-table" aria-label="K-means DBSCAN PCA">
-            <thead>
-              <tr>
-                <th scope="col">Outil</th>
-                <th scope="col">Question posée aux données</th>
-                <th scope="col">Livrable typique</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>K-means</strong></td>
-                <td>Où placer <span class="math-inline">k</span> centres pour minimiser la dispersion interne ?</td>
-                <td>Partition en <span class="math-inline">k</span> groupes (forme « ronde »)</td>
-              </tr>
-              <tr>
-                <td><strong>DBSCAN</strong></td>
-                <td>Où la densité dépasse-t-elle un seuil pendant au moins <span class="math-inline">min_samples</span> voisins ?</td>
-                <td>Clusters de forme variable + bruit explicite</td>
-              </tr>
-              <tr>
-                <td><strong>PCA</strong></td>
-                <td>Quels axes orthogonaux maximisent la variance ?</td>
-                <td>Nouvelles variables décorrélées, ordonnées par importance</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <p class="lead">
+        <strong>L’Éboulis des variances : le juge de paix.</strong> Une fois que la PCA a extrait toutes les composantes
+        (<span class="math-inline">PC</span><sub>1</sub>, <span class="math-inline">PC</span><sub>2</sub>, …), l’éboulis des variances vous aide à décider combien en
+        garder. L’idée est simple : c’est un graphique qui classe les composantes de celle qui contient le plus d’information (variance) à celle qui n’est que du
+        « bruit ». On cherche visuellement le <strong>coude</strong> (l’endroit où la pente s’adoucit brutalement) : tout ce qui est avant le coude est conservé car
+        cela capture l’essentiel de la structure des données, tandis que ce qui suit est sacrifié pour simplifier le modèle sans perte majeure de signal.
+      </p>
+      <ul>
+        <li>
+          <strong>Visualisation (de 100D à 2D) :</strong> la PCA trouve les 2 premières composantes (par exemple 80% de variance) pour visualiser et détecter des
+          structures.
+        </li>
+        <li><strong>Compression :</strong> réduire la dimension en conservant l’information la plus importante.</li>
+        <li><strong>Détection de colinéarité :</strong> résumer des variables très corrélées par quelques axes.</li>
+        <li>
+          <strong>Préparation de données (attention) :</strong> la PCA est <strong>linéaire</strong> ; si la structure est non linéaire (formes en “S”, “beignet”…), elle
+          peut rater la géométrie réelle. On considère alors des méthodes comme <strong>t-SNE</strong> ou <strong>UMAP</strong>.
+        </li>
+      </ul>
 
       <section class="unsupervised-conclusion" aria-labelledby="unsupervised-final-title">
         <h5 id="unsupervised-final-title" class="unsupervised-conclusion__title">Bilan : explorer sans étiquettes, mais avec méthode</h5>
