@@ -3292,43 +3292,31 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       <section class="unsupervised-conclusion" aria-labelledby="unsupervised-final-title">
         <h5 id="unsupervised-final-title" class="unsupervised-conclusion__title">Bilan : explorer sans étiquettes, mais avec méthode</h5>
         <p class="lead">
-          Comme Mowgli qui apprend où sont les zones sûres sans carte annotée, vous combinez ici des <strong>hypothèses géométriques</strong> (sphères pour K-means,
-          densité pour DBSCAN, sous-espace linéaire pour la PCA) et des <strong>réglages</strong> à valider par visualisation, métriques internes et sens métier.
-          <strong>Rappel :</strong> un neurone de classification n’apparaît pas ici — la PCA et le clustering ne minimisent pas une erreur sur un
-          <span class="math-inline">y</span> ; ils sculptent la structure de <span class="math-inline">X</span> seul.
+          En conclusion, l'apprentissage non supervisé est avant tout une démarche exploratoire : c'est l'art de naviguer dans les données sans boussole (sans étiquettes
+          <span class="math-inline">y</span>), en laissant les structures cachées émerger d'elles-mêmes. La véritable richesse de cette approche réside dans la diversité
+          des regards portés sur le même nuage de points <span class="math-inline">X</span>. Chaque algorithme possède sa propre "vision" et son propre objectif :
         </p>
         <ul>
           <li>
-            <strong>K-means :</strong> rapide, simple, exige <span class="math-inline">k</span> et des formes de clusters compatibles avec des centroïdes.
+            <strong>K-means</strong> voit le monde à travers des centres ; il cherche la simplicité et la rapidité en découpant l'espace en zones compactes (sphériques),
+            au prix d'un nombre <span class="math-inline">k</span> imposé par l'utilisateur.
           </li>
           <li>
-            <strong>DBSCAN :</strong> pas de <span class="math-inline">k</span> fixe, bonnes formes irrégulières, paramètres <span class="math-inline">ε</span> /
-            <span class="math-inline">min_samples</span> à calibrer.
+            <strong>DBSCAN</strong> voit le monde à travers la foule ; il ignore les centres et se concentre sur la densité. Il est capable d'épouser des formes complexes
+            et irrégulières tout en nettoyant le bruit, à condition de bien régler le rayon <span class="math-inline">ε</span>.
           </li>
           <li>
-            <strong>PCA :</strong> réduction et visualisation par axes de variance ; linéaire ; interpréter les composantes comme des mélanges des variables d’origine.
+            <strong>PCA</strong> voit le monde à travers le mouvement ; elle ne cherche pas de groupes, mais les directions (axes) où l'information est la plus étalée.
+            Elle sculpte un nouveau repère pour simplifier et visualiser la complexité sans la dénaturer.
           </li>
         </ul>
+        <p class="lead">
+          Comme Mowgli apprenant à déchiffrer la jungle sans carte annotée, vous apprenez ici à sculpter la structure de vos données. Ces méthodes ne cherchent pas à
+          minimiser une erreur de prédiction, mais à donner du sens à la géométrie brute. Combiner ces outils, c'est s'offrir plusieurs angles de vue pour transformer
+          une masse de données brutes en une connaissance métier actionnable.
+        </p>
       </section>
 
-      <details class="expand-panel">
-        <summary>Références utiles — DBSCAN &amp; PCA</summary>
-        <div class="expand-panel__body">
-          <ul>
-            <li>
-              <strong>DBSCAN :</strong> Ester, Kriegel, Sander, Xu (1996), « A density-based algorithm for discovering clusters in large spatial databases with noise ».
-            </li>
-            <li>
-              <strong>PCA :</strong> références classiques en analyse des données (Pearson, Hotelling) ; voir tout manuel de statistique multivariée.
-            </li>
-            <li>
-              <strong>Pratique :</strong>
-              <a href="https://scikit-learn.org/stable/modules/clustering.html#dbscan" target="_blank" rel="noopener noreferrer">scikit-learn — DBSCAN</a>,
-              <a href="https://scikit-learn.org/stable/modules/decomposition.html#pca" target="_blank" rel="noopener noreferrer">scikit-learn — PCA</a>.
-            </li>
-          </ul>
-        </div>
-      </details>
 
 
       <div class="section-divider" role="separator" aria-hidden="true"></div>
