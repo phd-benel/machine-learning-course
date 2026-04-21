@@ -3202,6 +3202,11 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       <div class="math-display math-display--left" role="math" aria-label="Centrage PCA">
         Z = X − X̄
       </div>
+      <p class="lead">
+        <strong>Lecture / notations :</strong> <span class="math-inline">X</span> est la matrice de données (lignes = individus, colonnes = variables) et
+        <span class="math-inline">X̄</span> désigne la moyenne de chaque variable. On obtient <span class="math-inline">Z</span> en soustrayant ces moyennes, pour
+        recentrer le nuage sur l’origine. <strong>Intuition :</strong> on enlève l’« offset » pour analyser uniquement la forme/dispersion des données.
+      </p>
 
       <p class="lead"><strong>Étape B : la matrice de covariance</strong></p>
       <p class="lead">
@@ -3211,6 +3216,12 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       <div class="math-display math-display--left" role="math" aria-label="Covariance PCA">
         C = (1/(n−1)) Zᵀ Z
       </div>
+      <p class="lead">
+        <strong>Lecture / notations :</strong> <span class="math-inline">C</span> est la matrice de covariance, <span class="math-inline">Z</span> les données centrées,
+        <span class="math-inline">Z</span>ᵀ la transposée, et <span class="math-inline">n</span> le nombre d’observations. Le facteur
+        <span class="math-inline">1</span>/(<span class="math-inline">n</span>−<span class="math-inline">1</span>) normalise. <strong>Intuition :</strong>
+        <span class="math-inline">C</span> mesure « comment ça bouge ensemble » : diagonale = variances, hors-diagonale = corrélations.
+      </p>
 
       <p class="lead"><strong>Étape C : la décomposition (SVD ou diagonalisation)</strong></p>
       <p class="lead">
@@ -3220,6 +3231,12 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       <div class="math-display math-display--left" role="math" aria-label="Equation valeurs propres PCA">
         C <span class="math-inline">v</span> = <span class="math-inline">λ</span> <span class="math-inline">v</span>
       </div>
+      <p class="lead">
+        <strong>Lecture / notations :</strong> <span class="math-inline">v</span> est un <strong>vecteur propre</strong> (une direction/axe) et
+        <span class="math-inline">λ</span> la <strong>valeur propre</strong> associée (la quantité de variance portée par cet axe). <strong>Intuition :</strong>
+        appliquer <span class="math-inline">C</span> à <span class="math-inline">v</span> ne change pas la direction : cela la “re-scale” seulement. Les plus grands
+        <span class="math-inline">λ</span> donnent les axes les plus informatifs (PC1, PC2, …).
+      </p>
       <p class="lead">
         À ce stade, l’algorithme a « appris » tous les angles de vue possibles et les a classés du plus informatif au moins informatif.
       </p>
@@ -3232,6 +3249,12 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       <div class="math-display math-display--left" role="math" aria-label="Projection PCA">
         X<sub>nouveau</sub> = Z × V<sub>choisis</sub>
       </div>
+      <p class="lead">
+        <strong>Lecture / notations :</strong> <span class="math-inline">V</span><sub>choisis</sub> regroupe les <span class="math-inline">k</span> vecteurs propres
+        retenus (les <span class="math-inline">k</span> meilleurs axes). <span class="math-inline">Z</span> sont les données centrées, et
+        <span class="math-inline">X</span><sub>nouveau</sub> les coordonnées des points dans le nouveau repère. <strong>Intuition :</strong> on “projette” les données
+        sur les axes les plus informatifs pour compresser sans perdre l’essentiel.
+      </p>
       <p class="lead">
         Comment choisir k ? l’éboulis des variances vous aide à décider combien en
         garder. L’idée est simple : c’est un graphique qui classe les composantes de celle qui contient le plus d’information (variance) à celle qui n’est que du
