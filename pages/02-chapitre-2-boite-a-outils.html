@@ -3230,7 +3230,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         données originales sur ces nouveaux axes.
       </p>
       <div class="math-display math-display--left" role="math" aria-label="Projection PCA">
-        X_nouveau = Z × V_choisis
+        X<sub>nouveau</sub> = Z × V<sub>choisis</sub>
       </div>
       <p class="lead">
         Comment choisir k ? l’éboulis des variances vous aide à décider combien en
@@ -3574,7 +3574,6 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
 
       <h5 id="ch2-rl-qlearning">2. Le Q-Learning : De l’intuition à la maîtrise de l’inconnu</h5>
 
-      <h6>1. Introduction : le changement de paradigme</h6>
       <p class="lead">
         Dans l’apprentissage supervisé, nous disposons d’un « oracle » (le dataset étiqueté) qui dit à la machine : « Pour cette entrée, voici la sortie exacte ». En
         apprentissage par renforcement (RL), cet oracle disparaît. L’agent est jeté dans un environnement dont il ignore les règles de « physique » et les objectifs.
@@ -3585,292 +3584,31 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         fonctionne ; il a seulement besoin de savoir « combien » ses actions lui rapportent sur le long terme.
       </p>
 
-      <h6>2. L’intuition : le concept de « qualité »</h6>
       <p class="lead">
-        Le « Q » de Q-learning signifie <strong>qualité</strong>. L’idée centrale est de construire une fonction de score, notée
-        <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>), qui répond à la question suivante :
+        Voici une ressource qui explique le Q-learning de manière <strong>très progressive</strong>, avec un <strong>cas pratique</strong>. Je vous invite à la suivre
+        pour avoir un premier avant-goût technique du RL : il s’agit de l’unité
+        <strong>« Unit 2 — Introduction to Q-Learning »</strong> du cours <strong>Deep Reinforcement Learning</strong> de Hugging Face.
       </p>
-      <blockquote>
-        <p class="lead">
-          « Si je suis dans l’état <span class="math-inline">s</span> et que je choisis l’action <span class="math-inline">a</span>, quel est le profit total que je
-          peux espérer obtenir jusqu’à la fin de ma mission ? »
-        </p>
-      </blockquote>
-      <p class="lead">Imaginez un étudiant préparant un examen :</p>
-      <ul>
-        <li><strong>L’état (<span class="math-inline">s</span>)</strong> : le chapitre qu’il révise actuellement.</li>
-        <li><strong>L’action (<span class="math-inline">a</span>)</strong> : choisir de faire un exercice difficile ou faire une pause.</li>
-        <li>
-          <strong>La récompense immédiate (<span class="math-inline">r</span>)</strong> : le plaisir de la pause (élevé) ou la fatigue de l’exercice (négatif).
-        </li>
-        <li>
-          <strong>La valeur Q (<span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>))</strong> : ce n’est pas
-          juste le plaisir immédiat, c’est ce plaisir <strong>plus</strong> la note finale à l’examen que cette action facilitera.
-        </li>
-      </ul>
-      <p class="lead">
-        L’objectif du Q-learning est de transformer une récompense immédiate (souvent trompeuse) en une vision à long terme.
-      </p>
-
-      <h6>3. La structure de données : la Q-table</h6>
-      <p class="lead">
-        Pour un débutant, la manière la plus simple de visualiser l’intelligence de l’agent est une <strong>Q-table</strong>. C’est un grand tableau à double entrée :
-      </p>
-      <ul>
-        <li>Chaque <strong>ligne</strong> représente un état possible de l’environnement.</li>
-        <li>Chaque <strong>colonne</strong> représente une action possible.</li>
-        <li>Chaque <strong>cellule</strong> contient une valeur numérique (souvent initialisée à 0).</li>
-      </ul>
-      <div class="table-block">
-        <p class="table-caption">Exemple : Q-table (mini-environnement jouet)</p>
-        <div class="table-wrap">
-          <table class="data-table" aria-label="Exemple de Q-table">
-            <thead>
-              <tr>
-                <th scope="col">État / Action</th>
-                <th scope="col">Gauche</th>
-                <th scope="col">Droite</th>
-                <th scope="col">Sauter</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Position 1</strong></td>
-                <td>0.0</td>
-                <td>0.5</td>
-                <td>0.0</td>
-              </tr>
-              <tr>
-                <td><strong>Position 2</strong></td>
-                <td>-1.2</td>
-                <td><strong>4.8</strong></td>
-                <td>0.2</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div style="margin-top:14px;display:flex;justify-content:center;">
+        <a
+          class="btn btn-soft"
+          href="https://huggingface.co/learn/deep-rl-course/unit2/introduction"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:10px 14px;"
+          aria-label="Ouvrir la ressource : Unit 2 Q-Learning (Hugging Face)"
+        >
+          <img
+            src="../Figures/hf-logo.svg"
+            alt="Logo Hugging Face"
+            loading="lazy"
+            style="width:22px;height:22px;object-fit:contain;flex:0 0 auto;"
+          />
+          <span><strong>Hugging Face</strong> — Unit 2 : Q-Learning</span>
+        </a>
       </div>
-      <p class="lead">
-        Au début, la table est vide de sens : l’agent « tâtonne ». Mais à force d’exploration, les nombres dans les cellules vont converger vers les vraies valeurs
-        d’utilité. À la fin de l’apprentissage, l’agent n’a plus besoin de réfléchir : il regarde sa ligne actuelle et choisit la colonne qui a le score le plus élevé.
-      </p>
 
-      <h6>4. La mécanique de l’apprentissage : le « bootstrap »</h6>
-      <p class="lead">
-        Le génie du Q-learning réside dans sa manière de mettre à jour ses scores. Il utilise une méthode appelée <strong>bootstrapping</strong> : il met à jour une
-        estimation à partir d’autres estimations.
-      </p>
-      <p class="lead">
-        Lorsqu’un agent effectue une action et arrive dans un nouvel état, il se dit : « Ma note pour ce que je viens de faire doit être un mélange de la récompense
-        que je viens de toucher et de la <strong>meilleure note possible</strong> que je vois disponible là où je viens d’arriver. »
-      </p>
-      <p class="lead">
-        C’est ainsi que la valeur « remonte » du but (la récompense finale) vers le point de départ, étape par étape, interaction après interaction.
-      </p>
-
-      <h6><strong>Partie 2 : Le moteur mathématique – l’équation de Bellman et la mise à jour temporelle</strong></h6>
-      <p class="lead">
-        Pour transformer l’intuition du « carnet de notes » en un algorithme capable de converger vers une solution parfaite, nous devons introduire le formalisme
-        mathématique. Ne voyez pas cette équation comme une barrière, mais comme une <strong>règle de correction d’erreur</strong>.
-      </p>
-
-      <hr />
-
-      <h6>1. L’objectif : maximiser l’espérance du retour</h6>
-      <p class="lead">
-        Avant de parler de mise à jour, rappelons ce que l’agent cherche à maximiser. Ce n’est pas la récompense immédiate
-        <span class="math-inline">R</span><sub>t</sub>, mais le <strong>gain cumulé actualisé</strong> (<span class="math-inline">G</span><sub>t</sub>) :
-      </p>
-      <div class="math-display">
-        <span class="math-inline">G</span><sub>t</sub>
-        =
-        <span class="math-inline">R</span><sub>t+1</sub>
-        +
-        <span class="math-inline">γ</span><span class="math-inline">R</span><sub>t+2</sub>
-        +
-        <span class="math-inline">γ</span>²<span class="math-inline">R</span><sub>t+3</sub>
-        + …
-      </div>
-      <p class="lead">
-        Le facteur <strong><span class="math-inline">γ</span> (gamma)</strong>, ou facteur d’escompte, mathématise la patience :
-      </p>
-      <ul>
-        <li>Si <span class="math-inline">γ</span> = 0 : l’agent est purement opportuniste (seul le présent compte).</li>
-        <li>Si <span class="math-inline">γ</span> → 1 : l’agent valorise les récompenses lointaines autant que les immédiates.</li>
-      </ul>
-
-      <h6>2. L’équation de mise à jour (Temporal Difference)</h6>
-      <p class="lead">
-        La formule du Q-learning est une application de la méthode des <strong>différences temporelles</strong> (TD). À chaque fois que l’agent effectue une transition
-        (<span class="math-inline">s</span>, <span class="math-inline">a</span>, <span class="math-inline">r</span>, <span class="math-inline">s</span>′), il met à
-        jour sa croyance <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) via :
-      </p>
-      <div class="math-display">
-        <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>)
-        &larr;
-        <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>)
-        +
-        <span class="math-inline">α</span>
-        &middot;
-        [
-        (
-        <span class="math-inline">r</span>
-        +
-        <span class="math-inline">γ</span>
-        max<sub><span class="math-inline">a</span>′</sub>
-        <span class="math-inline">Q</span>(<span class="math-inline">s</span>′, <span class="math-inline">a</span>′)
-        )
-        −
-        <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>)
-        ]
-      </div>
-      <p class="lead">
-        L’expression entre crochets est l’<strong>erreur de prédiction</strong> (TD error) : « la cible (réalité + futur) » moins « l’ancienne estimation ».
-      </p>
-
-      <p class="lead"><strong>Décomposition des termes :</strong></p>
-      <ul>
-        <li>
-          <strong><span class="math-inline">α</span> (alpha) – le taux d’apprentissage</strong> : il détermine à quel point la nouvelle information écrase l’ancienne.
-          En pratique, on commence souvent avec un <span class="math-inline">α</span> relativement élevé (p. ex. 0,1 à 0,5) pour apprendre vite, puis on le réduit
-          pour stabiliser les connaissances.
-        </li>
-        <li>
-          <strong>La cible (target)</strong> : c’est ce que l’agent considère comme la « vérité » après l’action. Elle combine la récompense immédiate
-          <span class="math-inline">r</span> et la meilleure valeur possible dans l’état suivant,
-          max<sub><span class="math-inline">a</span>′</sub> <span class="math-inline">Q</span>(<span class="math-inline">s</span>′, <span class="math-inline">a</span>′).
-        </li>
-        <li>
-          <strong>Le concept de « max »</strong> : c’est ici que réside l’optimisme du Q-learning. Même si l’agent explore et fait une erreur au coup d’après, il met
-          à jour sa valeur actuelle en supposant qu’il jouera <strong>parfaitement</strong> à partir du prochain état.
-        </li>
-      </ul>
-
-      <h6>3. Pourquoi cette équation fonctionne-t-elle ?</h6>
-      <p class="lead">
-        Imaginez que vous estimiez la valeur d’une case à 10 points, mais qu’en y allant, vous recevez une récompense de 2 points et que les cases suivantes ne valent
-        plus rien :
-      </p>
-      <ol>
-        <li>La cible devient 2 + 0 = 2.</li>
-        <li>L’erreur est de 2 − 10 = −8.</li>
-        <li>L’algorithme va donc <strong>diminuer</strong> la valeur de la case initiale.</li>
-      </ol>
-      <p class="lead">
-        Inversement, si vous découvrez un trésor caché, l’erreur sera positive et la valeur de la case augmentera. Par itérations successives, les valeurs se
-        propagent de la fin (la récompense) vers le début (l’état initial). C’est ce qu’on appelle la <strong>propagation de Bellman</strong>.
-      </p>
-
-      <h6>4. Le caractère « off-policy »</h6>
-      <p class="lead">
-        Un point technique majeur : le Q-learning est un algorithme <strong>off-policy</strong>. Cela signifie que la valeur <span class="math-inline">Q</span> est
-        mise à jour en supposant que l’agent choisira l’action optimale au tour suivant (le max), <strong>même si en réalité</strong> l’agent décide de faire autre
-        chose (par exemple pour explorer). L’apprentissage est donc partiellement déconnecté du comportement immédiat.
-      </p>
-
-      <h6><strong>Partie 3 : Le pilotage de l’agent – Exploration, exploitation et cycle de vie</strong></h6>
-      <p class="lead">
-        Maintenant que nous avons le moteur (l’équation de Bellman) et le carnet de notes (la Q-table), il reste une question cruciale : comment l’agent doit-il se
-        comporter pendant qu’il apprend ? S’il se contente de suivre bêtement ses notes actuelles, il risque de passer à côté du chemin optimal simplement parce qu’il
-        ne l’a pas encore testé.
-      </p>
-
-      <hr />
-
-      <h6>1. Le dilemme : exploration vs exploitation</h6>
-      <p class="lead">C’est le défi majeur de tout apprentissage par interaction.</p>
-      <ul>
-        <li>
-          <strong>L’exploitation</strong> : l’agent choisit l’action qui a la plus haute valeur dans sa Q-table. Il capitalise sur ce qu’il sait déjà pour obtenir des
-          récompenses.
-        </li>
-        <li>
-          <strong>L’exploration</strong> : l’agent choisit une action au hasard (ou une action qu’il connaît peu). Il prend le risque de perdre des points à court
-          terme pour améliorer ses connaissances à long terme.
-        </li>
-      </ul>
-
-      <h6>2. La stratégie <span class="math-inline">ε</span>-greedy (epsilon-gourmande)</h6>
-      <p class="lead">
-        Pour équilibrer ce choix, on utilise une règle simple mais d’une efficacité redoutable : la stratégie <strong><span class="math-inline">ε</span>-greedy</strong>.
-        On définit un paramètre <span class="math-inline">ε</span> compris entre 0 et 1 :
-      </p>
-      <ol>
-        <li>
-          <strong>Avec une probabilité <span class="math-inline">ε</span></strong> : l’agent choisit une action <strong>au hasard</strong> (exploration).
-        </li>
-        <li>
-          <strong>Avec une probabilité 1 − <span class="math-inline">ε</span></strong> : l’agent choisit l’action <strong>optimale</strong> selon sa table
-          (exploitation).
-        </li>
-      </ol>
-      <blockquote>
-        <p class="lead">
-          <strong>Le decay (décroissance) :</strong> en début de cours, on explique souvent qu’il faut faire varier <span class="math-inline">ε</span> au fil du temps.
-          On commence avec <span class="math-inline">ε</span> = 1,0 (l’agent est totalement ignorant et explore tout) et on le réduit progressivement (par exemple
-          jusqu’à 0,01) à mesure que la Q-table devient fiable. C’est ce qu’on appelle l’<strong>epsilon decay</strong>.
-        </p>
-      </blockquote>
-
-      <h6>3. L’algorithme complet</h6>
-      <p class="lead">Voici le déroulement pas à pas du Q-learning :</p>
-      <ol>
-        <li>
-          <strong>Initialisation</strong> : créer une Q-table remplie de zéros (ou de valeurs aléatoires proches de zéro).
-        </li>
-        <li>
-          <strong>Boucle de l’épisode</strong> (une partie de jeu, un trajet, etc.) :
-          <ul>
-            <li>Observer l’état actuel <span class="math-inline">s</span>.</li>
-            <li>
-              <strong>Action</strong> : choisir <span class="math-inline">a</span> via la stratégie <span class="math-inline">ε</span>-greedy.
-            </li>
-            <li>
-              <strong>Interaction</strong> : exécuter <span class="math-inline">a</span>, recevoir la récompense immédiate <span class="math-inline">r</span> et observer
-              le nouvel état <span class="math-inline">s</span>′.
-            </li>
-            <li>
-              <strong>Mise à jour</strong> : appliquer l’équation de Bellman pour corriger la valeur de
-              <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>).
-            </li>
-            <li>
-              <strong>Transition</strong> : l’état suivant devient l’état actuel (<span class="math-inline">s</span> &larr; <span class="math-inline">s</span>′).
-            </li>
-            <li><em>Si <span class="math-inline">s</span> est un état terminal (victoire/défaite), l’épisode s’arrête.</em></li>
-          </ul>
-        </li>
-        <li><strong>Répéter</strong> sur des milliers d’épisodes jusqu’à convergence.</li>
-      </ol>
-
-      <h6>4. Convergence et stabilité</h6>
-      <p class="lead">
-        Il est important de noter qu’en théorie, le Q-learning tabulaire est garanti de converger vers la politique optimale, à condition que :
-      </p>
-      <ul>
-        <li>
-          Tous les couples (état, action) soient visités un nombre infini de fois (d’où l’importance de l’exploration).
-        </li>
-        <li>
-          Le taux d’apprentissage <span class="math-inline">α</span> diminue progressivement.
-        </li>
-      </ul>
-
-      <section class="rl-conclusion" aria-labelledby="rl-conclusion-title">
-        <h5 id="rl-conclusion-title" class="rl-conclusion__title">En synthèse : le Q-learning comme première brique</h5>
-        <ul>
-          <li>
-            <strong>RL :</strong> interaction séquentielle, récompenses souvent retardées, exploration nécessaire — carte des difficultés (figure 68).
-          </li>
-          <li>
-            <strong>Q-learning :</strong> estimation tabulaire de <span class="math-inline">Q</span>(<span class="math-inline">s</span>,
-            <span class="math-inline">a</span>) par corrections TD vers la cible de Bellman optimale ; simple à coder sur de petits espaces.
-          </li>
-          <li>
-            <strong>Au-delà :</strong> fonction d’approximation, continuité, bruit, multi-agents… autant de chapitres que l’on trouve dans l’ouvrage de référence de Sutton
-            &amp; Barto.
-          </li>
-        </ul>
-      </section>
+      
 
       <h5 id="ch2-rl-cartographie">3. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
       <p class="lead">
