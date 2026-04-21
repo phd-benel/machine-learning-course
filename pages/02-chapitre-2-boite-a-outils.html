@@ -3337,10 +3337,6 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         qualité d’une stratégie qu’<strong>après plusieurs tours</strong>. Ce retard entre action et succès est au cœur des difficultés du RL.
       </p>
 
-      <p class="lead">
-        Ce n’est qu’un <strong>exemple culturel</strong> : en industrie, le même schéma apparaît en robotique (collisions rares mais coûteuses), logistique ou
-        pilotage énergétique. La figure suivante fixe la <strong>boucle</strong> minimale à avoir en tête.
-      </p>
       
 
       <div class="kernel-noyau-gallery" role="group" style="grid-template-columns:repeat(3,minmax(0,1fr));">
@@ -3354,6 +3350,18 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
           <img class="kernel-noyau-gallery__img" src="../Figures/Rl_3.gif" alt="Illustration RL 3" loading="lazy" />
         </figure>
       </div>
+
+      <p class="lead">
+        Historiquement, l’apprentissage par renforcement s’est d’abord popularisé dans les <strong>jeux</strong>, car ils offrent un terrain contrôlé : des règles
+        claires, un objectif mesurable, et la possibilité de simuler des millions d’épisodes. Mais aujourd’hui, les mêmes idées irriguent des systèmes bien plus
+        « réels » : <strong>robotique</strong> (apprendre à saisir un objet, marcher, équilibrer un drone), <strong>optimisation logistique</strong> (planifier des
+        tournées, gérer des stocks), <strong>pilotage énergétique</strong> (réguler chauffage/climatisation d’un bâtiment), ou encore
+        <strong>recommandation</strong> (optimiser une séquence d’interactions plutôt qu’un clic isolé). C’est aussi une brique clé des IA conversationnelles modernes
+        via le <strong>RLHF</strong> (<em>Reinforcement Learning from Human Feedback</em>) : après un pré-entraînement sur du texte, on ajuste le comportement du modèle
+        à partir de préférences humaines (réponses jugées « meilleures »), pour obtenir un assistant plus utile, plus sûr et mieux aligné. Enfin, dans les
+        environnements changeants, l’enjeu n’est pas seulement d’apprendre une fois, mais de <strong>s’adapter</strong> : ré-optimiser une politique quand les
+        conditions dérivent (nouveaux usages, nouveaux risques, nouvelles contraintes), autrement dit « apprendre à réapprendre ».
+      </p>
     
       
       <h5 id="ch2-rl-mdp">1. Formalisation : Le Processus de Décision de Markov (MDP)</h5>
@@ -3881,5 +3889,14 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
   </main>
 
   <script src="../assets/js/app.js"></script>
+
+  <div class="kernel-noyau-gallery" role="group" style="grid-template-columns:repeat(2,minmax(0,1fr)); margin-top: 18px;">
+    <figure class="kernel-noyau-gallery__fig">
+      <img class="kernel-noyau-gallery__img" src="../Figures/Rl_4.gif" alt="Illustration RL 4" loading="lazy" />
+    </figure>
+    <figure class="kernel-noyau-gallery__fig">
+      <img class="kernel-noyau-gallery__img" src="../Figures/Rl_5.gif" alt="Illustration RL 5" loading="lazy" />
+    </figure>
+  </div>
 </body>
 </html>
