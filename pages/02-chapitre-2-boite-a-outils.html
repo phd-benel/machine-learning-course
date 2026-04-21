@@ -77,9 +77,9 @@
             <li >
               <a href="#ch2-rl">Partie III — Apprentissage par renforcement</a>
               <ul class="chapter-toc__sub">
-                <li><a href="#ch2-rl-cartographie">1. Enjeux du RL</a></li>
-                <li><a href="#ch2-rl-mdp">2. MDP &amp; vocabulaire</a></li>
-                <li><a href="#ch2-rl-qlearning">3. Q-learning</a></li>
+                <li><a href="#ch2-rl-mdp">1. MDP &amp; vocabulaire</a></li>
+                <li><a href="#ch2-rl-qlearning">2. Q-learning</a></li>                
+                <li><a href="#ch2-rl-cartographie">3. Enjeux du RL</a></li>                
               </ul>
             </li>
           </ol>
@@ -3336,10 +3336,19 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         fournie d’office — vous apprenez par répétition ce qui fonctionne contre tel adversaire, avec des récompenses (PV perdus, statut infligé) qui ne résument la
         qualité d’une stratégie qu’<strong>après plusieurs tours</strong>. Ce retard entre action et succès est au cœur des difficultés du RL.
       </p>
-      <p class="lead">
-        Ce n’est qu’un <strong>exemple culturel</strong> : en industrie, le même schéma apparaît en robotique (collisions rares mais coûteuses), logistique ou
-        pilotage énergétique. La figure suivante fixe la <strong>boucle</strong> minimale à avoir en tête.
-      </p>
+      
+
+      <div class="kernel-noyau-gallery" role="group" style="grid-template-columns:repeat(3,minmax(0,1fr));">
+        <figure class="kernel-noyau-gallery__fig">
+          <img class="kernel-noyau-gallery__img" src="../Figures/RL_1.gif" alt="Illustration RL 1" loading="lazy" />
+        </figure>
+        <figure class="kernel-noyau-gallery__fig">
+          <img class="kernel-noyau-gallery__img" src="../Figures/RL_2.gif" alt="Illustration RL 2" loading="lazy" />
+        </figure>
+        <figure class="kernel-noyau-gallery__fig">
+          <img class="kernel-noyau-gallery__img" src="../Figures/Rl_3.gif" alt="Illustration RL 3" loading="lazy" />
+        </figure>
+      </div>
     
       
       <h5 id="ch2-rl-mdp">1. Formalisation : Le Processus de Décision de Markov (MDP)</h5>
@@ -3545,7 +3554,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         C'est précisément pour comprendre comment une machine peut conquérir un monde inconnu que nous allons maintenant explorer le **Q-Learning**. Cet algorithme emblématique nous montrera comment l'agent parvient à bâtir une table de "Qualité" ($Q$) capable de transformer le chaos de l'expérience en une stratégie optimale.
       </p>
 
-      <h5 id="ch2-rl-qlearning">3. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
+      <h5 id="ch2-rl-qlearning">2. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
       <p class="lead">
         On note <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) la <strong>valeur d’action</strong> : espérance du
         retour cumulé actualisé si l’on commence par prendre l’action <span class="math-inline">a</span> dans l’état <span class="math-inline">s</span>, puis se comporte
@@ -3632,7 +3641,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         </ul>
       </section>
 
-      <h5 id="ch2-rl-cartographie">Cartographie des enjeux (pourquoi le RL est difficile)</h5>
+      <h5 id="ch2-rl-cartographie">3. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
       <p class="lead">
         Avant d’entrer dans une méthode précise, il est utile de situer <strong>où</strong> les algorithmes peuvent buter — sans exhaustivité, mais pour cadrer vos
         attentes lorsque vous lirez la littérature (exploration, généralisation, stabilité…).
