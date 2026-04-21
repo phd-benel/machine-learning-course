@@ -3669,55 +3669,113 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         plus complexes à stabiliser. Au-delà des algorithmes spécifiques, tout système de RL se heurte à <strong>quatre défis fondamentaux</strong>.
       </p>
 
-      <h6>1. Le dilemme exploration–exploitation</h6>
+      <h6>1. Le dilemme exploration / exploitation</h6>
       <p class="lead">
-        C’est le défi « existentiel » de tout agent autonome. À chaque étape, l’agent doit arbitrer entre :
+        C’est sans doute le défi le plus intuitif du RL. L’agent se trouve constamment face à un choix cornélien :
       </p>
       <ul>
         <li>
-          <strong>L’exploitation</strong> : utiliser les connaissances acquises pour maximiser la récompense immédiate (rester dans sa zone de confort).
+          <strong>Exploitation</strong> : choisir l’action qui, d’après son expérience passée, rapporte le plus de récompenses cumulées. C’est la voie de la sécurité.
         </li>
         <li>
-          <strong>L’exploration</strong> : tester des actions inconnues ou paraissant sous-optimales pour découvrir de nouvelles opportunités.
+          <strong>Exploration</strong> : choisir une action dont le résultat est incertain, ou qui semble sous-optimale, dans l’espoir de découvrir une stratégie encore
+          meilleure. C’est la voie du risque et de la découverte.
         </li>
       </ul>
       <p class="lead">
-        Le risque est double : une exploitation prématurée peut faire stagner l’agent dans un <strong>optimum local</strong> (stratégie correcte mais pas géniale),
-        tandis qu’une exploration infinie empêche de capitaliser sur les acquis et de converger vers une solution stable.
+        <strong>L’intuition :</strong> si l’agent exploite trop tôt, il risque de rester bloqué dans une stratégie « médiocre » mais stable (un optimum local), sans
+        jamais découvrir la stratégie « géniale ». S’il explore trop, il gaspille son temps à faire des erreurs et ne maximise jamais son score. Un compromis mal réglé
+        bloque l’apprentissage.
       </p>
+      <p class="lead"><strong>Exemples concrets :</strong></p>
+      <ul>
+        <li>
+          <strong>Le dilemme du restaurant</strong> : vous allez dans une nouvelle ville. Soit vous allez dans le restaurant que vous connaissez déjà et qui est bon
+          (exploitation), soit vous testez un nouveau restaurant au risque d’être déçu, mais avec la chance de trouver encore mieux (exploration).
+        </li>
+        <li>
+          <strong>Robotique mobile</strong> : un robot doit trouver le chemin le plus court vers une sortie. Doit-il toujours emprunter le chemin qu’il vient de trouver
+          (exploitation) ou doit-il tester des couloirs inconnus au risque de se perdre (exploration) ?
+        </li>
+      </ul>
 
-      <h6>2. L’assignation de crédit (<em>credit assignment</em>)</h6>
+      <h6>2. Le problème de la récompense retardée (<em>delayed reward</em>)</h6>
       <p class="lead">
-        C’est le défi de la causalité temporelle. Dans de nombreux scénarios, une action cruciale prise à l’instant
-        <span class="math-inline">t</span> n’aura un impact sur la récompense qu’à l’instant <span class="math-inline">t</span> + 100.
+        Dans de nombreux problèmes réels, l’agent ne reçoit pas un feedback immédiat après chaque action. La « bonne » décision peut avoir été prise plusieurs pas
+        avant que le gain final ne devienne visible. C’est le problème de l’assignation de crédit (<em>credit assignment</em>) : comment savoir quelle action passée est
+        responsable du succès présent ?
       </p>
       <p class="lead">
-        <strong>Exemple (échecs) :</strong> le sacrifice d’une pièce en début de partie peut être la raison directe de la victoire finale, mais le signal de
-        récompense (+1) n’arrive qu’à la fin. Le challenge est alors : comment savoir, parmi des milliers d’actions, lesquelles méritent d’être « créditées » pour le
-        succès final ? Ce décalage temporel action → récompense est une source majeure de lenteur d’apprentissage.
+        <strong>L’intuition :</strong> l’agent doit apprendre à lier une action présente à une récompense qui n’arrivera que bien plus tard. Plus le retard est grand,
+        plus il est difficile pour l’algorithme de remonter le fil des causalités.
       </p>
+      <p class="lead"><strong>Exemples concrets :</strong></p>
+      <ul>
+        <li>
+          <strong>Jeux de stratégie (échecs, go)</strong> : un joueur peut sacrifier une pièce importante (action immédiate très coûteuse,
+          <span class="math-inline">R</span> négatif) si cela mène mathématiquement à un échec et mat dix coups plus tard (récompense finale maximale). L’agent doit
+          apprendre à ne pas être « myope ».
+        </li>
+        <li>
+          <strong>Voiture autonome</strong> : la décision d’activer le clignotant et de freiner légèrement à l’instant <span class="math-inline">t</span> est la « bonne »
+          action qui permet d’éviter une collision à l’instant <span class="math-inline">t</span> + 5. La récompense positive est d’avoir évité l’accident, mais elle
+          est retardée.
+        </li>
+      </ul>
 
-      <h6>3. La malédiction de la dimensionnalité</h6>
+      <h6>3. Grande dimension et observation partielle</h6>
       <p class="lead">
-        En théorie, le cadre MDP est clair. En pratique, dès que l’on s’attaque au monde réel, les espaces d’états et d’actions explosent.
+        Ce défi marque la frontière entre le RL classique (tabulaire) et le <strong>Deep RL</strong>.
       </p>
       <ul>
         <li>
-          <strong>Le mur mémoire</strong> : si l’état est une image haute résolution, le nombre de configurations possibles est gigantesque ; on ne peut plus stocker la
-          connaissance dans un tableau (approche tabulaire).
+          <strong>Grande dimension</strong> : lorsque l’espace des états (<span class="math-inline">𝒮</span>) ou des actions (<span class="math-inline">𝒜</span>) devient
+          trop vaste, nous ne pouvons plus stocker les valeurs de chaque couple (état, action) dans un tableau en mémoire.
         </li>
         <li>
-          <strong>Le besoin de généralisation</strong> : l’agent doit transférer son savoir. S’il a appris à éviter un obstacle rouge, il doit comprendre qu’il faut
-          aussi éviter un obstacle orange, sans « crash » supplémentaire. C’est ce défi qui impose le recours à des approximations par réseaux de neurones
-          (<strong>Deep RL</strong>).
+          <strong>Observation partielle</strong> : souvent, l’agent ne voit pas l’état réel et complet du monde. Il n’en a qu’une « observation ».
+        </li>
+      </ul>
+      <p class="lead">
+        <strong>L’intuition :</strong> le tableau des valeurs ne tient plus en mémoire. L’agent doit donc apprendre à généraliser : s’il voit un état similaire à un
+        état déjà connu, il doit pouvoir déduire la bonne action sans l’avoir apprise explicitement. C’est ici que l’on utilise des réseaux de neurones profonds comme
+        approximateurs de fonction.
+      </p>
+      <p class="lead"><strong>Exemples concrets :</strong></p>
+      <ul>
+        <li>
+          <strong>Jeux Atari (DQN)</strong> : l’état est une image de l’écran (210 × 160 pixels, couleurs). Le nombre de combinaisons de pixels possibles est
+          astronomique. On ne peut pas faire un tableau de valeurs pour chaque image ; on utilise un réseau de neurones pour « comprendre » l’image.
+        </li>
+        <li>
+          <strong>Robotique humanoïde</strong> : l’état d’un robot est défini par la position, la vitesse et l’accélération de chacun de ses joints (variables
+          continues). L’espace d’états est continu et de très grande dimension.
         </li>
       </ul>
 
-      <h6>4. L’efficacité échantillonnale (<em>sample efficiency</em>)</h6>
+      <h6>4. La stochasticité de l’environnement</h6>
       <p class="lead">
-        Le RL est extrêmement gourmand en données. Là où un humain peut apprendre en quelques tentatives, un agent peut nécessiter des millions d’épisodes de
-        simulation.
+        Le monde réel est rarement déterministe. Une même action entreprise dans un même état peut mener à des états suivants différents, de manière aléatoire.
       </p>
+      <p class="lead">
+        <strong>L’intuition :</strong> l’agent ne peut pas raisonner avec certitude (« si je fais <span class="math-inline">A</span>, j’arrive en
+        <span class="math-inline">B</span> »). Il doit raisonner en termes de probabilités et chercher à maximiser l’<strong>espérance</strong> du retour (la moyenne
+        des gains possibles pondérée par leur probabilité d’occurrence).
+      </p>
+      <p class="lead"><strong>Exemples concrets :</strong></p>
+      <ul>
+        <li>
+          <strong>Navigation par grand vent</strong> : un robot doit se déplacer vers la droite (<span class="math-inline">A</span>). Mais s’il y a des bourrasques
+          aléatoires, il peut se retrouver en haut, en bas, ou même à gauche, avec une certaine probabilité.
+        </li>
+        <li>
+          <strong>Jeux de dés (backgammon)</strong> : l’état suivant dépend du choix du joueur et du résultat aléatoire du lancer de dés.
+        </li>
+        <li>
+          <strong>Trading financier</strong> : acheter une action (<span class="math-inline">A</span>) quand son cours est bas (<span class="math-inline">s</span>) peut
+          mener à un gain ou à une perte, selon la dynamique stochastique du marché.
+        </li>
+      </ul>
       <p class="lead">
         Dans le monde réel, on ne peut pas se permettre des millions d’essais coûteux (robotique) ou dangereux (voitures autonomes). Un axe central de la recherche
         est donc d’apprendre avec <strong>peu d’échantillons</strong>, via le transfert de connaissances, l’apprentissage par démonstration, ou des modèles du monde plus
