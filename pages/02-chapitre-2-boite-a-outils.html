@@ -3665,32 +3665,70 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
 
       <h5 id="ch2-rl-cartographie">3. Cartographie des enjeux (pourquoi le RL est difficile)</h5>
       <p class="lead">
-        Avant d’entrer dans une méthode précise, il est utile de situer <strong>où</strong> les algorithmes peuvent buter — sans exhaustivité, mais pour cadrer vos
-        attentes lorsque vous lirez la littérature (exploration, généralisation, stabilité…).
+        Le <strong>Reinforcement Learning</strong> est sans doute le paradigme d’apprentissage le plus proche de l’intelligence biologique, mais c’est aussi l’un des
+        plus complexes à stabiliser. Au-delà des algorithmes spécifiques, tout système de RL se heurte à <strong>quatre défis fondamentaux</strong>.
       </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : quatre défis typiques</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig68.png"
-        alt="Quatre panneaux texte sur exploration, recompense retardee, observation, stochasticite"
-        loading="lazy"
-      />
+
+      <h6>1. Le dilemme exploration–exploitation</h6>
+      <p class="lead">
+        C’est le défi « existentiel » de tout agent autonome. À chaque étape, l’agent doit arbitrer entre :
+      </p>
       <ul>
         <li>
-          <strong>Exploration / exploitation :</strong> faut-il retenter une action peu essayée ou répéter ce qui marche déjà ? Un compromis mal réglé bloque
-          l’apprentissage.
+          <strong>L’exploitation</strong> : utiliser les connaissances acquises pour maximiser la récompense immédiate (rester dans sa zone de confort).
         </li>
         <li>
-          <strong>Récompense retardée :</strong> la « bonne » action peut être plusieurs pas avant un gain visible (crédit assigné à l’ancienne action).
-        </li>
-        <li>
-          <strong>Grande dimension / observation partielle :</strong> le tableau des valeurs ne tient plus en mémoire — d’où les réseaux de neurones pour
-          approximer des fonctions.
-        </li>
-        <li>
-          <strong>Stochasticité :</strong> le monde peut être aléatoire ; on raisonne souvent en <strong>espérance</strong> de retour.
+          <strong>L’exploration</strong> : tester des actions inconnues ou paraissant sous-optimales pour découvrir de nouvelles opportunités.
         </li>
       </ul>
+      <p class="lead">
+        Le risque est double : une exploitation prématurée peut faire stagner l’agent dans un <strong>optimum local</strong> (stratégie correcte mais pas géniale),
+        tandis qu’une exploration infinie empêche de capitaliser sur les acquis et de converger vers une solution stable.
+      </p>
+
+      <h6>2. L’assignation de crédit (<em>credit assignment</em>)</h6>
+      <p class="lead">
+        C’est le défi de la causalité temporelle. Dans de nombreux scénarios, une action cruciale prise à l’instant
+        <span class="math-inline">t</span> n’aura un impact sur la récompense qu’à l’instant <span class="math-inline">t</span> + 100.
+      </p>
+      <p class="lead">
+        <strong>Exemple (échecs) :</strong> le sacrifice d’une pièce en début de partie peut être la raison directe de la victoire finale, mais le signal de
+        récompense (+1) n’arrive qu’à la fin. Le challenge est alors : comment savoir, parmi des milliers d’actions, lesquelles méritent d’être « créditées » pour le
+        succès final ? Ce décalage temporel action → récompense est une source majeure de lenteur d’apprentissage.
+      </p>
+
+      <h6>3. La malédiction de la dimensionnalité</h6>
+      <p class="lead">
+        En théorie, le cadre MDP est clair. En pratique, dès que l’on s’attaque au monde réel, les espaces d’états et d’actions explosent.
+      </p>
+      <ul>
+        <li>
+          <strong>Le mur mémoire</strong> : si l’état est une image haute résolution, le nombre de configurations possibles est gigantesque ; on ne peut plus stocker la
+          connaissance dans un tableau (approche tabulaire).
+        </li>
+        <li>
+          <strong>Le besoin de généralisation</strong> : l’agent doit transférer son savoir. S’il a appris à éviter un obstacle rouge, il doit comprendre qu’il faut
+          aussi éviter un obstacle orange, sans « crash » supplémentaire. C’est ce défi qui impose le recours à des approximations par réseaux de neurones
+          (<strong>Deep RL</strong>).
+        </li>
+      </ul>
+
+      <h6>4. L’efficacité échantillonnale (<em>sample efficiency</em>)</h6>
+      <p class="lead">
+        Le RL est extrêmement gourmand en données. Là où un humain peut apprendre en quelques tentatives, un agent peut nécessiter des millions d’épisodes de
+        simulation.
+      </p>
+      <p class="lead">
+        Dans le monde réel, on ne peut pas se permettre des millions d’essais coûteux (robotique) ou dangereux (voitures autonomes). Un axe central de la recherche
+        est donc d’apprendre avec <strong>peu d’échantillons</strong>, via le transfert de connaissances, l’apprentissage par démonstration, ou des modèles du monde plus
+        efficaces.
+      </p>
+
+      <p class="lead">
+        <strong>Mot de la fin :</strong> ces limites expliquent pourquoi le RL est longtemps resté dominé par la simulation et les environnements contrôlés. Briser ces
+        verrous (en particulier la généralisation et l’efficacité) est l’objectif d’architectures modernes, notamment des approches de représentation et de prédiction
+        du type <em>JEPA</em> et apparentées.
+      </p>
 
 
       <details class="expand-panel">
