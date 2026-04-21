@@ -3572,78 +3572,100 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
         </li>
       </ul>
 
+      <h5 id="ch2-rl-qlearning">2. Le Q-Learning : De l’intuition à la maîtrise de l’inconnu</h5>
+
+      <h6>1. Introduction : le changement de paradigme</h6>
       <p class="lead">
-        C'est précisément pour comprendre comment une machine peut conquérir un monde inconnu que nous allons maintenant explorer le **Q-Learning**. Cet algorithme emblématique nous montrera comment l'agent parvient à bâtir une table de "Qualité" ($Q$) capable de transformer le chaos de l'expérience en une stratégie optimale.
+        Dans l’apprentissage supervisé, nous disposons d’un « oracle » (le dataset étiqueté) qui dit à la machine : « Pour cette entrée, voici la sortie exacte ». En
+        apprentissage par renforcement (RL), cet oracle disparaît. L’agent est jeté dans un environnement dont il ignore les règles de « physique » et les objectifs.
+      </p>
+      <p class="lead">
+        Le <strong>Q-learning</strong>, introduit par Christopher Watkins en 1989, est l’algorithme qui a révolutionné ce domaine. Sa force réside dans sa capacité à
+        apprendre une stratégie optimale <strong>sans modèle</strong> (<em>model-free</em>). Cela signifie que l’agent n’a pas besoin de comprendre « comment » le monde
+        fonctionne ; il a seulement besoin de savoir « combien » ses actions lui rapportent sur le long terme.
       </p>
 
-      <h5 id="ch2-rl-qlearning">2. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
+      <h6>2. L’intuition : le concept de « qualité »</h6>
       <p class="lead">
-        On note <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) la <strong>valeur d’action</strong> : espérance du
-        retour cumulé actualisé si l’on commence par prendre l’action <span class="math-inline">a</span> dans l’état <span class="math-inline">s</span>, puis se comporte
-        de façon <strong>optimale</strong> ensuite. Lorsque l’espace d’états et d’actions est <strong>petit et discret</strong>, on peut stocker
-        <span class="math-inline">Q</span> dans un <strong>tableau</strong> et le mettre à jour au fil des interactions — c’est le Q-learning dans sa forme d’origine
-        (Watkins, 1989).
+        Le « Q » de Q-learning signifie <strong>qualité</strong>. L’idée centrale est de construire une fonction de score, notée
+        <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>), qui répond à la question suivante :
       </p>
-      <p class="lead">
-        À chaque transition observée (<span class="math-inline">s</span>, <span class="math-inline">a</span>, <span class="math-inline">r</span>,
-        <span class="math-inline">s</span>′), on corrige <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) pour se
-        rapprocher de la <strong>cible</strong> <span class="math-inline">r</span> + <span class="math-inline">γ</span> max<sub><span class="math-inline">a</span>′</sub>
-        <span class="math-inline">Q</span>(<span class="math-inline">s</span>′, <span class="math-inline">a</span>′) (si <span class="math-inline">s</span>′ n’est pas
-        terminal). C’est une règle de <strong>différence temporelle</strong> (TD) ; la mise à jour « tire » la valeur courante vers cette cible avec un pas
-        <span class="math-inline">α</span> :
-      </p>
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : règle de mise à jour du Q-learning</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig71.png"
-        alt="Equation de mise a jour Q-learning avec alpha et gamma"
-        loading="lazy"
-      />
-      <p class="lead">
-        <strong>Lecture intuitive :</strong> si après avoir fait <span class="math-inline">a</span> dans <span class="math-inline">s</span> vous recevez une récompense
-        <span class="math-inline">r</span> et atterrissez dans un état <span class="math-inline">s</span>′ où « le mieux qu’on puisse encore espérer » vaut max
-        <span class="math-inline">Q</span>(<span class="math-inline">s</span>′, ·), alors la valeur de (<span class="math-inline">s</span>,
-        <span class="math-inline">a</span>) devrait refléter <span class="math-inline">r</span> + <span class="math-inline">γ</span> fois cette meilleure suite. L’erreur
-        (<strong>TD error</strong>) entre cette cible et l’ancienne estimation guide la correction.
-      </p>
-      <p class="lead"><strong>Algorithme (esprit, version tabulaire) :</strong></p>
-      <ol>
-        <li>Initialiser <span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>) (souvent à 0).</li>
+      <blockquote>
+        <p class="lead">
+          « Si je suis dans l’état <span class="math-inline">s</span> et que je choisis l’action <span class="math-inline">a</span>, quel est le profit total que je
+          peux espérer obtenir jusqu’à la fin de ma mission ? »
+        </p>
+      </blockquote>
+      <p class="lead">Imaginez un étudiant préparant un examen :</p>
+      <ul>
+        <li><strong>L’état (<span class="math-inline">s</span>)</strong> : le chapitre qu’il révise actuellement.</li>
+        <li><strong>L’action (<span class="math-inline">a</span>)</strong> : choisir de faire un exercice difficile ou faire une pause.</li>
         <li>
-          À chaque pas : observer <span class="math-inline">s</span>, choisir <span class="math-inline">a</span> (souvent <span class="math-inline">ε</span>-greedy :
-          aléatoire avec probabilité <span class="math-inline">ε</span>, sinon action qui maximise <span class="math-inline">Q</span>(<span class="math-inline">s</span>, ·)),
-          exécuter l’action, observer <span class="math-inline">r</span> et <span class="math-inline">s</span>′.
+          <strong>La récompense immédiate (<span class="math-inline">r</span>)</strong> : le plaisir de la pause (élevé) ou la fatigue de l’exercice (négatif).
         </li>
         <li>
-          Appliquer la mise à jour ci-dessus ; si <span class="math-inline">s</span>′ est terminal, utiliser uniquement
-          <span class="math-inline">r</span> comme cible pour le dernier pas (pas de bootstrap futur).
+          <strong>La valeur Q (<span class="math-inline">Q</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>))</strong> : ce n’est pas
+          juste le plaisir immédiat, c’est ce plaisir <strong>plus</strong> la note finale à l’examen que cette action facilitera.
         </li>
-        <li>Répéter jusqu’à convergence approximative ou budget d’épisodes épuisé.</li>
-      </ol>
+      </ul>
       <p class="lead">
-        Le Q-learning est dit <strong>off-policy</strong> au sens où la <strong>cible</strong> utilise max<sub><span class="math-inline">a</span>′</sub>
-        <span class="math-inline">Q</span>(<span class="math-inline">s</span>′, <span class="math-inline">a</span>′) (politique greedy pour l’évaluation), même si l’exploration
-        suit encore une politique mouvante (par ex. <span class="math-inline">ε</span>-greedy).
+        L’objectif du Q-learning est de transformer une récompense immédiate (souvent trompeuse) en une vision à long terme.
       </p>
 
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : petite grille « monde » (départ S, but G avec récompense positive)</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig69.png"
-        alt="Grille 5x5 avec case depart S et case objectif G"
-        loading="lazy"
-      />
-      <p class="table-caption" style="margin:12px 0 8px;">Figure : illustration — après entraînement simulé, max<sub>a</sub> Q(<span class="math-inline">s</span>, <span class="math-inline">a</span>) par case (couleurs)</p>
-      <img
-        class="cover-image"
-        src="../Figures/Fig70.png"
-        alt="Carte de chaleur des valeurs V par case apres Q-learning"
-        loading="lazy"
-      />
+      <h6>3. La structure de données : la Q-table</h6>
       <p class="lead">
-        Sur cette grille jouet, les valeurs élevées se concentrent logiquement près de l’objectif : le Q-learning tabulaire « remonte » la valeur des états menant au but.
-        Sur un problème réel à grande dimension, le <strong>tableau</strong> explose : on remplace alors <span class="math-inline">Q</span> par une fonction approximée —
-        typiquement un <strong>réseau de neurones</strong> (DQN et dérivés), ce qui relie cette section au § 6.
+        Pour un débutant, la manière la plus simple de visualiser l’intelligence de l’agent est une <strong>Q-table</strong>. C’est un grand tableau à double entrée :
+      </p>
+      <ul>
+        <li>Chaque <strong>ligne</strong> représente un état possible de l’environnement.</li>
+        <li>Chaque <strong>colonne</strong> représente une action possible.</li>
+        <li>Chaque <strong>cellule</strong> contient une valeur numérique (souvent initialisée à 0).</li>
+      </ul>
+      <div class="table-block">
+        <p class="table-caption">Exemple : Q-table (mini-environnement jouet)</p>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Exemple de Q-table">
+            <thead>
+              <tr>
+                <th scope="col">État / Action</th>
+                <th scope="col">Gauche</th>
+                <th scope="col">Droite</th>
+                <th scope="col">Sauter</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Position 1</strong></td>
+                <td>0.0</td>
+                <td>0.5</td>
+                <td>0.0</td>
+              </tr>
+              <tr>
+                <td><strong>Position 2</strong></td>
+                <td>-1.2</td>
+                <td><strong>4.8</strong></td>
+                <td>0.2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="lead">
+        Au début, la table est vide de sens : l’agent « tâtonne ». Mais à force d’exploration, les nombres dans les cellules vont converger vers les vraies valeurs
+        d’utilité. À la fin de l’apprentissage, l’agent n’a plus besoin de réfléchir : il regarde sa ligne actuelle et choisit la colonne qui a le score le plus élevé.
+      </p>
+
+      <h6>4. La mécanique de l’apprentissage : le « bootstrap »</h6>
+      <p class="lead">
+        Le génie du Q-learning réside dans sa manière de mettre à jour ses scores. Il utilise une méthode appelée <strong>bootstrapping</strong> : il met à jour une
+        estimation à partir d’autres estimations.
+      </p>
+      <p class="lead">
+        Lorsqu’un agent effectue une action et arrive dans un nouvel état, il se dit : « Ma note pour ce que je viens de faire doit être un mélange de la récompense
+        que je viens de toucher et de la <strong>meilleure note possible</strong> que je vois disponible là où je viens d’arriver. »
+      </p>
+      <p class="lead">
+        C’est ainsi que la valeur « remonte » du but (la récompense finale) vers le point de départ, étape par étape, interaction après interaction.
       </p>
 
       <section class="rl-conclusion" aria-labelledby="rl-conclusion-title">
