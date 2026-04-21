@@ -3431,10 +3431,59 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       </ul>
 
       <p class="lead">
-        Une fois posés le vocabulaire et l’objectif (politique, gain actualisé), il reste la question <strong>opérationnelle</strong> : comment trouver ou approcher une
-        bonne politique lorsque la dynamique <span class="math-inline">P</span> et la récompense <span class="math-inline">R</span> ne sont connues qu’imparfaitement —
-        voire pas du tout ? Les méthodes se distinguent d’abord selon que l’agent <strong>s’appuie sur un modèle</strong> de l’environnement ou qu’il reste
-        <strong>sans modèle</strong> et progresse surtout par échantillonnage. La <strong>figure suivante</strong> propose une schématisation synthétique des différentes familles de méthodes RL.
+        Pour illustrer ces concepts de manière concrète, prenons l’exemple d’une partie d’échecs. Dans ce cadre, l’<strong>environnement</strong> n’est pas seulement
+        l’échiquier physique, mais l’ensemble des règles et des mécanismes qui régissent la partie.
+      </p>
+      <p class="lead">Voici comment nous pourrions modéliser cet environnement techniquement :</p>
+      <pre><code class="language-json">{
+  "environment_name": "Chess_Engine",
+  "board_size": "8x8",
+  "rules": "FIDE_Standard",
+  "mechanics": {
+    "turn_based": true,
+    "stochastic": false,
+    "fully_observable": true
+  },
+  "termination_conditions": ["Checkmate", "Stalemate", "Draw_by_repetition"]
+}</code></pre>
+      <p class="lead">
+        Au sein de cet environnement, l’interaction de l’agent se définit par les piliers suivants :
+      </p>
+      <ul>
+        <li>
+          <strong>L’état (<span class="math-inline">S</span><sub>t</sub> ∈ <span class="math-inline">𝒮</span>)</strong> : la configuration précise de l’échiquier à
+          l’instant <span class="math-inline">t</span>. Il inclut la position de toutes les pièces, le trait (tour de jeu), et les droits spéciaux (roque, prise en
+          passant).
+        </li>
+        <li>
+          <strong>L’action (<span class="math-inline">A</span><sub>t</sub> ∈ <span class="math-inline">𝒜</span>)</strong> : un mouvement légal autorisé par les
+          règles, par exemple <code>Cavalier f3</code>.
+        </li>
+        <li>
+          <strong>La récompense (<span class="math-inline">R</span><sub>t+1</sub> ∈ <span class="math-inline">ℝ</span>)</strong> : le feedback immédiat. Pour la
+          plupart des coups, elle est de 0. Elle devient +1 en cas de victoire, −1 pour une défaite et 0,5 pour un nul.
+        </li>
+        <li>
+          <strong>La politique (<span class="math-inline">π</span>)</strong> : le « style de jeu » de l’IA. Par exemple, une politique agressive privilégiera des
+          actions menant à des échanges de pièces, tandis qu’une politique défensive cherchera à consolider la sécurité du roi.
+        </li>
+        <li>
+          <strong>Le gain cumulé (<span class="math-inline">G</span><sub>t</sub>)</strong> : l’anticipation de la victoire finale. Un joueur peut accepter de perdre sa
+          reine (récompense immédiate très négative) si cela mène mathématiquement à un échec et mat quelques coups plus tard (gain cumulé maximal).
+        </li>
+      </ul>
+      <p class="lead">
+        Une distinction fondamentale apparaît alors : en RL, le « dataset » n’est pas un fichier statique, c’est l’<strong>environnement</strong> lui-même. Dans
+        certains cas, nous disposons d’un univers presque « fermé », comme aux échecs, où il est possible de modéliser mathématiquement l’intégralité des règles et
+        des transitions. À l’inverse, dans d’autres contextes comme celui des <strong>voitures autonomes</strong>, l’environnement est ouvert, imprévisible et
+        impossible à modéliser totalement : l’agent doit alors apprendre à naviguer dans une complexité qu’aucun fichier de données ne pourra jamais résumer
+        parfaitement.
+      </p>
+      
+
+      <p class="lead">
+        Dès lors, la question devient : comment résoudre ce problème en pratique ? La <strong>figure suivante</strong> montre qu’il existe deux voies majeures selon
+        notre connaissance des « règles du jeu ».
       </p>
       <img
       class="cover-image"
@@ -3474,10 +3523,7 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       </ul>
 
       <p class="lead">
-        Pour illustrer comment un agent peut naviguer dans l’inconnu sans modèle préalable, nous allons maintenant approfondir le <strong>Q-learning</strong>. Cet
-        algorithme permet de construire dynamiquement une table de « qualité » <span class="math-inline">Q</span>(<span class="math-inline">s</span>,
-        <span class="math-inline">a</span>) qui, au fil des erreurs, devient le guide infaillible de l’agent.
-      </p>
+        C'est précisément pour comprendre comment une machine peut conquérir un monde inconnu que nous allons maintenant explorer le **Q-Learning**. Cet algorithme emblématique nous montrera comment l'agent parvient à bâtir une table de "Qualité" ($Q$) capable de transformer le chaos de l'expérience en une stratégie optimale./p>
 
       <h5 id="ch2-rl-qlearning">3. Q-learning : estimer la qualité de chaque action dans chaque état</h5>
       <p class="lead">
