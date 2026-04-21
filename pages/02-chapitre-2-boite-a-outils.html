@@ -3358,62 +3358,54 @@ Pour corriger cela, nous ne changeons pas de logique, nous changeons d'échelle.
       src="../Figures/MDP-model.webp"
       loading="lazy"
     />
-      <ul>
-        <li>
-          <strong>L’agent</strong> : le système qui perçoit l’état, choisit une action et apprend de ses conséquences.
-        </li>
-        <li>
-          <strong>L’environnement</strong> : tout ce qui répond à l’agent. Il est régi par des lois souvent inconnues de l’agent au départ.
-        </li>
-        <li>
-          <strong>L’état (<span class="math-inline">S</span><sub>t</sub> ∈ <span class="math-inline">𝒮</span>)</strong> : la configuration du monde à l’instant
-          <span class="math-inline">t</span>. <span class="math-inline">𝒮</span> est l’espace d’états, qui peut être fini (grille) ou continu (coordonnées GPS).
-        </li>
-        <li>
-          <strong>L’action (<span class="math-inline">A</span><sub>t</sub> ∈ <span class="math-inline">𝒜</span>)</strong> : le choix effectué par l’agent.
-          <span class="math-inline">𝒜</span> est l’espace des actions possibles.
-        </li>
-        <li>
-          <strong>La récompense (<span class="math-inline">R</span><sub>t+1</sub> ∈ <span class="math-inline">ℝ</span>)</strong> : le signal scalaire renvoyé par
-          l’environnement. C’est la seule source d’information permettant de guider l’apprentissage. Elle est définie par une fonction
-          <span class="math-inline">R</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>).
-        </li>
-      </ul>
-
-      <p class="lead">Le terme MDP repose sur deux piliers conceptuels :</p>
-      <ul>
-        <li>
-          <strong>La propriété de Markov</strong> : un état possède cette propriété si le futur est indépendant du passé, sachant le présent.
-          <blockquote>
-            <p class="lead">
-              <strong>Formulation mathématique</strong> :
-              <span class="math-inline">P</span>(<span class="math-inline">S</span><sub>t+1</sub> | <span class="math-inline">S</span><sub>t</sub>,
-              <span class="math-inline">A</span><sub>t</sub>).
-            </p>
-          </blockquote>
-          Cela signifie que <span class="math-inline">S</span><sub>t</sub> contient toute l’information pertinente (mémoire compressée) pour prédire
-          <span class="math-inline">S</span><sub>t+1</sub>. Si vous connaissez la position et la vitesse d’un drone à <span class="math-inline">t</span>, vous n’avez
-          pas besoin de savoir d’où il venait à <span class="math-inline">t</span> − 1.
-        </li>
-        <li>
-          <strong>Le processus de décision</strong> : la trajectoire du système est pilotée par l’agent. On définit la <strong>probabilité de transition</strong>
-          <span class="math-inline">P</span>(<span class="math-inline">s</span>′ | <span class="math-inline">s</span>, <span class="math-inline">a</span>) :
-          <div class="math-display">
-            <span class="math-inline">P</span>(<span class="math-inline">s</span>′ | <span class="math-inline">s</span>, <span class="math-inline">a</span>) =
-            Prob(<span class="math-inline">S</span><sub>t+1</sub> = <span class="math-inline">s</span>′ | <span class="math-inline">S</span><sub>t</sub> =
-            <span class="math-inline">s</span>, <span class="math-inline">A</span><sub>t</sub> = <span class="math-inline">a</span>)
-          </div>
-          C’est la « physique » du monde : si je tourne à gauche (<span class="math-inline">a</span>) alors que je suis face au mur (<span class="math-inline">s</span>),
-          quelle est la probabilité que je sois dans l’état <span class="math-inline">s</span>′ au tour suivant ?
-        </li>
-      </ul>
+      <p class="lead">
+        Au cœur de cette dynamique, comme l’illustre la figure 1, s’installe une boucle de rétroaction perpétuelle. À chaque étape de temps
+        <span class="math-inline">t</span>, l’agent (le système décisionnel) observe une situation précise, son état
+        (<span class="math-inline">S</span><sub>t</sub> ∈ <span class="math-inline">𝒮</span>), et choisit d’y répondre par une action
+        (<span class="math-inline">A</span><sub>t</sub> ∈ <span class="math-inline">𝒜</span>). L’environnement, en réaction, évolue vers une nouvelle configuration
+        tout en renvoyant un signal critique : la récompense (<span class="math-inline">R</span><sub>t+1</sub> ∈ <span class="math-inline">ℝ</span>). C’est ce score
+        numérique, souvent défini par une fonction <span class="math-inline">R</span>(<span class="math-inline">s</span>, <span class="math-inline">a</span>), qui
+        constitue l’unique boussole de l’agent pour guider son apprentissage.
+      </p>
+      <p class="lead">
+        Cependant, pour que ce système soit mathématiquement gérable, il doit reposer sur deux piliers conceptuels qui définissent la « mémoire » et la « physique »
+        de ce monde. Le premier est la <strong>propriété de Markov</strong>, qui stipule que le présent suffit à prédire le futur. Formellement, on note :
+      </p>
+      <div class="math-display">
+        <span class="math-inline">P</span>(<span class="math-inline">S</span><sub>t+1</sub> | <span class="math-inline">S</span><sub>t</sub>,
+        <span class="math-inline">A</span><sub>t</sub>)
+      </div>
+      <p class="lead">
+        La probabilité d’atteindre l’état suivant ne dépend que de l’état actuel et de l’action choisie, et non de tout l’historique passé. C’est une notion de
+        « mémoire compressée » où <span class="math-inline">S</span><sub>t</sub> contient toute l’information pertinente. Par exemple, si vous connaissez la position
+        et la vitesse d’un drone à l’instant <span class="math-inline">t</span>, vous n’avez pas besoin de savoir d’où il venait à
+        <span class="math-inline">t</span> − 1 pour prédire sa position à <span class="math-inline">t</span> + 1.
+      </p>
+      <p class="lead">
+        C’est sur cette base que s’appuie le second pilier : le <strong>processus de décision</strong>. Puisque la trajectoire du système est pilotée par l’agent,
+        nous définissons une <strong>probabilité de transition</strong> :
+      </p>
+      <div class="math-display">
+        <span class="math-inline">P</span>(<span class="math-inline">s</span>′ | <span class="math-inline">s</span>, <span class="math-inline">a</span>) =
+        Prob(<span class="math-inline">S</span><sub>t+1</sub> = <span class="math-inline">s</span>′ | <span class="math-inline">S</span><sub>t</sub> =
+        <span class="math-inline">s</span>, <span class="math-inline">A</span><sub>t</sub> = <span class="math-inline">a</span>)
+      </div>
+      <p class="lead">
+        C’est la « physique » du monde vue par l’algorithme : si je décide de tourner à gauche (<span class="math-inline">a</span>) alors que je suis face à un mur
+        (<span class="math-inline">s</span>), quelle est la probabilité de me retrouver dans l’état de collision (<span class="math-inline">s</span>′) au tour suivant ?
+      </p>
+      <p class="lead">
+        Une fois ces règles du jeu établies, l’agent doit développer une politique (<span class="math-inline">π</span>), véritable « cerveau » décisionnel qui associe
+        chaque état à une action. Son but n’est pas de glaner une petite récompense immédiate, mais de viser le gain cumulé
+        (<span class="math-inline">G</span><sub>t</sub>) sur le long terme. C’est ici qu’intervient le facteur d’escompte
+        (<span class="math-inline">γ</span>) : une variable comprise entre 0 et 1 qui ajuste l’horizon de l’agent. Un
+        <span class="math-inline">γ</span> proche de zéro créera une IA opportuniste et « myope », tandis qu’un <span class="math-inline">γ</span> proche de 1 forcera
+        l’agent à la patience, valorisant des stratégies dont les fruits ne seront récoltés que bien plus tard.
+      </p>
 
       <p class="lead">
-        Comprendre la <strong>boucle</strong> (état, action, récompense, transition) ne suffit pas : encore faut-il décider <em>quoi faire</em> dans chaque situation et
-        <em>pourquoi</em> ces choix sont bons. L’agent doit donc se donner une <strong>règle de comportement</strong> — la <strong>politique</strong>
-        <span class="math-inline">π</span> — et un <strong>critère d’optimisation</strong> qui agrège les récompenses dans le temps. Sans politique, il n’y a pas de
-        stratégie ; sans objectif de long terme (via le <strong>gain cumulé</strong> <span class="math-inline">G</span><sub>t</sub> et le facteur
-        <span class="math-inline">γ</span>), une action apparemment peu rentable immédiatement peut pourtant ouvrir la voie au succès — c’est l’enjeu central du RL.
+        Ces notions se résument à travers trois objets clés : une <strong>politique</strong> <span class="math-inline">π</span>, un <strong>gain</strong>
+        <span class="math-inline">G</span><sub>t</sub>, et un <strong>facteur d’escompte</strong> <span class="math-inline">γ</span>.
       </p>
       <ul>
         <li>
